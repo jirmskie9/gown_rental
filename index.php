@@ -76,6 +76,8 @@ include('pages/process/config.php');
                   <p class="mb-4 text-sm mx-auto">
                     Don't have an account?
                     <a href="signup.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                    <br>
+                    <p>Beta Version 1.9</p>
                   </p>
                 </div>
               </div>
