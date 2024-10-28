@@ -61,12 +61,18 @@ include('pages/process/config.php');
                       <input type="email" name = "email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
                     </div>
                     <div class="mb-3">
-                      <input type="password" name = "password" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                    <input type="password" name="password" id="passwordInput" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
                     </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
+                    <div class="form-check form-switch mt-2">
+                      <input class="form-check-input" type="checkbox" id="showPasswordSwitch">
+                      <label class="form-check-label" for="showPasswordSwitch">Show Password</label>
+                  </div>
+                  <script>
+                    document.getElementById('showPasswordSwitch').addEventListener('change', function() {
+                        const passwordInput = document.getElementById('passwordInput');
+                        passwordInput.type = this.checked ? 'text' : 'password';
+                    });
+                </script>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
                     </div>
