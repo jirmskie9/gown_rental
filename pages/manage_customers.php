@@ -37,7 +37,7 @@ if (isset($_SESSION['email'])) {
 
   <?php include('header.php');?>
   <title>
-  Pepping's Boutique | Reservations
+  Pepping's Boutique | Customers
   </title>
 </head>
 
