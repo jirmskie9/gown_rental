@@ -31,20 +31,39 @@ include('pages/process/config.php');
     <div class="row">
       <div class="col-12">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
-          <div class="container-fluid">
-            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="#">
-              (PBRRS) - Pepping's Boutique Rental Reservation System
-            </a>
-           
-            <div class="collapse navbar-collapse" id="navigation">
-              
-              <ul class="navbar-nav d-lg-block d-none">
-               
-              </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
+            <div class="container-fluid">
+                <!-- Navbar Brand -->
+                <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3" href="#">
+                    (PBRRS) - Pepping's Boutique Rental Reservation System
+                </a>
+
+                <!-- Toggler Button for Small Screens -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Collapsible Navbar Links -->
+                <div class="collapse navbar-collapse" id="navigation">
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Add navbar items here if needed -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
         </nav>
+
         <!-- End Navbar -->
       </div>
     </div>
