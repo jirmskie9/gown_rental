@@ -83,7 +83,7 @@ include('pages/process/config.php');
                     Don't have an account?
                     <a href="signup.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
                     <br>
-                    <p>Beta Version 1.9</p>
+                    <p>Beta Test</p>
                   </p>
                 </div>
               </div>
