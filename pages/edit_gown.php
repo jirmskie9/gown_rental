@@ -300,9 +300,30 @@ $gown_id = intval($_GET['gown_id']);
               </div>
             </div>
             <div class="card-footer text-center">
-                <button type = "submit" name = "save_gown" class = "btn btn-primary"><i class = "fa fa-file"></i> Save Gown</button>
-            </div>
-        </form>
+            <form action="return_gown.php" method="POST" style="display: inline;">
+                <input type="hidden" name="reservation_id" value="<?php echo $reservation_id; ?>">
+                <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>">
+                <button type="submit" name="save_gown" class="btn btn-primary me-2">
+                    <i class="fa fa-file"></i> Save Gown
+                </button>
+            </form>
+            
+            <form action="process/maintenance_gown.php" method="POST" style="display: inline;">
+                <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
+                <button type="submit" name="maintenance_gown" class="btn btn-danger">
+                    <i class="fa fa-wrench"></i> Set Under Maintenance
+                </button>
+            </form>
+            <form action="process/fix_gown.php" method="POST" style="display: inline;">
+              <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
+              <button type="submit" name="fix_gown" class="btn btn-success">
+                  <i class="fa fa-wrench"></i> Fix Gown
+              </button>
+          </form>
+
+        </div>
+
+        
           </div>
         </div>
         <div class="col-md-4">

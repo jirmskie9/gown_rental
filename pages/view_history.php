@@ -50,10 +50,57 @@ $result = $stmt->get_result();
         }
 
 ?>
+ <?php
+
+$sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image, g.description 
+FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' AND r.status = 'confirmed' AND reservation_id = '$reservation_id'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+
+    while ($row = $result->fetch_assoc()) {
+        $gown_id = $row['gown_id'];
+        $gown_name = $row['name'];
+        $main_image = 'uploads/' . basename($row['main_image']);
+        $name = $row['name'];
+        $start_date = $row['start_date'];
+        $end_date = $row['end_date'];
+        $status = $row['status'];
+        $reservation_id = $row['reservation_id'];
+        $description = $row['description'];
+    }
+  } else {
+    $_SESSION['status'] = "Reservation Completed";
+    $_SESSION['status_code'] = "info";
+    $_SESSION['status_button'] = "Okay";
+    header('location: history.php');
+    exit();
+  }
+        ?>
 <!DOCTYPE html>
 <html lang="en">
 
   <?php include('header.php');?>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<style>
+ #calendar {
+    width: 100%; /* Full width of the container */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.card-body, .profile-tab, .custom-tab-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+</style>
+
   <title>
   Boutique Gown | History
   </title>
@@ -127,8 +174,8 @@ $result = $stmt->get_result();
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Find</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">My</a></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Reservation</li>
           </ol>
           <h6 class="font-weight-bolder text-white mb-0">Gowns</h6>
         </nav>
@@ -247,91 +294,132 @@ $result = $stmt->get_result();
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-    
+   
     <div class="row">
         <div class="col-12">
           <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>My Reservation History</h6>
-            </div>
+  
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Picked</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date to Return</th>
-                    
-                      <th class="text-secondary opacity-7"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <?php
+        
+                <div class="row">
+                    <div class="col-xl-4">
+						<div class="row">
+							
+							<div class="col-xl-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="profile-blog">
+											<h5 class="text-primary d-inline">Gown Rented</h5>
+											<img src="<?php echo $main_image?>" alt="<?php echo $main_image?>" class="img-fluid mt-4 mb-4 w-100">
+											<h4><a href="#" class="text-black"><?php echo $gown_name?></a></h4>
+											<p class="mb-0"><?php echo $description?></p>
+										</div>
+									</div>
+								</div>
+							</div>
+              <div class="text-center">
+												<div class="row">
+											
+												</div>
+												<div class="mt-4">
+                        <a href="#" class="btn btn-primary mb-1 me-1" data-bs-toggle="modal" data-bs-target="#returnGownModal">Return Gown</a>
 
-            $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
-            FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' AND r.status = 'confirmed' ORDER BY r.status DESC";
-            $result = $conn->query($sql);
+												</div>
+											</div>
+							
+						</div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="profile-tab">
+                                    <div class="custom-tab-1">
+                                    <div id="calendar"></div>
+                                    <script>
+                                      document.addEventListener('DOMContentLoaded', function() {
+                                          var calendarEl = document.getElementById('calendar');
+                                          
+                                          // Check if the event is overdue by comparing end_date to the current date
+                                          var endDate = new Date('<?php echo $end_date; ?>');
+                                          var isOverdue = new Date() > endDate;
+                                          var returnTitle = isOverdue ? 'Return Date (Overdue)' : 'Return Date';
+                                          var returnColor = isOverdue ? '#FF0000' : '#FF6347'; // Red for overdue, default color otherwise
 
-            if ($result->num_rows > 0) {
+                                          var calendar = new FullCalendar.Calendar(calendarEl, {
+                                      initialView: 'dayGridMonth', // Default view (month view)
+                                      headerToolbar: {
+                                          left: 'prev,next today',
+                                          center: 'title',
+                                          right: 'dayGridMonth,timeGridWeek,timeGridDay' // View options
+                                      },
+                                      aspectRatio: 1.2, // Lower ratio for more height flexibility
+                                      height: 'auto', // Adjusts calendar height responsively
+                                      expandRows: true, // Makes rows fill available space
+                                      contentHeight: 'auto', // Makes height responsive
+                                      windowResize: function(view) { // Re-renders calendar on window resize
+                                          calendar.updateSize();
+                                      },
+                                              events: [
+                                                  {
+                                                      title: 'Start Date', // Title for the start date event
+                                                      start: '<?php echo $start_date; ?>', // PHP variable for start date
+                                                      color: '#1E90FF' // Optional: Customize color for start date
+                                                  },
+                                                  {
+                                                      title: returnTitle, // Shows 'Return Date (Overdue)' if overdue
+                                                      start: '<?php echo $end_date; ?>', // PHP variable containing the date
+                                                      color: returnColor // Red color if overdue, otherwise default
+                                                  }
+                                              ]
+                                          });
 
-                while ($row = $result->fetch_assoc()) {
-                    $gown_id = $row['gown_id'];
-                    $main_image = 'uploads/' . basename($row['main_image']);
-                    $name = $row['name'];
-                    $start_date = $row['start_date'];
-                    $end_date = $row['end_date'];
-                    $status = $row['status'];
-                    $reservation_id = $row['reservation_id'];
-         
-                    ?>
-                    <tr>
-                    <td>
-                        <div class="d-flex px-2 py-1">
-                            <div>
-                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3" alt="<?php echo htmlspecialchars($name); ?>">
-                            </div>
-                            <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
+                                          calendar.render();
+                                      });
+                                  </script>
+                                                     
+                                    </div>
+		
+									
+                                </div>
                             </div>
                         </div>
-                    </td>
-                    <td>
-                        <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
-                        <p class="text-xs text-secondary mb-0"></p> 
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <a href="view_history.php?reservation_id='<?php echo $reservation_id?>'" class = "btn btn-warning"><i class = "fa fa-eye"></i></a>
-                    </td>
-                  
-                    </tr>
-                    <?php
-                        }
-                    } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/empty.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>Reservation Empty</p></td></tr>";
-
-                    }
-
-
-                    $conn->close();
-                    ?>
-                    
-                  </tbody>
-                  
-                </table>
-                
-               
-              </div>
+                    </div>
+                </div>
               
             </div>
             
           </div>
          
         </div>
+
+        <div class="modal fade" id="returnGownModal" tabindex="-1" aria-labelledby="returnGownModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="returnGownModalLabel">Return Gown</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- Content of the modal -->
+                      <p class = "text-primary">Are you sure you want to return this gown?</p>
+                       <p>- The gown must be returned in the same condition it was received. <br>
+                          - A late return fee of 100 per day will be applied for late returns. <br>
+                          - The Renter is responsible for any damage or loss to the gown. <br>
+                          - No alterations can be made to the gown without prior permission from the Rental Service Provider.</p>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <form action="process/return_gown.php" method = "POST">
+                      <input type="hidden" name = "reservation_id" value = "<?php echo $reservation_id?>">
+                      <input type="hidden" name = "gown_id" value = "<?php echo $gown_id?>">
+                      <input type="hidden" name = "user_id" value = "<?php echo $user_id?>">
+                      <button type="submit" class="btn btn-primary" name = "return">Confirm Return</button>
+                     
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
       
       
       
