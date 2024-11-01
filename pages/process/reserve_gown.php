@@ -75,8 +75,8 @@ if (isset($_POST['reserve'])) {
         if ($stmt->execute()) {
             $notif = "INSERT INTO notifications (user_id, content, date_time, type) VALUES ('$user_id', '$full_name wants to rent $gown_name', NOW(), 'admin')";
             $res = $conn->query($notif);
-            $_SESSION['status'] = "Reservation successful!";
-            $_SESSION['status_code'] = "success";
+            $_SESSION['status'] = "Reservation successful. wait for Approval";
+            $_SESSION['status_code'] = "info";
             $_SESSION['status_button'] = "Okay";
             header("Location: ../find_gown.php");
             exit();
