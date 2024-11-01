@@ -259,8 +259,8 @@ $result = $stmt->get_result();
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Picked</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Returned</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date to Return</th>
+                    
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -303,7 +303,7 @@ $result = $stmt->get_result();
                         <span class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
                     </td>
                     <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($status); ?></span>
+                      <a href="view_history.php?reservation_id='<?php echo $reservation_id?>'" class = "btn btn-primary"><i class = "fa fa-eye"></i></a>
                     </td>
                   
                     </tr>
