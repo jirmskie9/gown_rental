@@ -62,7 +62,84 @@ if (isset($_POST['reg'])) {
 
                 $mail->isHTML(false);
                 $mail->Subject = 'Boutique Gowns';
-                $mail->Body    = "Hello $full_name, your verification code is: $otp";
+                $mail->Body = "
+                <html>
+                <head>
+                    <style>
+                        .email-container {
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        .header {
+                            background-color: #5E72E4;
+                            color: white;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                        .content {
+                            padding: 20px;
+                            font-size: 16px;
+                            line-height: 1.6;
+                        }
+                        .otp-code {
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #5E72E4;
+                            text-align: center;
+                            margin: 20px 0;
+                        }
+                        .cta-button {
+                            display: block;
+                            width: 200px;
+                            margin: 20px auto;
+                            padding: 10px 20px;
+                            background-color: #5E72E4;
+                            color: #fff;
+                            text-align: center;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+                        .cta-button:hover {
+                            background-color: #6a4ea3;
+                        }
+                        .footer {
+                            background-color: #f9f9f9;
+                            padding: 15px;
+                            text-align: center;
+                            font-size: 12px;
+                            color: #777;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class='email-container'>
+                        <div class='header'>
+                            <h1>Welcome to Peppings Boutique!</h1>
+                        </div>
+                        <div class='content'>
+                            <p>Hello <strong>$full_name</strong>,</p>
+                            <p>Thank you for registering with us! To complete your registration, please use the following verification code:</p>
+                            <div class='otp-code'>$otp</div>
+                            <p>Or, you can confirm your registration by clicking the button below:</p>
+                            <a href='#' class='cta-button'>Confirm Registration</a>
+                            <p>If you did not register, please ignore this email.</p>
+                        </div>
+                        <div class='footer'>
+                            <p>Peppings Boutique, Tupi, South Cotabato</p>
+                            <p>&copy; " . date('Y') . " PBGRRS. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            ";
 
                 $mail->send();
                 echo 'Email sent successfully.';
