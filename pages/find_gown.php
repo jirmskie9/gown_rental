@@ -274,18 +274,6 @@ if (isset($_SESSION['email'])) {
                             <div class="col-md-7 col-xxl-12">
                                 <div class="new-arrival-content position-relative">
                                     <h4><a href="view_gown.php?id=<?php echo $row['gown_id']; ?>"><?php echo $row['name']; ?></a></h4>
-                                    <div class="comment-review star-rating">
-                                        <div class="rating">
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star-half-alt text-warning"></i>
-                                        </div>
-                                        <span class="review-text">(34 reviews) / </span>
-                                        <a class="product-review" href="#" data-bs-toggle="modal" data-bs-target="#reviewModal"></a>
-                                        <p class="price"><?php echo $row['price']; ?> PHP</p>
-                                    </div>
                                     <p>Availability: <span class="item"><?php echo $row['availability_status']; ?> <i class="fa fa-check-circle text-success"></i></span></p>
                                     <p class = "text-warning">Size: <span class="item"><?php echo $row['size']; ?></span></p>
                                     <p class="text-content text-primary"><?php echo $row['description']; ?></p>
