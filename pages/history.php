@@ -280,15 +280,13 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
                   </thead>
                   <tbody>
                     <?php
+
                     $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
-        FROM reservations r 
-        JOIN gowns g ON r.gown_id = g.gown_id 
-        WHERE r.customer_id = '$user_id' 
-        AND (r.status = 'confirmed' OR r.status = 'completed') 
-        ORDER BY r.status DESC";
+                    FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' AND r.status = 'confirmed' OR r.status = 'completed' ORDER BY r.status DESC";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
+
                       while ($row = $result->fetch_assoc()) {
                         $gown_id = $row['gown_id'];
                         $main_image = 'uploads/' . basename($row['main_image']);
@@ -297,6 +295,7 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
                         $end_date = $row['end_date'];
                         $status = $row['status'];
                         $reservation_id = $row['reservation_id'];
+
                         ?>
                         <tr>
                           <td>
@@ -313,29 +312,28 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
                           </td>
                           <td>
                             <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
+                            <p class="text-xs text-secondary mb-0"></p>
                           </td>
                           <td class="align-middle text-center text-sm">
                             <span
                               class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
                           </td>
                           <td class="align-middle text-center">
-                            <?php if ($status !== 'completed') { ?>
-                              <a href="view_history.php?reservation_id=<?php echo $reservation_id; ?>"
-                                class="btn btn-warning">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                            <?php } ?>
+                            <a href="view_history.php?reservation_id=<?php echo $reservation_id ?>"
+                              class="btn btn-warning"><i class="fa fa-eye"></i></a>
                           </td>
+
                         </tr>
                         <?php
                       }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/empty.png' class='img-fluid' alt='Empty Image'><p class='text-danger'>Reservation Empty</p></td></tr>";
+                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/empty.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>Reservation Empty</p></td></tr>";
+
                     }
+
 
                     $conn->close();
                     ?>
-
 
                   </tbody>
 
