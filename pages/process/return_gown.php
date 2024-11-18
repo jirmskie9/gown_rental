@@ -56,7 +56,7 @@ if (isset($_POST['return'])) {
         $_SESSION['status_button'] = "Okay";
 
         // Redirect to the view reservation page
-        header("Location: ../view_reservation.php?reservation_id=$reservation_id");
+        header("Location: ../history.php");
         exit();
     } catch (Exception $e) {
         // Rollback the transaction on error
@@ -71,7 +71,7 @@ if (isset($_POST['return'])) {
         $_SESSION['status_button'] = "Okay";
 
         // Redirect back to the view reservation page
-        header("Location: ../view_reservation.php?reservation_id=$reservation_id");
+        header("Location: ../history.php");
         exit();
     }
 } else {
