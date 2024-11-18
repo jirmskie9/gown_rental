@@ -316,7 +316,7 @@ FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = 
                               class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
                           </td>
                           <td class="align-middle text-center">
-                            <?php if ($status == 'completed') { ?>
+                            <?php if ($status !== 'completed') { ?>
                               <a href="view_history.php?reservation_id=<?php echo $reservation_id ?>"
                                 class="btn btn-warning"><i class="fa fa-eye"></i></a>
                             <?php } ?>
