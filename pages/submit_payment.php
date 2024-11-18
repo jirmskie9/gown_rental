@@ -74,6 +74,53 @@ $interest = $price2 * 0.03;
 $total = $interest + $price2 + 400;
 
 ?>
+<?php
+
+$reservation_id = isset($_GET['reservation_id']) ? $_GET['reservation_id'] : null;
+
+if ($reservation_id) {
+  // Prepare the query to check for unpaid reservations
+  $query = "SELECT * FROM reservations WHERE reservation_id = ? AND payment_status = 'unpaid'";
+
+  if ($stmt = $conn->prepare($query)) {
+    // Bind the reservation_id to the prepared statement
+    $stmt->bind_param("s", $reservation_id);
+
+    // Execute the query
+    $stmt->execute();
+
+    // Get the result of the query
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      // If reservation_id exists and payment status is unpaid
+      echo "Payment record exists. You can proceed.";
+      // Add additional logic if needed
+    } else {
+      // Set session status messages for already paid reservations
+      $_SESSION['status'] = "You have already paid.";
+      $_SESSION['status_code'] = "info";
+      $_SESSION['status_button'] = "Okay";
+
+      // Redirect to the find_gown.php page
+      header("Location: find_gown.php");
+      exit;
+    }
+
+    // Close the result and statement
+    $result->free();
+    $stmt->close();
+  } else {
+    // Handle SQL preparation errors
+    die("Error preparing the SQL statement: " . $conn->error);
+  }
+} else {
+  // Redirect to find_gown.php if no reservation_id is provided
+  header("Location: find_gown.php");
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
