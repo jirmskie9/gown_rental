@@ -93,9 +93,7 @@ if ($reservation_id) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-      // If reservation_id exists and payment status is unpaid
-      echo "Payment record exists. You can proceed.";
-      // Add additional logic if needed
+   
     } else {
       // Set session status messages for already paid reservations
       $_SESSION['status'] = "You have already paid.";
