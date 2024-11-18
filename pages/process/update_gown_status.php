@@ -20,7 +20,7 @@ if (isset($_POST['reserve']) && isset($_POST['reservation_id']) && isset($_POST[
     // Update reservation status to 'confirmed'
     $sql = "UPDATE reservations SET status = ? WHERE reservation_id = ?";
     $stmt = $conn->prepare($sql);
-    $status = 'confirmed';
+    $status = 'tosig';
     $stmt->bind_param('si', $status, $reservation_id);
 
     if ($stmt->execute()) {
@@ -35,7 +35,7 @@ if (isset($_POST['reserve']) && isset($_POST['reservation_id']) && isset($_POST[
         // Update gown availability status to 'rented'
         $sql = "UPDATE gowns SET availability_status = ? WHERE gown_id = ?";
         $stmt_update_gown = $conn->prepare($sql);
-        $availability_status = 'rented';
+        $availability_status = 'available';
         $stmt_update_gown->bind_param('si', $availability_status, $gown_id);
 
         if ($stmt_update_gown->execute()) {

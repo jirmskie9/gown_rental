@@ -260,7 +260,7 @@ $result = $stmt->get_result();
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Picked</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Returned</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                   
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -268,7 +268,7 @@ $result = $stmt->get_result();
                   <?php
 
             $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
-            FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' ANd r.status = 'confirmed'";
+            FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' ANd r.status = 'tosig'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -279,7 +279,7 @@ $result = $stmt->get_result();
                     $name = $row['name'];
                     $start_date = $row['start_date'];
                     $end_date = $row['end_date'];
-                    $status = $row['status'];
+               
                     $reservation_id = $row['reservation_id'];
          
                     ?>
@@ -302,9 +302,7 @@ $result = $stmt->get_result();
                     <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
                     </td>
-                    <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($status); ?></span>
-                    </td>
+                   
                     <td class="align-middle">
                         <a class="btn btn-warning btn-md" href="my_reservation.php?reservation_id=<?php echo $row['reservation_id']; ?>"><i class="fas fa-eye"></i></a>
                          

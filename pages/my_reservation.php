@@ -289,6 +289,7 @@ if ($reservation_id) {
                 $date_to_return = htmlspecialchars($row['end_date']);
                 $size = htmlspecialchars($row['size']);
                 $color = htmlspecialchars($row['color']);
+                $gown_id = htmlspecialchars($row['gown_id']);
      
               }
           }
@@ -352,6 +353,7 @@ if ($reservation_id) {
                         <br>
                         <form action="process/sign_agreement.php" method = "POST" enctype = "multiform/part">
                           <input type="hidden" name = "reservation_id" value = "<?php echo $reservation_id?>">
+                          <input type="hidden" name = "gown_id" value = "<?php echo $gown_id?>">
                         <img id="signatureImg" src="<?php echo $signature_img_url ?? ''; ?>" alt="Signature" style="width: 100px; height: 80px; display: <?php echo !empty($signature_img_url) ? 'block' : 'none'; ?>;">
                         <p style = "text-decoration: underline;"><b><?php echo strtoupper($full_name); ?></b></p>
                         <p>Signature over Printed Name</p>
