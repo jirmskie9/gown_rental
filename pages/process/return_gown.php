@@ -3,7 +3,7 @@ session_start();
 
 require_once 'config.php'; // Ensure this includes your DB connection setup
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['returned'])) {
+if (isset($_POST['returned'])) {
     // Sanitize input data
     $gown_id = htmlspecialchars($_POST['gown_id']);
     $reservation_id = htmlspecialchars($_POST['reservation_id']);
