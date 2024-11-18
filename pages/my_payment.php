@@ -50,10 +50,7 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
 ?>
 <?php
 $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
-FROM reservations r 
-JOIN gowns g ON r.gown_id = g.gown_id 
-WHERE r.customer_id = ? AND (r.status = 'tosig' OR r.status = 'confirmed') 
-ORDER BY r.status DESC";
+            FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' ANd r.status = 'tosig' OR r.status = 'confirmed' ORDER BY r.status DESC";
 
 // Prepare the statement
 if ($stmt = $conn->prepare($sql)) {
