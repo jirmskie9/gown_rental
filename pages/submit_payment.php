@@ -264,15 +264,15 @@ $result = $stmt->get_result();
 
           if ($res->num_rows > 0) {
             while ($row = $res->fetch_assoc()) {
-                $gown_name = htmlspecialchars($row['name']);
-                $price = htmlspecialchars($row['price']);
-                $date_to_pick = htmlspecialchars($row['start_date']);
-                $date_to_return = htmlspecialchars($row['end_date']);
+                $gown_name2 = htmlspecialchars($row['name']);
+                $price2 = htmlspecialchars($row['price']);
+                $date_to_pick2 = htmlspecialchars($row['start_date']);
+                $date_to_return2 = htmlspecialchars($row['end_date']);
               }
           }
 
-          $interest = $price * 0.03;
-          $total = $interest + $price + 400;
+          $interest = $price2 * 0.03;
+          $total = $interest + $price2 + 400;
 
           ?>
             <div class="card-body px-4 pt-4 pb-4">
@@ -286,14 +286,14 @@ $result = $stmt->get_result();
                                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                 <div>
                                                     <h6 class="my-0">Gown name</h6>
-                                                    <small class="text-muted"><?php echo $gown_name?></small>
+                                                    <small class="text-muted"><?php echo $gown_name2?></small>
                                                 </div>
                                               
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                 <div>
                                                     <h6 class="my-0">Rental Price</h6>
-                                                    <small class="text-muted"><?php echo $price?> PHP</small>
+                                                    <small class="text-muted"><?php echo $price2?> PHP</small>
                                                 </div>
                                               
                                             </li>
@@ -307,14 +307,14 @@ $result = $stmt->get_result();
                                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                 <div>
                                                     <h6 class="my-0">Date to Pick</h6>
-                                                    <small class="text-muted"><?php echo $date_to_pick?></small>
+                                                    <small class="text-muted"><?php echo $date_to_pick2?></small>
                                                 </div>
                                              
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                 <div>
                                                     <h6 class="my-0">Date to Return</h6>
-                                                    <small class="text-muted"><?php echo $date_to_return?></small>
+                                                    <small class="text-muted"><?php echo $date_to_return2?></small>
                                                 </div>
                                              
                                             </li>
@@ -344,7 +344,7 @@ $result = $stmt->get_result();
                                     <h5 class="mb-3">Payment</h5>
                                     <small class="text-muted">Please leave empty the Gcash Fields if you choose Cash on Pick Up payment method</small>
                                             <input type="hidden" name = "reservation_id" value = "<?php echo $reservation_id?>">
-                                            <input type="hidden" name = "amount" value = "<?php echo $price?>">
+                                            <input type="hidden" name = "amount" value = "<?php echo $price2?>">
                                             <div class="d-block my-3">
                                               <div class="form-check custom-radio mb-2">
                                                   <input id="credit" name="paymentMethod" type="radio" class="form-check-input" value="Cash on Pick Up" required="">
