@@ -313,7 +313,6 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
                           </td>
                           <td>
                             <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
-                            <p class="text-xs text-secondary mb-0"></p>
                           </td>
                           <td class="align-middle text-center text-sm">
                             <span
@@ -336,6 +335,7 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
 
                     $conn->close();
                     ?>
+
 
                   </tbody>
 
