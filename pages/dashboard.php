@@ -40,6 +40,56 @@ if (isset($_SESSION['email'])) {
   <title>
   Ging's Boutique | Dashboard
   </title>
+  <style>
+    .timeline {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      height: 100%;
+      width: 2px;
+      background: #e9ecef;
+    }
+    .timeline-block {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .timeline-step {
+      position: absolute;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      z-index: 1;
+    }
+    .timeline-content {
+      margin-left: 50px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    .badge-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 0.25rem;
+    }
+    .bg-gradient-success {
+      background: linear-gradient(310deg, #17a37f 0%, #17a37f 100%);
+    }
+    .bg-gradient-warning {
+      background: linear-gradient(310deg, #fbcf33 0%, #fbcf33 100%);
+    }
+    .bg-gradient-danger {
+      background: linear-gradient(310deg, #ea0606 0%, #ea0606 100%);
+    }
+  </style>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -210,14 +260,16 @@ if (isset($_SESSION['email'])) {
                       <?php echo $total_users?>
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder"></span>
-                     
+                      <span class="text-success text-sm font-weight-bolder">
+                        <i class="fa fa-arrow-up"></i> 3.48%
+                      </span>
+                      <span class="text-secondary text-sm font-weight-bolder">since last month</span>
                     </p>
                   </div>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa fa-users text-lg opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -235,14 +287,16 @@ if (isset($_SESSION['email'])) {
                     <?php echo $total_reservations?>
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder"></span>
-                      
+                      <span class="text-success text-sm font-weight-bolder">
+                        <i class="fa fa-arrow-up"></i> 2.6%
+                      </span>
+                      <span class="text-secondary text-sm font-weight-bolder">since last month</span>
                     </p>
                   </div>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa fa-calendar-check text-lg opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -260,14 +314,16 @@ if (isset($_SESSION['email'])) {
                       <?php echo $gcash?>
                     </h5>
                     <p class="mb-0">
-                      <span class="text-danger text-sm font-weight-bolder"></span>
-                      
+                      <span class="text-success text-sm font-weight-bolder">
+                        <i class="fa fa-arrow-up"></i> 4.2%
+                      </span>
+                      <span class="text-secondary text-sm font-weight-bolder">since last month</span>
                     </p>
                   </div>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa fa-mobile-alt text-lg opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -285,13 +341,16 @@ if (isset($_SESSION['email'])) {
                      <?php echo $cash ?>
                     </h5>
                     <p class="mb-0">
-                      <span class="text-success text-sm font-weight-bolder"></span>
+                      <span class="text-success text-sm font-weight-bolder">
+                        <i class="fa fa-arrow-up"></i> 1.8%
+                      </span>
+                      <span class="text-secondary text-sm font-weight-bolder">since last month</span>
                     </p>
                   </div>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa fa-money-bill-wave text-lg opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -299,14 +358,98 @@ if (isset($_SESSION['email'])) {
           </div>
         </div>
       </div>
+      
+      <!-- Quick Actions Section -->
       <div class="row mt-4">
-        <div class="col-lg-12 mb-lg-0 mb-4">
+        <div class="col-lg-4 mb-lg-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Quick Actions</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <a href="manage_gowns.php" class="btn btn-primary btn-sm w-100">
+                    <i class="fa fa-plus-circle me-2"></i> Add Gown
+                  </a>
+                </div>
+                <div class="col-6 mb-3">
+                  <a href="manage_reservations.php" class="btn btn-info btn-sm w-100">
+                    <i class="fa fa-calendar-plus me-2"></i> Reservations
+                  </a>
+                </div>
+                <div class="col-6 mb-3">
+                  <a href="manage_customers.php" class="btn btn-success btn-sm w-100">
+                    <i class="fa fa-user-plus me-2"></i> View Customer
+                  </a>
+                </div>
+                <div class="col-6 mb-3">
+                  <a href="payments.php" class="btn btn-warning btn-sm w-100">
+                    <i class="fa fa-money-bill-alt me-2"></i> Payments
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recent Activities Section -->
+        <div class="col-lg-8 mb-lg-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Recent Activities</h6>
+            </div>
+            <div class="card-body p-3">
+              <div class="timeline timeline-one-side">
+                <?php
+                // Get recent reservations
+                $sql_recent = "SELECT r.*, u.full_name, g.name 
+                               FROM reservations r 
+                               JOIN users u ON r.customer_id = u.user_id 
+                               JOIN gowns g ON r.gown_id = g.gown_id 
+                               ORDER BY r.created_at DESC LIMIT 5";
+                $result_recent = $conn->query($sql_recent);
+                
+                if ($result_recent && $result_recent->num_rows > 0) {
+                  while ($row_recent = $result_recent->fetch_assoc()) {
+                    $date = date("M d, Y", strtotime($row_recent['created_at']));
+                    $time = date("h:i A", strtotime($row_recent['created_at']));
+                    $status_class = ($row_recent['status'] == 'completed') ? 'success' : 
+                                   (($row_recent['status'] == 'pending') ? 'warning' : 'danger');
+                ?>
+                  <div class="timeline-block mb-3">
+                    <span class="timeline-step bg-<?php echo $status_class; ?>">
+                      <i class="fa fa-calendar-check text-white"></i>
+                    </span>
+                    <div class="timeline-content">
+                      <h6 class="text-dark text-sm font-weight-bold mb-0">
+                        <?php echo $row_recent['full_name']; ?> reserved <?php echo $row_recent['name']; ?>
+                      </h6>
+                      <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                        <?php echo $date; ?> at <?php echo $time; ?>
+                      </p>
+                    </div>
+                  </div>
+                <?php
+                  }
+                } else {
+                  echo '<p class="text-center">No recent activities found.</p>';
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Charts Section -->
+      <div class="row mt-4">
+        <div class="col-lg-8 mb-lg-0 mb-4">
           <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Reservations overview</h6>
+              <h6 class="text-capitalize">Reservations Overview</h6>
               <p class="text-sm mb-0">
-              
-                 in 2024
+                Monthly reservation trends in 2024
               </p>
             </div>
             <div class="card-body p-3">
@@ -317,6 +460,99 @@ if (isset($_SESSION['email'])) {
           </div>
         </div>
         
+        <div class="col-lg-4 mb-lg-0 mb-4">
+          <div class="card z-index-2 h-100">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Payment Methods</h6>
+              <p class="text-sm mb-0">
+                Distribution of payment methods
+              </p>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-pie" class="chart-canvas" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Upcoming Reservations Section -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Upcoming Reservations</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gown</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Start Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">End Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    // Get upcoming reservations
+                    $sql_upcoming = "SELECT r.*, u.full_name, g.name 
+                                    FROM reservations r 
+                                    JOIN users u ON r.customer_id = u.user_id 
+                                    JOIN gowns g ON r.gown_id = g.gown_id 
+                                    WHERE r.status = 'pending' 
+                                    ORDER BY r.start_date ASC LIMIT 5";
+                    $result_upcoming = $conn->query($sql_upcoming);
+                    
+                    if ($result_upcoming && $result_upcoming->num_rows > 0) {
+                      while ($row_upcoming = $result_upcoming->fetch_assoc()) {
+                        $start_date = date("M d, Y", strtotime($row_upcoming['start_date']));
+                        $end_date = date("M d, Y", strtotime($row_upcoming['end_date']));
+                        $status_class = ($row_upcoming['status'] == 'completed') ? 'success' : 
+                                       (($row_upcoming['status'] == 'pending') ? 'warning' : 'danger');
+                    ?>
+                      <tr>
+                        <td>
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                              <h6 class="mb-0 text-sm"><?php echo $row_upcoming['full_name']; ?></h6>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <p class="text-sm font-weight-bold mb-0"><?php echo $row_upcoming['name']; ?></p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-secondary text-sm font-weight-bold"><?php echo $start_date; ?></span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-secondary text-sm font-weight-bold"><?php echo $end_date; ?></span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="badge badge-sm bg-gradient-<?php echo $status_class; ?>"><?php echo ucfirst($row_upcoming['status']); ?></span>
+                        </td>
+                        <td class="align-middle">
+                          <a href="manage_reservations.php?id=<?php echo $row_upcoming['reservation_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View details">
+                            View
+                          </a>
+                        </td>
+                      </tr>
+                    <?php
+                      }
+                    } else {
+                      echo '<tr><td colspan="6" class="text-center">No upcoming reservations found.</td></tr>';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <?php include ('footer.php'); ?>
@@ -386,6 +622,7 @@ if (isset($_SESSION['email'])) {
   <!--   Core JS Files   -->
   <?php include('script.php'); ?>
   <?php include('graph.php'); ?>
+  <?php include('payment_chart.php'); ?>
   <script src="sweetalert.min.js"></script>
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {

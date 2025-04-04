@@ -255,7 +255,7 @@ if (isset($_SESSION['email'])) {
              $result = $conn->query($sql);
  
              if ($result->num_rows > 0) {
- 
+
                 while ($row = $result->fetch_assoc()) {
                     $full_name = htmlspecialchars($row['full_name']);
                     $date_to_pick = htmlspecialchars($row['start_date']);
@@ -272,84 +272,227 @@ if (isset($_SESSION['email'])) {
             }
             ?>
            
-         
-            <div class="card-body px-0 pt-0 pb-2" style="position: relative; background-image: url('background.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px;">
-              <div class="contract-container" id="contractContent" style="padding: 40px; border-radius: 10px; font-family: Arial, sans-serif; background-color: rgba(255, 255, 255, 0.9); box-shadow: 0px 0px 15px rgba(0,0,0,0.1);">
-                  <h4 style="text-align: center; color: #886CC0; font-weight: bold;">Gown Rental Contract</h4>
-                  <p style="text-align: justify; color: #333;">
-                      This agreement is made between 
-                      <input type="text" name="renter_name" value="<?php echo $full_name ?>" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
-                      hereinafter referred to as "The Renter," and 
-                      <input type="text" name="business_name" value="Ging's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
-                      referred to as "The Rental Service Provider," on 
-                      <input type="text" name="contract_date" value="07/09/2004" style="border: none; border-bottom: 1px solid #333;" readOnly>.
-                  </p>
+            <div class="card-header pb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Contract Details</h5>
+                        <p class="text-sm text-secondary mb-0">Reservation ID: <strong>#<?php echo $reservation_id ?></strong></p>
+                    </div>
+                    <div>
+                        <span class="badge badge-sm bg-gradient-info">Rental Agreement</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Customer Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md me-3">
+                                        <i class="fa fa-user text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-weight-bold mb-0"><?php echo $full_name ?></p>
+                                        <p class="text-xs text-secondary mb-0">Customer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Rental Period</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md me-3">
+                                        <i class="fa fa-calendar-alt text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-weight-bold mb-0"><?php echo date('M d, Y', strtotime($date_to_pick)) ?> - <?php echo date('M d, Y', strtotime($date_to_return)) ?></p>
+                                        <p class="text-xs text-secondary mb-0">Pickup to Return</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Gown Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md me-3">
+                                        <i class="fa fa-female text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-weight-bold mb-0"><?php echo $gown_name ?></p>
+                                        <p class="text-xs text-secondary mb-0"><?php echo $color ?>, Size: <?php echo $size ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 col-sm-12">
+                        <div class="card mb-4">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Contract Agreement</h6>
+                            </div>
+                            <div class="card-body px-0 pt-0 pb-2">
+                                <div class="contract-container p-4" id="contractContent" style="border-radius: 10px; font-family: 'Poppins', sans-serif; background-color: #f8f9fa; box-shadow: 0px 0px 15px rgba(0,0,0,0.05);">
+                                    <div class="text-center mb-4">
+                                        <h4 class="text-primary font-weight-bold">Gown Rental Contract</h4>
+                                        <div class="divider bg-gradient-primary my-3"></div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <p class="text-sm">
+                                            This agreement is made between 
+                                            <span class="font-weight-bold"><?php echo $full_name ?></span>, 
+                                            hereinafter referred to as "The Renter," and 
+                                            <span class="font-weight-bold">Ging's Boutique</span>, 
+                                            referred to as "The Rental Service Provider," on 
+                                            <span class="font-weight-bold"><?php echo date('F d, Y') ?></span>.
+                                        </p>
+                                    </div>
 
-                  <h5 style="color: #886CC0; margin-top: 20px;">Rental Details</h5>
-                  <p style="text-align: justify; color: #333;">
-                      The Renter agrees to rent the gown described below for the period starting from 
-                      <input type="date" name="pickup_date" value="<?php echo $date_to_pick ?>" style="border: none; border-bottom: 1px solid #333;" readOnly> 
-                      to 
-                      <input type="date" name="return_date" value="<?php echo $date_to_return ?>" style="border: none; border-bottom: 1px solid #333;" readOnly>.
-                  </p>
-                  <ul style="color: #333;">
-                      <li><strong>Gown Name:</strong> <input type="text" name="gown_name" value="<?php echo $gown_name ?>" placeholder="Gown Name" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                      <li><strong>Size:</strong> <input type="text" name="gown_size" value="<?php echo $size ?>" placeholder="Size" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                      <li><strong>Color:</strong> <input type="text" name="gown_color" value="<?php echo $color ?>" placeholder="Color" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                      <li><strong>Rental Price:</strong> <input type="text" name="gown_price" value="<?php echo $price ?> PHP" placeholder="Price" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                  </ul>
+                                    <div class="mb-4">
+                                        <h5 class="text-primary font-weight-bold">Rental Details</h5>
+                                        <p class="text-sm">
+                                            The Renter agrees to rent the gown described below for the period starting from 
+                                            <span class="font-weight-bold"><?php echo date('F d, Y', strtotime($date_to_pick)) ?></span> 
+                                            to 
+                                            <span class="font-weight-bold"><?php echo date('F d, Y', strtotime($date_to_return)) ?></span>.
+                                        </p>
+                                        <div class="table-responsive">
+                                            <table class="table align-items-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Item</th>
+                                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Color</th>
+                                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Size</th>
+                                                        <th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div>
+                                                                    <img src="images/dress.png" class="avatar avatar-sm me-3" alt="gown">
+                                                                </div>
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm"><?php echo $gown_name ?></h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-xs font-weight-bold mb-0"><?php echo $color ?></p>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span class="text-secondary text-xs font-weight-bold"><?php echo $size ?></span>
+                                                        </td>
+                                                        <td class="align-middle text-end">
+                                                            <span class="text-secondary text-xs font-weight-bold">₱<?php echo number_format($price, 2); ?></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-                  <h5 style="color: #886CC0; margin-top: 20px;">Terms & Conditions</h5>
-                  <ol style="color: #333;">
-                      <li>The gown must be returned in the same condition it was received.</li>
-                      <li>A late return fee of <input type="text" name="late_fee" value="100" placeholder="Fee Amount" style="border: none; border-bottom: 1px solid #333;" readOnly> per day will be applied for late returns.</li>
-                      <li>The Renter is responsible for any damage or loss to the gown.</li>
-                      <li>No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
-                  </ol>
+                                    <div class="mb-4">
+                                        <h5 class="text-primary font-weight-bold">Terms & Conditions</h5>
+                                        <ol class="text-sm">
+                                            <li class="mb-2">The gown must be returned in the same condition it was received.</li>
+                                            <li class="mb-2">A late return fee of <span class="font-weight-bold">₱100</span> per day will be applied for late returns.</li>
+                                            <li class="mb-2">The Renter is responsible for any damage or loss to the gown.</li>
+                                            <li class="mb-2">No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
+                                        </ol>
+                                    </div>
 
-                  <h5 style="color: #886CC0; margin-top: 20px;">Payment & Deposit</h5>
-                  <p style="text-align: justify; color: #333;">
-                      The total rental fee is 
-                      <input type="text" name="total_fee" placeholder="Total Rental Fee" value="<?php echo $total ?> PHP" style="border: none; border-bottom: 1px solid #333;" required>, 
-                      including a 3% transaction fee. A refundable security deposit of 
-                      <input type="text" name="deposit_amount" value="400 PHP" placeholder="Deposit Amount" style="border: none; border-bottom: 1px solid #333;" required> 
-                      will be collected and returned upon inspection of the gown.
-                  </p>
+                                    <div class="mb-4">
+                                        <h5 class="text-primary font-weight-bold">Payment & Deposit</h5>
+                                        <p class="text-sm">
+                                            The total rental fee is 
+                                            <span class="font-weight-bold">₱<?php echo number_format($total, 2); ?></span>, 
+                                            including a 3% transaction fee. A refundable security deposit of 
+                                            <span class="font-weight-bold">₱400</span> 
+                                            will be collected and returned upon inspection of the gown.
+                                        </p>
+                                    </div>
 
-                  <h5 style="color: #886CC0; margin-top: 20px;">Signature</h5>
-                  <p style="text-align: justify; color: #333;">
-                      The Renter agrees to the terms and conditions by signing below.
-                  </p>
-                  <br>
-
-                  <input type="hidden" name="reservation_id" value="<?php echo $reservation_id ?>">
-                  <img src="uploads/<?php echo $signature ?>" alt="<?php echo $signature ?>" style="width: 100px; height: 80px; display;">
-                  <p style="text-decoration: underline;"><b><?php echo strtoupper($full_name); ?></b></p>
-                  <p>Signature over Printed Name</p>
-
-                  
-              </div>
-              <div style="text-align: center; margin-top: 20px;">
-                      <button class="btn btn-primary" type="button" onclick="printContract()"><i class="fa fa-print"></i> Print</button>
-                      <a href="manage_contract.php" class="btn btn-block"><i class="fa fa-arrow-left"></i> Return</a>
-                  </div>
-          </div>
-
-            <script>
-                function printContract() {
-                    var printContents = document.getElementById('contractContent').innerHTML;
-                    var originalContents = document.body.innerHTML;
-
-                    document.body.innerHTML = printContents;
-                    window.print();
-                    document.body.innerHTML = originalContents;
-                    location.reload(); 
-                }
-            </script>
-
+                                    <div class="mb-4">
+                                        <h5 class="text-primary font-weight-bold">Signature</h5>
+                                        <p class="text-sm">
+                                            The Renter agrees to the terms and conditions by signing below.
+                                        </p>
+                                        <div class="mt-3">
+                                            <img src="uploads/<?php echo $signature ?>" alt="Customer Signature" class="img-fluid" style="max-height: 80px;">
+                                            <p class="text-sm font-weight-bold mt-2"><?php echo strtoupper($full_name); ?></p>
+                                            <p class="text-xs text-secondary">Signature over Printed Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-12 col-sm-12">
+                        <div class="card mb-4">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Payment Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-sm font-weight-bold">Rental Fee:</span>
+                                    <span class="text-sm">₱<?php echo number_format($price, 2); ?></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-sm font-weight-bold">Transaction Fee (3%):</span>
+                                    <span class="text-sm">₱<?php echo number_format($interest, 2); ?></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-sm font-weight-bold">Security Deposit:</span>
+                                    <span class="text-sm">₱400.00</span>
+                                </div>
+                                <hr class="horizontal dark my-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-sm font-weight-bold">Total Amount:</span>
+                                    <span class="text-sm font-weight-bold">₱<?php echo number_format($total + 400, 2); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header pb-0">
+                                <h6 class="mb-0">Contract Actions</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-column gap-3">
+                                    <button class="btn btn-primary w-100" type="button" onclick="printContract()">
+                                        <i class="fa fa-print me-2"></i> Print Contract
+                                    </button>
+                                    <a href="manage_contract.php" class="btn btn-secondary w-100">
+                                        <i class="fa fa-arrow-left me-2"></i> Back to Contracts
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <br>
     </div>
 
     <?php include ('footer.php'); ?>

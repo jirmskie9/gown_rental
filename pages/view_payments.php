@@ -217,153 +217,222 @@ $payment_id = intval($_GET['payment_id']);
                             $row = $result->fetch_assoc();
                             $payment_status = $row['payment_status'];
                             $reservation_id = $row['reservation_id'];
+                            
+                            // Status badge class
+                            $status_class = '';
+                            if ($payment_status == 'completed') {
+                                $status_class = 'bg-gradient-success';
+                            } elseif ($payment_status == 'pending') {
+                                $status_class = 'bg-gradient-warning';
+                            } elseif ($payment_status == 'failed') {
+                                $status_class = 'bg-gradient-danger';
+                            } else {
+                                $status_class = 'bg-gradient-secondary';
+                            }
                         }
                     }
                             ?>
-                            <div class="card-header">Reservation ID: <strong>00000<?php echo $payment_id?></strong> <span class="float-end">
-                                    <strong class = "text-primary">Status:</strong> <?php echo htmlspecialchars($row['payment_status'])?></span> </div>
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Payment Details</h5>
+                                    <p class="text-sm text-secondary mb-0">Reservation ID: <strong>00000<?php echo $payment_id?></strong></p>
+                                </div>
+                                <div>
+                                    <span class="badge badge-sm <?php echo $status_class; ?>"><?php echo ucfirst(htmlspecialchars($row['payment_status']))?></span>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <div class="row mb-5">
-                                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <h6>Payment Information:</h6>
-                                        <div> <strong><?php echo htmlspecialchars($row['gcash_name'])?></strong> </div>
-                                        <div><?php echo htmlspecialchars($row['number'])?></div>
-                                        <div><?php echo htmlspecialchars($row['transaction_id'])?></div>
-                                       
-                                    </div>
-                                    <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <h6>Payment Method:</h6>
-                                        <div> <strong><?php echo htmlspecialchars($row['payment_method'])?></strong> </div>
-                                       
-                                    </div>
-                                    <div class="mt-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 d-flex justify-content-lg-end justify-content-md-center justify-content-xs-start">
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-9 d-flex align-items-center">
-                                            <div class="brand-logo me-3">
-                                                <img class="logo-abbr me-2" width="50" src="images/logo.png" alt="">
-                                                <img class="logo-compact" width="110" src="page-error-404.html" alt="">
+                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+                                        <div class="card h-100">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Payment Information</h6>
                                             </div>
-                                            <div>
-                                               
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md me-3">
+                                                        <i class="fa fa-user text-lg opacity-10" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-weight-bold mb-0"><?php echo htmlspecialchars($row['gcash_name'])?></p>
+                                                        <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($row['number'])?></p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md me-3">
+                                                        <i class="fa fa-receipt text-lg opacity-10" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-weight-bold mb-0">Transaction ID</p>
+                                                        <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($row['transaction_id'])?></p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-sm-3 d-flex flex-column align-items-center">
-                                            <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['proof'])); ?>" alt="" class="img-fluid width110 mb-2">
-                                            <strong><?php echo htmlspecialchars($row['name'])?></strong><br>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+                                        <div class="card h-100">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Payment Method</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon icon-shape bg-gradient-info shadow text-center border-radius-md me-3">
+                                                        <i class="fa fa-credit-card text-lg opacity-10" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-weight-bold mb-0"><?php echo htmlspecialchars($row['payment_method'])?></p>
+                                                        <p class="text-xs text-secondary mb-0">Payment Date: <?php echo date('M d, Y', strtotime($row['payment_date']))?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-4">
+                                        <div class="card h-100">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Payment Proof</h6>
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['proof'])); ?>" alt="Payment Proof" class="img-fluid rounded mb-3" style="max-height: 150px;">
+                                                <p class="text-sm font-weight-bold mb-0"><?php echo htmlspecialchars($row['name'])?></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">#</th>
-                                                <th>Gown Name</th>
-                                                <th>Price</th>
-                                                <th class="right">Color</th>
-                                                <th class="center">Qty</th>
-                                           
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="center">1</td>
-                                                <td class="left strong"><?php echo htmlspecialchars($row['name'])?></td>
-                                                <td class="left"><?php echo htmlspecialchars($row['price'])?></td>
-                                                <td class="right"><?php echo htmlspecialchars($row['color'])?></td>
-                                                <td class="center">1</td>
-                                          
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                
                                 <div class="row">
-                                    <div class="col-lg-4 col-sm-5"> </div>
-                                    <div class="col-lg-4 col-sm-5 ms-auto">
-                                        <table class="table table-clear">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="left"><strong>Subtotal</strong></td>
-                                                    <td class="right"><?php echo htmlspecialchars($row['price'])?></td>
-                                                </tr>
+                                    <div class="col-12">
+                                        <div class="card mb-4">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Order Details</h6>
+                                            </div>
+                                            <div class="card-body px-0 pt-0 pb-2">
+                                                <div class="table-responsive p-0">
+                                                    <table class="table align-items-center mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Item</th>
+                                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Color</th>
+                                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                                                                <th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex px-2 py-1">
+                                                                        <div>
+                                                                            <img src="images/dress.png" class="avatar avatar-sm me-3" alt="gown">
+                                                                        </div>
+                                                                        <div class="d-flex flex-column justify-content-center">
+                                                                            <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($row['name'])?></h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($row['color'])?></p>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <span class="text-secondary text-xs font-weight-bold">1</span>
+                                                                </td>
+                                                                <td class="align-middle text-end">
+                                                                    <span class="text-secondary text-xs font-weight-bold">₱<?php echo number_format($row['price'], 2); ?></span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Payment Summary</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <span class="text-sm font-weight-bold">Subtotal:</span>
+                                                    <span class="text-sm">₱<?php echo number_format($row['price'], 2); ?></span>
+                                                </div>
                                                 <?php
                                                 $price = htmlspecialchars($row['price']);
                                                 $transactionFee = $price * 0.03; 
                                                 $totalPrice = $price + $transactionFee;
                                                 $added = $totalPrice - $price;
                                                 ?>
-                                                <tr>
-                                                    <td class="left"><strong>Transaction Fee (3%)</strong></td>
-                                                    <td class="right"><?php echo $added?> PHP</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left"><strong>Security Deposit</strong></td>
-                                                    <td class="right"><?php echo $added + 400?> PHP</td>
-                                                </tr>
-                                               
-                                                <tr>
-                                                
-                                                    <td class="left"><strong>Total</strong></td>
-                                                    <td class="right"><strong><?php echo number_format($totalPrice, 2); ?></strong><br>
-                                                        <strong>PHP</strong></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                      
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <span class="text-sm font-weight-bold">Transaction Fee (3%):</span>
+                                                    <span class="text-sm">₱<?php echo number_format($added, 2); ?></span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-3">
+                                                    <span class="text-sm font-weight-bold">Security Deposit:</span>
+                                                    <span class="text-sm">₱<?php echo number_format($added + 400, 2); ?></span>
+                                                </div>
+                                                <hr class="horizontal dark my-2">
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="text-sm font-weight-bold">Total:</span>
+                                                    <span class="text-sm font-weight-bold">₱<?php echo number_format($totalPrice, 2); ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                 
-
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header pb-0">
+                                                <h6 class="mb-0">Payment Actions</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex flex-column gap-3">
+                                                    <form action="process/paid_payment.php" method="POST">
+                                                        <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
+                                                        <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
+                                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
+                                                        <input type="hidden" value="<?php echo htmlspecialchars($row['name'])?>" name="name">
+                                                        <button class="btn btn-success w-100" type="submit" name="conf">
+                                                            <i class="fas fa-check me-2"></i> Mark as Paid
+                                                        </button>
+                                                    </form>
+                                                    
+                                                    <button class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#validModal">
+                                                        <i class="fas fa-times me-2"></i> Reject Payment
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <br>
-                                <div class="text-center">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <form action="process/paid_payment.php" method="POST">
-                                        <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
-                                        <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
-                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
-                                        <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
-                                        <button class="btn btn-success" type="submit" name="conf">
-                                            <i class="fas fa-check"></i> Paid
-                                        </button>
-                                    </form>
-     
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#validModal">
-                                        <i class="fas fa-times"></i> Reject
-                                    </button>
-                                </div>
-                            </div>
-
                             </div>
                         </div>
                         <div class="modal fade" id="validModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-															<div class="modal-dialog modal-dialog-centered modal-lg">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<h7 class="modal-title" id="imageModalLabel">Rejection Letter</h7>
-																		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-																	</div>
-																	<div class="modal-body text-center">
-
-																		<div class="form-group">
-                                                                            <form action="process/reject_payment.php" method = "POST">
-                                                                            <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
-                                                                            <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
-                                                                            <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
-                                                                            <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
-                                                                            <textarea name="reason" id="" class = "form-control" placeholder = "State your reason here...."></textarea>
-                                                                        </div>
-																	</div>
-                                                                    <div class="modal-footer">
-                                                                        <button class = "btn btn-primary" type = "submit" name = "save">Okay</button>
-                                                                        </form>
-                                                                    </div>
-																</div>
-															</div>
-														</div>
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="imageModalLabel">Rejection Letter</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="process/reject_payment.php" method="POST">
+                                            <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
+                                            <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
+                                            <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
+                                            <input type="hidden" value="<?php echo htmlspecialchars($row['name'])?>" name="name">
+                                            <div class="form-group">
+                                                <label for="reason" class="form-label">Reason for Rejection</label>
+                                                <textarea name="reason" id="reason" class="form-control" rows="4" placeholder="Please state your reason for rejecting this payment..."></textarea>
+                                            </div>
+                                            <div class="mt-4">
+                                                <button class="btn btn-primary w-100" type="submit" name="save">Submit Rejection</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
          
         </div>
 

@@ -41,6 +41,142 @@ $gown_id = intval($_GET['gown_id']);
   <title>
   Ging's Boutique | Edit Gown
   </title>
+  <style>
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    .card-header {
+      border-radius: 15px 15px 0 0 !important;
+      background: linear-gradient(310deg, #5e72e4 0%, #825ee4 100%);
+      color: white;
+    }
+    .form-control {
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e9ecef;
+      transition: all 0.2s ease;
+    }
+    .form-control:focus {
+      border-color: #5e72e4;
+      box-shadow: 0 3px 9px rgba(50, 50, 9, 0), 3px 4px 8px rgba(94, 114, 228, 0.1);
+    }
+    .form-control-label {
+      font-weight: 600;
+      color: #344767;
+    }
+    .btn {
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(310deg, #5e72e4 0%, #825ee4 100%);
+      border: none;
+    }
+    .btn-danger {
+      background: linear-gradient(310deg, #f5365c 0%, #f56036 100%);
+      border: none;
+    }
+    .btn-success {
+      background: linear-gradient(310deg, #2dce89 0%, #2dcecc 100%);
+      border: none;
+    }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #344767;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 50px;
+      background: linear-gradient(310deg, #5e72e4 0%, #825ee4 100%);
+      border-radius: 3px;
+    }
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    .file-input-wrapper .form-control {
+      padding-right: 30px;
+    }
+    .file-input-wrapper:after {
+      content: '\f093';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5e72e4;
+      pointer-events: none;
+    }
+    .gown-status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-available {
+      background-color: rgba(45, 206, 137, 0.1);
+      color: #2dce89;
+    }
+    .status-maintenance {
+      background-color: rgba(251, 99, 67, 0.1);
+      color: #fb6343;
+    }
+    .status-rented {
+      background-color: rgba(251, 207, 51, 0.1);
+      color: #fbcf33;
+    }
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .action-buttons .btn {
+      flex: 1;
+      min-width: 150px;
+    }
+    .gown-info-card {
+      background: linear-gradient(310deg, #5e72e4 0%, #825ee4 100%);
+      color: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .gown-info-card h5 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .gown-info-card p {
+      margin-bottom: 0.25rem;
+      opacity: 0.8;
+    }
+    .gown-info-card .info-label {
+      font-weight: 600;
+      opacity: 0.9;
+    }
+  </style>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -203,9 +339,11 @@ $gown_id = intval($_GET['gown_id']);
     <div class="col-md-8">
           <div class="card">
             <div class="card-header pb-0">
-              <div class="d-flex align-items-center">
-                <p class="mb-0">Edit form</p>
-               
+              <div class="d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Edit Gown</h5>
+                <a href="manage_gowns.php" class="btn btn-sm btn-outline-light">
+                  <i class="fa fa-arrow-left me-1"></i> Back to Gowns
+                </a>
               </div>
             </div>
             <?php 
@@ -221,11 +359,26 @@ $gown_id = intval($_GET['gown_id']);
                     $price = htmlspecialchars($row['price']);
                     $description = htmlspecialchars($row['description']);
                     $main_image = htmlspecialchars($row['main_image']);
+                    $status = htmlspecialchars($row['availability_status']);
                 }
             }
             ?>
             <div class="card-body">
-              <p class="text-uppercase text-sm">Gown Information</p>
+              <div class="gown-info-card">
+                <h5><?php echo $gown_name; ?></h5>
+                <p><span class="info-label">ID:</span> #<?php echo $gown_id; ?></p>
+                <p><span class="info-label">Status:</span> 
+                  <?php if($status == 'available'): ?>
+                    <span class="gown-status status-available">Available</span>
+                  <?php elseif($status == 'maintenance'): ?>
+                    <span class="gown-status status-maintenance">Under Maintenance</span>
+                  <?php else: ?>
+                    <span class="gown-status status-rented">Rented</span>
+                  <?php endif; ?>
+                </p>
+              </div>
+              
+              <p class="section-title">Gown Information</p>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -256,40 +409,51 @@ $gown_id = intval($_GET['gown_id']);
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Price</label>
-                    <input class="form-control" type="number" name = "gown_price" value = "<?php echo $price?>">
+                    <div class="input-group">
+                      <span class="input-group-text">₱</span>
+                      <input class="form-control" type="number" name = "gown_price" value = "<?php echo $price?>">
+                    </div>
                   </div>
                 </div>
               </div>
               <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Images</p>
+              <p class="section-title">Images</p>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Main Image</label>
-                        <input type="file" class = "form-control" name = "gown_main">
+                    <div class="file-input-wrapper">
+                      <input type="file" class = "form-control" name = "gown_main">
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label" >Gown Image 1</label>
-                    <input type="file" class = "form-control" name = "img1">
+                    <div class="file-input-wrapper">
+                      <input type="file" class = "form-control" name = "img1">
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Gown Image 2</label>
-                    <input type="file" class = "form-control" name = "img2">
+                    <div class="file-input-wrapper">
+                      <input type="file" class = "form-control" name = "img2">
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Gown Image 3</label>
-                    <input type="file" class = "form-control" name = "img3">
+                    <div class="file-input-wrapper">
+                      <input type="file" class = "form-control" name = "img3">
+                    </div>
                   </div>
                 </div>
               </div>
               <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Description</p>
+              <p class="section-title">Description</p>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -300,52 +464,74 @@ $gown_id = intval($_GET['gown_id']);
               </div>
             </div>
             <div class="card-footer text-center">
-            <form action="return_gown.php" method="POST" style="display: inline;">
-                <input type="hidden" name="reservation_id" value="<?php echo $reservation_id; ?>">
-                <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>">
-                <button type="submit" name="save_gown" class="btn btn-primary me-2">
-                    <i class="fa fa-file"></i> Save Gown
-                </button>
-            </form>
-            
-            <form action="process/maintenance_gown.php" method="POST" style="display: inline;">
-                <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
-                <button type="submit" name="maintenance_gown" class="btn btn-danger">
-                    <i class="fa fa-wrench"></i> Set Under Maintenance
-                </button>
-            </form>
-            <form action="process/fix_gown.php" method="POST" style="display: inline;">
-              <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
-              <button type="submit" name="fix_gown" class="btn btn-success">
-                  <i class="fa fa-wrench"></i> Fix Gown
-              </button>
-          </form>
-
-        </div>
-
-        
+              <div class="action-buttons">
+                <form action="return_gown.php" method="POST" style="display: inline;">
+                  <input type="hidden" name="reservation_id" value="<?php echo $reservation_id; ?>">
+                  <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>">
+                  <button type="submit" name="save_gown" class="btn btn-primary me-2">
+                    <i class="fa fa-save me-2"></i> Save Gown
+                  </button>
+                </form>
+                
+                <form action="process/maintenance_gown.php" method="POST" style="display: inline;">
+                  <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
+                  <button type="submit" name="maintenance_gown" class="btn btn-danger">
+                    <i class="fa fa-wrench me-2"></i> Set Under Maintenance
+                  </button>
+                </form>
+                <form action="process/fix_gown.php" method="POST" style="display: inline;">
+                  <input type="hidden" name="gown_id" value="<?php echo $gown_id; ?>"> <!-- Include gown_id for maintenance action -->
+                  <button type="submit" name="fix_gown" class="btn btn-success">
+                    <i class="fa fa-check me-2"></i> Fix Gown
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card card-profile">
-            <img src="../assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
-            <div class="row justify-content-center">
-              <div class="col-4 col-lg-4 order-lg-2">
-                <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                  <a href="javascript:;">
-                    <img src="images/dress.png" class="rounded-circle img-fluid border border-2 border-white">
-                  </a>
-                </div>
-              </div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <h5 class="mb-0">Gown Preview</h5>
             </div>
-            
-            <div class="card-body pt-0">
+            <div class="card-body">
+              <div class="text-center">
+                <?php if(!empty($main_image) && file_exists("../uploads/gowns/".$main_image)): ?>
+                  <img src="../uploads/gowns/<?php echo $main_image; ?>" alt="Gown Preview" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
+                <?php else: ?>
+                  <div class="text-center p-5">
+                    <i class="fa fa-female fa-5x mb-3 text-secondary"></i>
+                    <p class="text-secondary">No image available</p>
+                  </div>
+                <?php endif; ?>
+              </div>
               
-              <div class="text-center mt-4">
-                <h5>
-                Ging's Boutique<span class="font-weight-light"></span>
-                </h5>
-                
+              <div class="mt-4">
+                <h6 class="text-uppercase text-sm font-weight-bold">Quick Stats</h6>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Status</span>
+                    <?php if($status == 'available'): ?>
+                      <span class="gown-status status-available">Available</span>
+                    <?php elseif($status == 'maintenance'): ?>
+                      <span class="gown-status status-maintenance">Under Maintenance</span>
+                    <?php else: ?>
+                      <span class="gown-status status-rented">Rented</span>
+                    <?php endif; ?>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Size</span>
+                    <span class="font-weight-bold"><?php echo $size; ?></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Color</span>
+                    <span class="font-weight-bold"><?php echo $color; ?></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Price</span>
+                    <span class="font-weight-bold">₱<?php echo number_format($price, 2); ?></span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

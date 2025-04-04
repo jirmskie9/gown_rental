@@ -196,11 +196,95 @@ if (isset($_SESSION['email'])) {
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-    <div class="row">
+      <!-- Payment Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Payments</p>
+                    <?php
+                    $sql_total = "SELECT COUNT(*) as total FROM payments";
+                    $result_total = $conn->query($sql_total);
+                    $row_total = $result_total->fetch_assoc();
+                    ?>
+                    <h5 class="font-weight-bolder mb-0">
+                      <?php echo $row_total['total']; ?>
+                    </h5>
+                    <p class="mb-0 text-sm">
+                      <span class="text-success text-sm font-weight-bolder">+3%</span>
+                      since last month
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="fa fa-money-bill-wave text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Revenue</p>
+                    <?php
+                    $sql_revenue = "SELECT SUM(amount) as total FROM payments";
+                    $result_revenue = $conn->query($sql_revenue);
+                    $row_revenue = $result_revenue->fetch_assoc();
+                    $total_revenue = $row_revenue['total'] ?? 0;
+                    ?>
+                    <h5 class="font-weight-bolder mb-0">
+                      ₱<?php echo number_format($total_revenue, 2); ?>
+                    </h5>
+                    <p class="mb-0 text-sm">
+                      <span class="text-success text-sm font-weight-bolder">+5%</span>
+                      since last month
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                    <i class="fa fa-chart-line text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div>
+      
+      <div class="row">
         <div class="col-12">
           <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Manage Payments</h6>
+            <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">Manage Payments</h6>
+              <div class="d-flex">
+                <div class="dropdown me-2">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#">All Payments</a></li>
+                    <li><a class="dropdown-item" href="#">Completed</a></li>
+                    <li><a class="dropdown-item" href="#">Pending</a></li>
+                    <li><a class="dropdown-item" href="#">Failed</a></li>
+                  </ul>
+                </div>
+                <div class="input-group input-group-sm" style="width: 250px;">
+                  <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                  <input type="text" class="form-control" placeholder="Search payments...">
+                </div>
+              </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -210,16 +294,17 @@ if (isset($_SESSION['email'])) {
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renter Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Transaction ID</th>
-            
-                    
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Amount</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   <tbody>
                   <?php
 
-            $sql = "SELECT p.payment_id, p.reservation_id, p.payment_method, p.transaction_id, p.proof, r.gown_id, r.customer_id, g.name, g.main_image, u.full_name FROM payments p
-            JOIN reservations r ON p.reservation_id = r.reservation_id JOIN gowns g ON r.gown_id = g.gown_id JOIN users u ON r.customer_id = u.user_id";
+            $sql = "SELECT p.payment_id, p.reservation_id, p.payment_method, p.transaction_id, p.proof, p.amount, p.payment_date, r.gown_id, r.customer_id, g.name, g.main_image, u.full_name FROM payments p
+            JOIN reservations r ON p.reservation_id = r.reservation_id JOIN gowns g ON r.gown_id = g.gown_id JOIN users u ON r.customer_id = u.user_id ORDER BY p.payment_date DESC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -229,8 +314,21 @@ if (isset($_SESSION['email'])) {
                     $main_image = 'uploads/' . basename($row['main_image']);
                     $name = $row['name'];
                     $transaction_id = $row['transaction_id'];
-    
-         
+                    $amount = $row['amount'];
+                    $status = $row['status'] ?? 'pending';
+                    $date_paid = $row['payment_date'] ? date('M d, Y', strtotime($row['payment_date'])) : 'N/A';
+                    
+                    // Status badge class
+                    $status_class = '';
+                    if ($status == 'completed') {
+                        $status_class = 'bg-gradient-success';
+                    } elseif ($status == 'pending') {
+                        $status_class = 'bg-gradient-warning';
+                    } elseif ($status == 'failed') {
+                        $status_class = 'bg-gradient-danger';
+                    } else {
+                        $status_class = 'bg-gradient-secondary';
+                    }
                     ?>
                     <tr>
                     <td>
@@ -240,46 +338,63 @@ if (isset($_SESSION['email'])) {
                             </div>
                             <div class="d-flex flex-column justify-content-center">
                                 <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
+                                <p class="text-xs text-secondary mb-0">ID: <?php echo $row['gown_id']; ?></p>
                             </div>
                         </div>
                     </td>
-                    <td class="text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"><?php echo htmlspecialchars($full_name); ?></span>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($full_name); ?></h6>
+                            <p class="text-xs text-secondary mb-0">ID: <?php echo $row['customer_id']; ?></p>
+                        </div>
                     </td>
                     <td>
                         <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($transaction_id); ?></p>
-                        <p class="text-xs text-secondary mb-0"></p> 
+                        <p class="text-xs text-secondary mb-0"><?php echo $row['payment_method']; ?></p>
                     </td>
-                  
+                    <td>
+                        <p class="text-xs font-weight-bold mb-0">₱<?php echo number_format($amount, 2); ?></p>
+                    </td>
+                    <td>
+                        <span class="badge badge-sm <?php echo $status_class; ?>"><?php echo ucfirst($status); ?></span>
+                    </td>
+                    <td>
+                        <p class="text-xs font-weight-bold mb-0"><?php echo $date_paid; ?></p>
+                    </td>
                     <td class="align-middle">
-                        <a class="btn btn-warning btn-md" href="view_payments.php?payment_id=<?php echo $row['payment_id']; ?>"><i class="fas fa-eye"></i></a>
-                         
+                        <a class="btn btn-link text-dark px-3 mb-0" href="view_payments.php?payment_id=<?php echo $row['payment_id']; ?>">
+                            <i class="fas fa-eye text-dark me-2"></i>View
                         </a>
                     </td>
                     </tr>
                     <?php
                         }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/folder.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>No Payment Found</p></td></tr>";
+                      echo "<tr><td colspan='7' class='text-center align-middle py-4'><img src='images/folder.png' class='img-fluid mb-2' style='max-width: 100px;' alt='Empty Image'><p class='text-danger mb-0'>No Payment Found</p></td></tr>";
                     }
-
-
-                    $conn->close();
                     ?>
-                    
                   </tbody>
-                  
                 </table>
-                
-               
               </div>
-              
             </div>
-            
+            <div class="card-footer py-3">
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                  </li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
-         
         </div>
+      </div>
 
       <?php include ('footer.php'); ?>
     </div>
