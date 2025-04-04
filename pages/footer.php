@@ -7,7 +7,7 @@
                   document.write(new Date().getFullYear())
                 </script>,
                 made with <i class="fa fa-heart"></i>
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Pepping's Boutique Rentals Reservation System</a>
+                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Ging's Boutique Rentals Reservation System</a>
                
               </div>
             </div>

@@ -53,7 +53,7 @@ $result = $stmt->get_result();
 
   <?php include('header.php');?>
   <title>
-  Boutique Gown | Payment
+  Ging's Boutique | Payment
   </title>
 </head>
 

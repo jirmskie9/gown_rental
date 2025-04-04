@@ -37,7 +37,7 @@ if (isset($_SESSION['email'])) {
 
   <?php include('header.php');?>
   <title>
-  Pepping's Boutique | Add Gown
+  Ging's Boutique | Add Gown
   </title>
 </head>
 
@@ -331,7 +331,7 @@ if (isset($_SESSION['email'])) {
               
               <div class="text-center mt-4">
                 <h5>
-                Pepping's Boutique<span class="font-weight-light"></span>
+                Ging's Boutique<span class="font-weight-light"></span>
                 </h5>
                 
               </div>

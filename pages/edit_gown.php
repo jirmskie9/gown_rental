@@ -39,7 +39,7 @@ $gown_id = intval($_GET['gown_id']);
 
   <?php include('header.php');?>
   <title>
-  Pepping's Boutique | Edit Gown
+  Ging's Boutique | Edit Gown
   </title>
 </head>
 
@@ -343,7 +343,7 @@ $gown_id = intval($_GET['gown_id']);
               
               <div class="text-center mt-4">
                 <h5>
-                Pepping's Boutique<span class="font-weight-light"></span>
+                Ging's Boutique<span class="font-weight-light"></span>
                 </h5>
                 
               </div>

@@ -12,7 +12,7 @@ include('pages/process/config.php');
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="pages/images/dress.png">
   <title>
-  Pepping's Boutique| Login
+  Ging's Boutique| Login
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -35,8 +35,8 @@ include('pages/process/config.php');
             <div class="container-fluid">
                 <!-- Responsive Navbar Brand Text -->
                 <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-wrap" href="#">
-                    <span class="d-none d-md-inline">(PBRRS) - Pepping's Boutique Rental Reservation System</span>
-                    <span class="d-inline d-md-none">PBRRS - Pepping's Rental System</span>
+                    <span class="d-none d-md-inline">(GBRRS) - Ging's Boutique Rental Reservation System</span>
+                    <span class="d-inline d-md-none">GBRRS - Ging's Rental System</span>
                 </a>
             </div>
         </nav>

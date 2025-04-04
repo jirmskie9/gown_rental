@@ -102,7 +102,7 @@ if ($result->num_rows > 0) {
 </style>
 
   <title>
-  Boutique Gown | History
+  Ging's Boutique | History
   </title>
 </head>
 

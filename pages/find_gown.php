@@ -37,7 +37,7 @@ if (isset($_SESSION['email'])) {
 
   <?php include('header.php');?>
   <title>
-  Boutique Gown | Find
+  Ging's Boutique | Find Gown
   </title>
   <style>
     .image-zoom {

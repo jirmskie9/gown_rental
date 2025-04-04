@@ -53,7 +53,7 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
 
 <?php include('header.php'); ?>
 <title>
-  Boutique Gown | History
+Ging's Boutique | History
 </title>
 </head>
 

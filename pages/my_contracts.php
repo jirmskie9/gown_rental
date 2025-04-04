@@ -287,7 +287,7 @@ $result = $stmt->get_result();
                             This agreement is made between 
                             <input type="text" name="renter_name" value = "<?php echo $full_name?>" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
                             hereinafter referred to as "The Renter," and 
-                            <input type="text" name="business_name" value = "Pepping's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
+                            <input type="text" name="business_name" value = "Ging's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
                             referred to as "The Rental Service Provider," on 
                             <input type="text" name="contract_date" value = "07/09/2004" style="border: none; border-bottom: 1px solid #333;" readOnly>.
                         </p>

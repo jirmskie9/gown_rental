@@ -43,7 +43,7 @@ if($gown_id == ""){
 
   <?php include('header.php');?>
   <title>
-  Boutique Gown | View Gown
+  Ging's Boutique | View Gown
   </title>
 </head>
 
