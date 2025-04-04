@@ -278,82 +278,134 @@ $result = $stmt->get_result();
     <div class="row">
     <div class="col-12">
         <div class="card mb-4">
-           
             <div class="card-body px-0 pt-0 pb-2" style="position: relative; background-image: url('background.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px;">
-                <div class="contract-container" id="contractContent" style="padding: 40px; border-radius: 10px; font-family: Arial, sans-serif; background-color: rgba(255, 255, 255, 0.9); box-shadow: 0px 0px 15px rgba(0,0,0,0.1);">
-                    <h4 style="text-align: center; color: #886CC0; font-weight: bold;">Gown Rental Contract</h4>
-                   
-                        <p style="text-align: justify; color: #333;">
+                <div class="contract-container" id="contractContent" style="padding: 40px; border-radius: 10px; font-family: 'Times New Roman', Times, serif; background-color: rgba(255, 255, 255, 0.95); box-shadow: 0px 0px 20px rgba(0,0,0,0.15); max-width: 800px; margin: 0 auto; border: 1px solid #e0e0e0;">
+                    <!-- Contract Header with Logo -->
+                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #886CC0; padding-bottom: 20px; position: relative;">
+                        <div style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); background: white; padding: 10px; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                            <i class="fas fa-file-contract" style="font-size: 30px; color: #886CC0;"></i>
+                        </div>
+                        <h3 style="color: #886CC0; font-weight: bold; margin: 20px 0 10px 0; font-size: 24px; letter-spacing: 1px;">GOWN RENTAL CONTRACT</h3>
+                        <p style="color: #666; font-style: italic; margin: 0; font-size: 14px;">This is a legally binding agreement between the parties</p>
+                    </div>
+                    
+                    <!-- Contract Number and Date -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px; color: #666;">
+                        <div><strong>Contract #:</strong> <span style="color: #886CC0;"><?php echo "CNT-" . date("Ymd") . "-" . substr(md5($full_name), 0, 4); ?></span></div>
+                        <div><strong>Date:</strong> <span style="color: #886CC0;"><?php echo date("F j, Y"); ?></span></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <p style="text-align: justify; color: #333; line-height: 1.6; margin-bottom: 15px;">
                             This agreement is made between 
-                            <input type="text" name="renter_name" value = "<?php echo $full_name?>" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
+                            <span style="font-weight: bold; color: #886CC0; border-bottom: 1px solid #886CC0; padding: 0 5px;"><?php echo $full_name?></span>, 
                             hereinafter referred to as "The Renter," and 
-                            <input type="text" name="business_name" value = "Ging's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
+                            <span style="font-weight: bold; color: #886CC0; border-bottom: 1px solid #886CC0; padding: 0 5px;">Ging's Boutique</span>, 
                             referred to as "The Rental Service Provider," on 
-                            <input type="text" name="contract_date" value = "07/09/2004" style="border: none; border-bottom: 1px solid #333;" readOnly>.
+                            <span style="font-weight: bold; color: #886CC0; border-bottom: 1px solid #886CC0; padding: 0 5px;"><?php echo date("F j, Y"); ?></span>.
                         </p>
+                    </div>
 
-                        <h5 style="color: #886CC0; margin-top: 20px;">Rental Details</h5>
-                        <p style="text-align: justify; color: #333;">
+                    <div style="margin-bottom: 25px;">
+                        <h5 style="color: #886CC0; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #886CC0; padding-left: 10px; display: flex; align-items: center;">
+                            <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Rental Details
+                        </h5>
+                        <p style="text-align: justify; color: #333; line-height: 1.6; margin-bottom: 15px;">
                             The Renter agrees to rent the gown described below for the period starting from 
-                            <input type="date" name="pickup_date" value = "<?php echo $date_to_pick?>" style="border: none; border-bottom: 1px solid #333;" readOnly> 
+                            <span style="font-weight: bold; color: #886CC0; border-bottom: 1px solid #886CC0; padding: 0 5px;"><?php echo $date_to_pick?></span> 
                             to 
-                            <input type="date" name="return_date" value = "<?php echo $date_to_return?>" style="border: none; border-bottom: 1px solid #333;" readOnly>.
+                            <span style="font-weight: bold; color: #886CC0; border-bottom: 1px solid #886CC0; padding: 0 5px;"><?php echo $date_to_return?></span>.
                         </p>
-                        <ul style="color: #333;">
-                            <li><strong>Gown Name:</strong> <input type="text" name="gown_name" value = "<?php echo $gown_name?>" placeholder="Gown Name" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Size:</strong> <input type="text" name="gown_size" value = "<?php echo $size?>" placeholder="Size" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Color:</strong> <input type="text" name="gown_color" value = "<?php echo $color?>" placeholder="Color" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Rental Price:</strong> <input type="text" name="gown_price" value = "<?php echo $price?> PHP" placeholder="Price" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                        </ul>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e0e0e0;">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #e0e0e0; padding-bottom: 8px;">
+                                    <strong style="color: #886CC0;"><i class="fas fa-tshirt" style="margin-right: 8px;"></i>Gown Name:</strong> 
+                                    <span><?php echo $gown_name?></span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #e0e0e0; padding-bottom: 8px;">
+                                    <strong style="color: #886CC0;"><i class="fas fa-ruler" style="margin-right: 8px;"></i>Size:</strong> 
+                                    <span><?php echo $size?></span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #e0e0e0; padding-bottom: 8px;">
+                                    <strong style="color: #886CC0;"><i class="fas fa-palette" style="margin-right: 8px;"></i>Color:</strong> 
+                                    <span><?php echo $color?></span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; justify-content: space-between; padding-bottom: 8px;">
+                                    <strong style="color: #886CC0;"><i class="fas fa-tag" style="margin-right: 8px;"></i>Rental Price:</strong> 
+                                    <span style="font-weight: bold;">₱<?php echo number_format($price, 2)?> PHP</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                        <h5 style="color: #886CC0; margin-top: 20px;">Terms & Conditions</h5>
-                        <ol style="color: #333;">
-                            <li>The gown must be returned in the same condition it was received.</li>
-                            <li>A late return fee of <input type="text" name="late_fee" value = "100" placeholder="Fee Amount" style="border: none; border-bottom: 1px solid #333;" readOnly> per day will be applied for late returns.</li>
-                            <li>The Renter is responsible for any damage or loss to the gown.</li>
-                            <li>No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
+                    <div style="margin-bottom: 25px;">
+                        <h5 style="color: #886CC0; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #886CC0; padding-left: 10px; display: flex; align-items: center;">
+                            <i class="fas fa-file-contract" style="margin-right: 10px;"></i> Terms & Conditions
+                        </h5>
+                        <ol style="color: #333; line-height: 1.6; padding-left: 20px;">
+                            <li style="margin-bottom: 10px; position: relative; padding-left: 5px;">The gown must be returned in the same condition it was received.</li>
+                            <li style="margin-bottom: 10px; position: relative; padding-left: 5px;">A late return fee of <span style="font-weight: bold; color: #886CC0;">₱100</span> per day will be applied for late returns.</li>
+                            <li style="margin-bottom: 10px; position: relative; padding-left: 5px;">The Renter is responsible for any damage or loss to the gown.</li>
+                            <li style="margin-bottom: 10px; position: relative; padding-left: 5px;">No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
                         </ol>
+                    </div>
 
-                        <h5 style="color: #886CC0; margin-top: 20px;">Payment & Deposit</h5>
-                        <p style="text-align: justify; color: #333;">
-                            The total rental fee is 
-                            <input type="text" name="total_fee" placeholder="Total Rental Fee" value = "<?php echo $total ?> PHP" style="border: none; border-bottom: 1px solid #333;" required>, 
-                            including a 3% transaction fee. A refundable security deposit of 
-                            <input type="text" name="deposit_amount"  value = "400 PHP" placeholder="Deposit Amount" style="border: none; border-bottom: 1px solid #333;" required> 
-                            will be collected and returned upon inspection of the gown.
-                        </p>
+                    <div style="margin-bottom: 25px;">
+                        <h5 style="color: #886CC0; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #886CC0; padding-left: 10px; display: flex; align-items: center;">
+                            <i class="fas fa-money-bill-wave" style="margin-right: 10px;"></i> Payment & Deposit
+                        </h5>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e0e0e0;">
+                            <p style="text-align: justify; color: #333; line-height: 1.6; margin-bottom: 10px;">
+                                The total rental fee is <span style="font-weight: bold; color: #886CC0;">₱<?php echo number_format($total, 2)?> PHP</span>, 
+                                including a 3% transaction fee. A refundable security deposit of 
+                                <span style="font-weight: bold; color: #886CC0;">₱400 PHP</span> will be collected and returned upon inspection of the gown.
+                            </p>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e0e0e0;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span>Rental Fee:</span>
+                                    <span>₱<?php echo number_format($price, 2)?> PHP</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span>Transaction Fee (3%):</span>
+                                    <span>₱<?php echo number_format($interest, 2)?> PHP</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; border-top: 1px solid #e0e0e0; padding-top: 8px; margin-top: 8px;">
+                                    <span>Total Amount:</span>
+                                    <span style="color: #886CC0;">₱<?php echo number_format($total, 2)?> PHP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <h5 style="color: #886CC0; margin-top: 20px;">Signature</h5>
-                        <p style="text-align: justify; color: #333;">
+                    <div style="margin-bottom: 25px;">
+                        <h5 style="color: #886CC0; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #886CC0; padding-left: 10px; display: flex; align-items: center;">
+                            <i class="fas fa-signature" style="margin-right: 10px;"></i> Signature
+                        </h5>
+                        <p style="text-align: justify; color: #333; line-height: 1.6; margin-bottom: 15px;">
                             The Renter agrees to the terms and conditions by signing below.
                         </p>
-                        <p>Date Signed:</p>
-                        <?php echo date("F j, Y, g:i a", strtotime($date_signed)); ?>
-
-                        <br>
-                 
-                   
-                        <img id="signatureImg" src="uploads/<?php echo $signature ?>" alt="<?php echo $signature ?>" style="width: 100px; height: 80px;">
-                        <p style = "text-decoration: underline;"><b><?php echo strtoupper($full_name); ?></b></p>
-                        <p>Signature over Printed Name</p>
-
-                       
+                        <div style="margin-top: 30px;">
+                            <p style="color: #666; margin-bottom: 5px;"><i class="far fa-calendar-alt" style="margin-right: 5px;"></i>Date Signed: <?php echo date("F j, Y, g:i a", strtotime($date_signed)); ?></p>
+                            <div style="margin: 20px 0; text-align: center;">
+                                <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; display: inline-block; background: #f8f9fa;">
+                                    <img id="signatureImg" src="uploads/<?php echo $signature ?>" alt="<?php echo $signature ?>" style="width: 150px; height: 100px; margin-bottom: 10px;">
+                                    <p style="border-top: 1px solid #886CC0; padding-top: 5px; margin: 0; font-weight: bold; color: #886CC0;">
+                                        <?php echo strtoupper($full_name); ?>
+                                    </p>
+                                    <p style="color: #666; margin: 5px 0 0 0; font-size: 0.9em;">Signature over Printed Name</p>
+                                </div>
+                            </div>
                         </div>
-                        <div style="text-align: center; margin-top: 20px;">
-            <button class="btn btn-primary" type="button" onclick="printContract()"><i class="fa fa-print"></i> Print</button>
-            <a href="contracts.php" class="btn btn-block"><i class="fa fa-arrow-left"></i> Return</a>
-        </div>
-            <script>
-                function printContract() {
-                    var printContents = document.getElementById('contractContent').innerHTML;
-                    var originalContents = document.body.innerHTML;
+                    </div>
 
-                    document.body.innerHTML = printContents;
-                    window.print();
-                    document.body.innerHTML = originalContents;
-                    location.reload(); 
-                }
-            </script>
+                    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #886CC0;">
+                        <button class="btn btn-primary" type="button" onclick="printContract()" style="background: #886CC0; border: none; padding: 10px 25px; margin-right: 10px; border-radius: 5px; transition: all 0.3s ease;">
+                            <i class="fa fa-print"></i> Print Contract
+                        </button>
+                        <a href="contracts.php" class="btn btn-secondary" style="background: #6c757d; border: none; padding: 10px 25px; border-radius: 5px; transition: all 0.3s ease;">
+                            <i class="fa fa-arrow-left"></i> Return to Contracts
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -444,6 +496,125 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     unset($_SESSION['status_button']);
 }
 ?>
+
+<script>
+    function printContract() {
+        // Create a new window for printing
+        var printWindow = window.open('', '_blank');
+        
+        // Get the contract content
+        var contractContent = document.getElementById('contractContent').innerHTML;
+        
+        // Create the HTML content for the print window
+        var printContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Gown Rental Contract</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+                <style>
+                    body {
+                        font-family: 'Times New Roman', Times, serif;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 20px;
+                    }
+                    .contract-container {
+                        max-width: 800px;
+                        margin: 0 auto;
+                        padding: 40px;
+                        border: 1px solid #e0e0e0;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    }
+                    h3, h5 {
+                        color: #886CC0;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 30px;
+                        border-bottom: 2px solid #886CC0;
+                        padding-bottom: 20px;
+                        position: relative;
+                    }
+                    .header-icon {
+                        position: absolute;
+                        top: -40px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: white;
+                        padding: 10px;
+                        border-radius: 50%;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    }
+                    .section {
+                        margin-bottom: 25px;
+                    }
+                    .section-title {
+                        color: #886CC0;
+                        margin-bottom: 15px;
+                        font-weight: bold;
+                        border-left: 3px solid #886CC0;
+                        padding-left: 10px;
+                        display: flex;
+                        align-items: center;
+                    }
+                    .info-box {
+                        background: #f8f9fa;
+                        padding: 15px;
+                        border-radius: 8px;
+                        margin: 15px 0;
+                        border: 1px solid #e0e0e0;
+                    }
+                    .signature-box {
+                        border: 1px solid #e0e0e0;
+                        padding: 15px;
+                        border-radius: 8px;
+                        display: inline-block;
+                        background: #f8f9fa;
+                        text-align: center;
+                    }
+                    @media print {
+                        body {
+                            padding: 0;
+                        }
+                        .contract-container {
+                            box-shadow: none;
+                            border: none;
+                        }
+                        .no-print {
+                            display: none;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="contract-container">
+                    ${contractContent}
+                </div>
+                <div class="no-print" style="text-align: center; margin-top: 20px;">
+                    <button onclick="window.print()" style="background: #886CC0; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        <i class="fa fa-print"></i> Print
+                    </button>
+                </div>
+            </body>
+            </html>
+        `;
+        
+        // Write the content to the new window
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        
+        // Wait for resources to load
+        printWindow.onload = function() {
+            // Print the window
+            printWindow.print();
+            
+            // Close the window after printing (optional)
+            // printWindow.close();
+        };
+    }
+</script>
 
 </body>
 

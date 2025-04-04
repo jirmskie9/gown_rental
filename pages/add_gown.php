@@ -258,6 +258,18 @@ if (isset($_SESSION['email'])) {
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Gown Category</label>
+                  
+                    <select name="category" id="" class = "form-control">
+                      <option value="wedding">Wedding Gowns</option>
+                      <option value="evening">Evening Gowns</option>
+                      <option value="prom">Prom Gowns</option>
+                      <option value="cocktail">Cocktail Gowns</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Color</label>
                     <input class="form-control" type="text" name = "gown_color">
                   </div>

@@ -213,26 +213,48 @@ $reservation_id = intval($_GET['reservation_id']);
     <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-        <div class="card mt-3">
-                            <div class="card-header">Reservation ID: <strong>00000<?php echo $reservation_id?></strong> <span class="float-end">
-                                    <strong class = "text-primary">Status:</strong> <?php echo htmlspecialchars($row['status'])?></span> </div>
+        <div class="card mt-3 shadow-sm">
+                            <div class="card-header bg-gradient-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-0">Reservation ID: <strong>00000<?php echo $reservation_id?></strong></h5>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-white text-primary">
+                                            <strong>Status:</strong> <?php echo htmlspecialchars($row['status'])?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <div class="row mb-5">
                                     <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <h6>Pick up Date:</h6>
-                                        <div> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
-                                        <div><?php echo htmlspecialchars($row['start_date'])?></div>
-                                        <div><?php echo htmlspecialchars($row['address'])?></div>
-                                        <div><?php echo htmlspecialchars($row['email'])?></div>
-                                        <div><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                        <div class="card shadow-sm mb-3">
+                                            <div class="card-header bg-gradient-info text-white py-2">
+                                                <h6 class="mb-0"><i class="fa fa-calendar-plus me-2"></i>Pick up Date:</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
+                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-primary"></i><?php echo htmlspecialchars($row['start_date'])?></div>
+                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-primary"></i><?php echo htmlspecialchars($row['address'])?></div>
+                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-primary"></i><?php echo htmlspecialchars($row['email'])?></div>
+                                                <div><i class="fa fa-phone me-2 text-primary"></i><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="mt-4 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                        <h6>Date to Return:</h6>
-                                        <div> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
-                                        <div><?php echo htmlspecialchars($row['end_date'])?></div>
-                                        <div><?php echo htmlspecialchars($row['address'])?></div>
-                                        <div><?php echo htmlspecialchars($row['email'])?></div>
-                                        <div><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                        <div class="card shadow-sm mb-3">
+                                            <div class="card-header bg-gradient-success text-white py-2">
+                                                <h6 class="mb-0"><i class="fa fa-calendar-minus me-2"></i>Date to Return:</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
+                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-success"></i><?php echo htmlspecialchars($row['end_date'])?></div>
+                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-success"></i><?php echo htmlspecialchars($row['address'])?></div>
+                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-success"></i><?php echo htmlspecialchars($row['email'])?></div>
+                                                <div><i class="fa fa-phone me-2 text-success"></i><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="mt-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 d-flex justify-content-lg-end justify-content-md-center justify-content-xs-start">
                                     <div class="row align-items-center">
@@ -247,67 +269,84 @@ $reservation_id = intval($_GET['reservation_id']);
                                         </div>
 
                                         <div class="col-sm-3 d-flex flex-column align-items-center">
-                                            <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['main_image'])); ?>" alt="" class="img-fluid width110 mb-2">
-                                            <strong><?php echo htmlspecialchars($row['name'])?></strong><br>
+                                            <div class="card shadow-sm">
+                                                <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['main_image'])); ?>" alt="" class="img-fluid rounded mb-2" style="max-height: 150px; object-fit: cover;">
+                                                <div class="card-body p-2 text-center">
+                                                    <strong class="text-primary"><?php echo htmlspecialchars($row['name'])?></strong>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
                                 </div>
 
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">#</th>
-                                                <th>Gown Name</th>
-                                                <th>Price</th>
-                                                <th class="right">Color</th>
-                                                <th class="center">Qty</th>
-                                           
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="center">1</td>
-                                                <td class="left strong"><?php echo htmlspecialchars($row['name'])?></td>
-                                                <td class="left"><?php echo htmlspecialchars($row['price'])?></td>
-                                                <td class="right"><?php echo htmlspecialchars($row['color'])?></td>
-                                                <td class="center">1</td>
-                                          
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-gradient-primary text-white py-2">
+                                        <h6 class="mb-0"><i class="fa fa-list me-2"></i>Gown Details</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-items-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th>Gown Name</th>
+                                                        <th>Price</th>
+                                                        <th class="text-end">Color</th>
+                                                        <th class="text-center">Qty</th>
+                                                   
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-center">1</td>
+                                                        <td class="font-weight-bold"><?php echo htmlspecialchars($row['name'])?></td>
+                                                        <td>₱<?php echo number_format(htmlspecialchars($row['price']), 2)?></td>
+                                                        <td class="text-end"><?php echo htmlspecialchars($row['color'])?></td>
+                                                        <td class="text-center">1</td>
+                                                      
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4 col-sm-5"> </div>
                                     <div class="col-lg-4 col-sm-5 ms-auto">
-                                        <table class="table table-clear">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="left"><strong>Subtotal</strong></td>
-                                                    <td class="right"><?php echo htmlspecialchars($row['price'])?></td>
-                                                </tr>
-                                                <?php
-                                                $price = htmlspecialchars($row['price']);
-                                                $transactionFee = $price * 0.03; 
-                                                $totalPrice = $price + $transactionFee;
-                                                $added = $totalPrice - $price;
-                                                ?>
-                                                <tr>
-                                                    <td class="left"><strong>Transaction Fee (3%)</strong></td>
-                                                    <td class="right"><?php echo $added?> PHP</td>
-                                                </tr>
-                                               
-                                                <tr>
-                                                
-                                                    <td class="left"><strong>Total</strong></td>
-                                                    <td class="right"><strong><?php echo number_format($totalPrice, 2); ?></strong><br>
-                                                        <strong>PHP</strong></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                      
+                                        <div class="card shadow-sm">
+                                            <div class="card-header bg-gradient-info text-white py-2">
+                                                <h6 class="mb-0"><i class="fa fa-money-bill-wave me-2"></i>Payment Summary</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <table class="table table-clear">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="left"><strong>Subtotal</strong></td>
+                                                            <td class="right">₱<?php echo number_format(htmlspecialchars($row['price']), 2)?></td>
+                                                        </tr>
+                                                        <?php
+                                                        $price = htmlspecialchars($row['price']);
+                                                        $transactionFee = $price * 0.03; 
+                                                        $totalPrice = $price + $transactionFee;
+                                                        $added = $totalPrice - $price;
+                                                        ?>
+                                                        <tr>
+                                                            <td class="left"><strong>Transaction Fee (3%)</strong></td>
+                                                            <td class="right">₱<?php echo number_format($added, 2)?></td>
+                                                        </tr>
+                                                       
+                                                        <tr>
+                                                        
+                                                            <td class="left"><strong>Total</strong></td>
+                                                            <td class="right"><strong>₱<?php echo number_format($totalPrice, 2); ?></strong></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                              
+                                            </div>
+                                        </div>
                                     </div>
                                  
 
@@ -320,8 +359,8 @@ $reservation_id = intval($_GET['reservation_id']);
                                         <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
                                         <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
                                         <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
-                                        <button class="btn btn-primary" type="submit" name="reserve">
-                                            <i class="fas fa-check"></i> Confirm
+                                        <button class="btn btn-success" type="submit" name="reserve">
+                                            <i class="fas fa-check me-2"></i> Confirm
                                         </button>
                                     </form>
                                     <form action="process/return_gown.php" method = "POST">
@@ -331,14 +370,14 @@ $reservation_id = intval($_GET['reservation_id']);
                                         <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
                                         <?php if ($row['payment_status'] == 'paid') { ?>
                                           <button class="btn btn-primary" type="submit" name="returned">
-                                              <i class="fas fa-check"></i> Returned
+                                              <i class="fas fa-undo me-2"></i> Returned
                                           </button>
                                       <?php } ?>
 
                                         </form>
                                     
                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#validModal">
-                                        <i class="fas fa-times"></i> Reject
+                                        <i class="fas fa-times me-2"></i> Reject
                                     </button>
                                 </div>
                             </div>
@@ -348,18 +387,20 @@ $reservation_id = intval($_GET['reservation_id']);
                         <div class="modal fade" id="validModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
 															<div class="modal-dialog modal-dialog-centered modal-lg">
 																<div class="modal-content">
-																	<div class="modal-header">
-																		<h7 class="modal-title" id="imageModalLabel">Rejection Letter</h7>
-																		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	<div class="modal-header bg-gradient-danger text-white">
+																		<h5 class="modal-title" id="imageModalLabel">Rejection Letter</h5>
+																		<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 																	</div>
-																	<div class="modal-body text-center">
+																	<div class="modal-body">
 																
 																		<div class="form-group">
-                                                                            <textarea name="reason" id="" class = "form-control" placeholder = "State your reason here...."></textarea>
+                                                                            <label for="reason" class="form-label">Reason for Rejection</label>
+                                                                            <textarea name="reason" id="reason" class="form-control" rows="4" placeholder="State your reason here...."></textarea>
                                                                         </div>
 																	</div>
                                                                     <div class="modal-footer">
-                                                                        <button class = "btn btn-primary" type = "submit" name = "save">Okay</button>
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button class="btn btn-danger" type="submit" name="save">Submit Rejection</button>
                                                                     </div>
 																</div>
 															</div>

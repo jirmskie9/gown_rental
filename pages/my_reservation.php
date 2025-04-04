@@ -303,94 +303,106 @@ if ($reservation_id) {
         <div class="card mb-4">
            
             <div class="card-body px-0 pt-0 pb-2" style="position: relative; background-image: url('background.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px;">
-                <div class="contract-container" style="padding: 40px; border-radius: 10px; font-family: Arial, sans-serif; background-color: rgba(255, 255, 255, 0.9); box-shadow: 0px 0px 15px rgba(0,0,0,0.1);">
-                    <h4 style="text-align: center; color: #886CC0; font-weight: bold;">Gown Rental Contract</h4>
-                   
-                        <p style="text-align: justify; color: #333;">
+                <div class="contract-container" style="padding: 40px; border-radius: 10px; font-family: 'Times New Roman', serif; background-color: rgba(255, 255, 255, 0.95); box-shadow: 0px 0px 20px rgba(0,0,0,0.15); max-width: 900px; margin: 0 auto;">
+                    <h4 style="text-align: center; color: #886CC0; font-weight: bold; font-size: 24px; margin-bottom: 5px; position: relative;">
+                        <span style="position: relative; z-index: 1;">Gown Rental Contract</span>
+                        <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 80%; height: 3px; background: linear-gradient(90deg, transparent, #886CC0, transparent);"></div>
+                    </h4>
+                    <p style="text-align: center; color: #777; font-style: italic; margin-bottom: 25px; font-size: 14px;">A legally binding agreement between the Renter and the Rental Service Provider</p>
+                       
+                        <p style="text-align: justify; color: #333; line-height: 1.8;">
                             This agreement is made between 
-                            <input type="text" name="renter_name" value = "<?php echo $full_name?>" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
+                            <input type="text" name="renter_name" value = "<?php echo $full_name?>" style="border: none; border-bottom: 1px solid #333; width: 150px; text-align: center; font-weight: bold; color: #886CC0;" readOnly>, 
                             hereinafter referred to as "The Renter," and 
-                            <input type="text" name="business_name" value = "Ging's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px;" readOnly>, 
+                            <input type="text" name="business_name" value = "Ging's Boutique" style="border: none; border-bottom: 1px solid #333; width: 150px; text-align: center; font-weight: bold; color: #886CC0;" readOnly>, 
                             referred to as "The Rental Service Provider," on 
-                            <input type="text" name="contract_date" value = "07/09/2004" style="border: none; border-bottom: 1px solid #333;" readOnly>.
+                            <input type="text" name="contract_date" value = "<?php echo date("F d, Y"); ?>" style="border: none; border-bottom: 1px solid #333; text-align: center; font-weight: bold; color: #886CC0;" readOnly>.
                         </p>
 
-                        <h5 style="color: #886CC0; margin-top: 20px;">Rental Details</h5>
-                        <p style="text-align: justify; color: #333;">
-                            The Renter agrees to rent the gown described below for the period starting from 
-                            <input type="date" name="pickup_date" value = "<?php echo $date_to_pick?>" style="border: none; border-bottom: 1px solid #333;" readOnly> 
-                            to 
-                            <input type="date" name="return_date" value = "<?php echo $date_to_return?>" style="border: none; border-bottom: 1px solid #333;" readOnly>.
-                        </p>
-                        <ul style="color: #333;">
-                            <li><strong>Gown Name:</strong> <input type="text" name="gown_name" value = "<?php echo $gown_name?>" placeholder="Gown Name" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Size:</strong> <input type="text" name="gown_size" value = "<?php echo $size?>" placeholder="Size" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Color:</strong> <input type="text" name="gown_color" value = "<?php echo $color?>" placeholder="Color" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                            <li><strong>Rental Price:</strong> <input type="text" name="gown_price" value = "<?php echo $price?> PHP" placeholder="Price" style="border: none; border-bottom: 1px solid #333;" readOnly></li>
-                        </ul>
-
-                        <h5 style="color: #886CC0; margin-top: 20px;">Terms & Conditions</h5>
-                        <ol style="color: #333;">
-                            <li>The gown must be returned in the same condition it was received.</li>
-                            <li>A late return fee of <input type="text" name="late_fee" value = "100" placeholder="Fee Amount" style="border: none; border-bottom: 1px solid #333;" readOnly> per day will be applied for late returns.</li>
-                            <li>The Renter is responsible for any damage or loss to the gown.</li>
-                            <li>No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
-                        </ol>
-
-                        <h5 style="color: #886CC0; margin-top: 20px;">Payment & Deposit</h5>
-                        <p style="text-align: justify; color: #333;">
-                            The total rental fee is 
-                            <input type="text" name="total_fee" placeholder="Total Rental Fee" value = "<?php echo $total ?> PHP" style="border: none; border-bottom: 1px solid #333;" required>, 
-                            including a 3% transaction fee. A refundable security deposit of 
-                            <input type="text" name="deposit_amount"  value = "400 PHP" placeholder="Deposit Amount" style="border: none; border-bottom: 1px solid #333;" required> 
-                            will be collected and returned upon inspection of the gown.
-                        </p>
-
-                        <h5 style="color: #886CC0; margin-top: 20px;">Signature</h5>
-                        <p style="text-align: justify; color: #333;">
-                            The Renter agrees to the terms and conditions by signing below.
-                        </p>
-                        <br>
-                        <form action="process/sign_agreement.php" method = "POST" enctype = "multiform/part">
-                          <input type="hidden" name = "reservation_id" value = "<?php echo $reservation_id?>">
-                          <input type="hidden" name = "gown_id" value = "<?php echo $gown_id?>">
-                        <img id="signatureImg" src="<?php echo $signature_img_url ?? ''; ?>" alt="Signature" style="width: 100px; height: 80px; display: <?php echo !empty($signature_img_url) ? 'block' : 'none'; ?>;">
-                        <p style = "text-decoration: underline;"><b><?php echo strtoupper($full_name); ?></b></p>
-                        <p>Signature over Printed Name</p>
-
-                        <canvas id="signatureCanvas" style="border: 1px solid #333; width: 200px; height: 150px;"></canvas>
-                        <input type="hidden" name="signature_data" id="signature_data">
-                        <br>
-                        <button type="button" id="signButton" class="btn btn-success">Sign</button>
-                        <button class="btn btn-danger" type="button" id="clearCanvas">Clear Signature</button>
-
-                        <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-                        <script>
-                        var canvas = document.getElementById('signatureCanvas');
-                        var signaturePad = new SignaturePad(canvas);
-                        var signatureImg = document.getElementById('signatureImg');
-
-                        document.getElementById('signButton').addEventListener('click', function () {
-                            if (!signaturePad.isEmpty()) {
-                                var dataURL = signaturePad.toDataURL(); 
-                                document.getElementById('signature_data').value = dataURL;
-                                signatureImg.src = dataURL; 
-                                signatureImg.style.display = 'block'; 
-                            } else {
-                                alert("Please provide a signature.");
-                            }
-                        });
-
-                        document.getElementById('clearCanvas').addEventListener('click', function () {
-                            signaturePad.clear();
-                            signatureImg.style.display = 'none'; 
-                        });
-                        </script>
-
-                        <div style="text-align: center; margin-top: 20px;">
-                            <button class="btn btn-primary" type="submit" name="sign"><i class="fa fa-save"></i> Continue to Payment</button>
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #886CC0; margin: 20px 0;">
+                            <h5 style="color: #886CC0; margin-top: 0; font-weight: bold; font-size: 18px;"><i class="fas fa-calendar-alt me-2"></i> Rental Details</h5>
+                            <p style="text-align: justify; color: #333; line-height: 1.8;">
+                                The Renter agrees to rent the gown described below for the period starting from 
+                                <input type="date" name="pickup_date" value = "<?php echo $date_to_pick?>" style="border: none; border-bottom: 1px solid #333; text-align: center; font-weight: bold; color: #886CC0;" readOnly> 
+                                to 
+                                <input type="date" name="return_date" value = "<?php echo $date_to_return?>" style="border: none; border-bottom: 1px solid #333; text-align: center; font-weight: bold; color: #886CC0;" readOnly>.
+                            </p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                                <div>
+                                    <p><strong>Gown Name:</strong> <input type="text" name="gown_name" value = "<?php echo $gown_name?>" placeholder="Gown Name" style="border: none; border-bottom: 1px solid #333; width: 100%; text-align: center; font-weight: bold; color: #886CC0;" readOnly></p>
+                                    <p><strong>Size:</strong> <input type="text" name="gown_size" value = "<?php echo $size?>" placeholder="Size" style="border: none; border-bottom: 1px solid #333; width: 100%; text-align: center; font-weight: bold; color: #886CC0;" readOnly></p>
+                                </div>
+                                <div>
+                                    <p><strong>Color:</strong> <input type="text" name="gown_color" value = "<?php echo $color?>" placeholder="Color" style="border: none; border-bottom: 1px solid #333; width: 100%; text-align: center; font-weight: bold; color: #886CC0;" readOnly></p>
+                                    <p><strong>Rental Price:</strong> <input type="text" name="gown_price" value = "<?php echo $price?> PHP" placeholder="Price" style="border: none; border-bottom: 1px solid #333; width: 100%; text-align: center; font-weight: bold; color: #886CC0;" readOnly></p>
+                                </div>
+                            </div>
                         </div>
-                    </form>
+
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #886CC0; margin: 20px 0;">
+                            <h5 style="color: #886CC0; margin-top: 0; font-weight: bold; font-size: 18px;"><i class="fas fa-file-contract me-2"></i> Terms & Conditions</h5>
+                            <ol style="color: #333; line-height: 1.8;">
+                                <li>The gown must be returned in the same condition it was received.</li>
+                                <li>A late return fee of <input type="text" name="late_fee" value = "100" placeholder="Fee Amount" style="border: none; border-bottom: 1px solid #333; width: 50px; text-align: center; font-weight: bold; color: #886CC0;" readOnly> per day will be applied for late returns.</li>
+                                <li>The Renter is responsible for any damage or loss to the gown.</li>
+                                <li>No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
+                            </ol>
+                        </div>
+
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #886CC0; margin: 20px 0;">
+                            <h5 style="color: #886CC0; margin-top: 0; font-weight: bold; font-size: 18px;"><i class="fas fa-money-bill-wave me-2"></i> Payment & Deposit</h5>
+                            <p style="text-align: justify; color: #333; line-height: 1.8;">
+                                The total rental fee is 
+                                <input type="text" name="total_fee" placeholder="Total Rental Fee" value = "<?php echo $total ?> PHP" style="border: none; border-bottom: 1px solid #333; width: 150px; text-align: center; font-weight: bold; color: #886CC0;" required>, 
+                                including a 3% transaction fee. A refundable security deposit of 
+                                <input type="text" name="deposit_amount"  value = "400 PHP" placeholder="Deposit Amount" style="border: none; border-bottom: 1px solid #333; width: 100px; text-align: center; font-weight: bold; color: #886CC0;" required> 
+                                will be collected and returned upon inspection of the gown.
+                            </p>
+                        </div>
+
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #886CC0; margin: 20px 0;">
+                            <h5 style="color: #886CC0; margin-top: 0; font-weight: bold; font-size: 18px;"><i class="fas fa-signature me-2"></i> Signature</h5>
+                            <p style="text-align: justify; color: #333; line-height: 1.8;">
+                                The Renter agrees to the terms and conditions by signing below.
+                            </p>
+                            <br>
+                            <form action="process/sign_agreement.php" method = "POST" enctype = "multiform/part">
+                              <input type="hidden" name = "reservation_id" value = "<?php echo $reservation_id?>">
+                              <input type="hidden" name = "gown_id" value = "<?php echo $gown_id?>">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
+                                <div style="text-align: center; width: 45%;">
+                                    <img id="signatureImg" src="<?php echo $signature_img_url ?? ''; ?>" alt="Signature" style="width: 100%; height: 80px; object-fit: contain; display: <?php echo !empty($signature_img_url) ? 'block' : 'none'; ?>;">
+                                    <p style = "text-decoration: underline; margin-top: 10px;"><b><?php echo strtoupper($full_name); ?></b></p>
+                                    <p style="color: #777; font-size: 14px;">Signature over Printed Name</p>
+                                </div>
+                                <div style="text-align: center; width: 45%;">
+                                    <div style="border: 1px solid #ddd; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
+                                        <p style="color: #777; font-style: italic;">Ging's Boutique Stamp</p>
+                                    </div>
+                                    <p style="margin-top: 10px; font-weight: bold;">Ging's Boutique</p>
+                                    <p style="color: #777; font-size: 14px;">Authorized Representative</p>
+                                </div>
+                            </div>
+
+                            <canvas id="signatureCanvas" style="border: 1px solid #ddd; width: 100%; height: 150px; margin: 20px 0; border-radius: 5px;"></canvas>
+                            <input type="hidden" name="signature_data" id="signature_data">
+                            <br>
+                            <div style="display: flex; justify-content: center; gap: 15px; margin: 20px 0;">
+                                <button type="button" id="signButton" class="btn btn-success" style="background: linear-gradient(45deg, #28a745, #20c997); border: none; padding: 10px 25px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);">
+                                    <i class="fas fa-signature me-2"></i> Sign
+                                </button>
+                                <button class="btn btn-danger" type="button" id="clearCanvas" style="background: linear-gradient(45deg, #dc3545, #f86b7d); border: none; padding: 10px 25px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);">
+                                    <i class="fas fa-eraser me-2"></i> Clear Signature
+                                </button>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 20px;">
+                                <button class="btn btn-primary" type="submit" name="sign" style="background: linear-gradient(45deg, #886CC0, #9b7ed3); border: none; padding: 12px 30px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(136, 108, 192, 0.3);">
+                                    <i class="fa fa-save me-2"></i> Continue to Payment
+                                </button>
+                            </div>
+                            </form>
+                        </div>
                 </div>
             </div>
         </div>
@@ -465,6 +477,7 @@ if ($reservation_id) {
   <!--   Core JS Files   -->
   <?php include('script.php'); ?>
   <script src="sweetalert.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
 ?>
@@ -482,6 +495,84 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
 }
 ?>
 
+<script>
+// Enhanced signature pad functionality
+document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('signatureCanvas');
+    var signaturePad = new SignaturePad(canvas, {
+        backgroundColor: 'rgb(255, 255, 255)',
+        penColor: '#886CC0',
+        minWidth: 1,
+        maxWidth: 2.5
+    });
+    var signatureImg = document.getElementById('signatureImg');
+    
+    // Resize canvas to fit container
+    function resizeCanvas() {
+        var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+        signaturePad.clear(); // Clear the canvas after resize
+    }
+    
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    
+    // Sign button functionality
+    document.getElementById('signButton').addEventListener('click', function () {
+        if (!signaturePad.isEmpty()) {
+            var dataURL = signaturePad.toDataURL(); 
+            document.getElementById('signature_data').value = dataURL;
+            signatureImg.src = dataURL; 
+            signatureImg.style.display = 'block';
+            canvas.style.display = 'none';
+            
+            // Show success message
+            swal({
+                title: "Signature Added",
+                text: "Your signature has been successfully added to the contract.",
+                icon: "success",
+                button: "Continue",
+            });
+        } else {
+            swal({
+                title: "Signature Required",
+                text: "Please provide a signature before proceeding.",
+                icon: "warning",
+                button: "Try Again",
+            });
+        }
+    });
+    
+    // Clear canvas functionality
+    document.getElementById('clearCanvas').addEventListener('click', function () {
+        signaturePad.clear();
+        signatureImg.style.display = 'none';
+        canvas.style.display = 'block';
+    });
+    
+    // Add hover effects to buttons
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 6px 15px rgba(0,0,0,0.2)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+        });
+    });
+    
+    // Debug information
+    console.log("Signature pad initialized");
+    console.log("Canvas dimensions:", canvas.width, "x", canvas.height);
+    console.log("Canvas style dimensions:", canvas.style.width, "x", canvas.style.height);
+    console.log("Canvas offset dimensions:", canvas.offsetWidth, "x", canvas.offsetHeight);
+});
+</script>
 </body>
 
 </html>

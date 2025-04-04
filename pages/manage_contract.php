@@ -39,6 +39,242 @@ if (isset($_SESSION['email'])) {
   <title>
   Ging's Boutique | Contract
   </title>
+  <style>
+    /* Enhanced Contract Management Table Styles */
+    .contract-container {
+      background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .contract-header {
+      background: linear-gradient(45deg, #17a2b8, #5bc0de);
+      color: white;
+      padding: 20px;
+      border-radius: 15px 15px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .contract-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .contract-header h6 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .contract-header h6 i {
+      margin-right: 10px;
+      font-size: 1.4rem;
+    }
+    
+    .contract-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .contract-table thead th {
+      background-color: #f8f9fa;
+      color: #344767;
+      font-weight: 600;
+      padding: 15px;
+      border-bottom: 2px solid #e9ecef;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .contract-table tbody tr {
+      transition: all 0.3s ease;
+    }
+    
+    .contract-table tbody tr:hover {
+      background-color: rgba(23, 162, 184, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .contract-table tbody td {
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .gown-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .gown-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .gown-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .gown-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .gown-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .gown-name {
+      font-weight: 600;
+      color: #344767;
+      margin-bottom: 5px;
+    }
+    
+    .customer-name {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: linear-gradient(45deg, #ffc107, #ffdb6d);
+      color: #856404;
+    }
+    
+    .date-cell {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .date-label {
+      font-size: 0.7rem;
+      color: #67748e;
+      margin-bottom: 3px;
+    }
+    
+    .date-value {
+      font-weight: 600;
+      color: #344767;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-badge.confirmed {
+      background: linear-gradient(45deg, #28a745, #75b798);
+      color: #ffffff;
+    }
+    
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border: none;
+      background: linear-gradient(45deg, #17a2b8, #5bc0de);
+      color: white;
+      box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(23, 162, 184, 0.4);
+    }
+    
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .empty-state img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    
+    .empty-state p {
+      font-size: 1rem;
+      color: #67748e;
+      margin: 0;
+    }
+    
+    .edit-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #17a2b8, #5bc0de);
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+      margin-top: 20px;
+    }
+    
+    .edit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(23, 162, 184, 0.4);
+      color: white;
+    }
+    
+    .edit-btn i {
+      margin-right: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .contract-table thead th {
+        font-size: 0.7rem;
+        padding: 10px;
+      }
+      
+      .contract-table tbody td {
+        padding: 10px;
+      }
+      
+      .gown-image {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .gown-name {
+        font-size: 0.9rem;
+      }
+      
+      .date-value {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -198,21 +434,21 @@ if (isset($_SESSION['email'])) {
     <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Manage Contract</h6>
+          <div class="card contract-container mb-4">
+            <div class="card-header contract-header">
+              <h6><i class="fas fa-file-contract me-2"></i> Manage Contract</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table class="table contract-table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Details</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Reserved By</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date to Pick</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date to Return</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pick-up Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Return Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-secondary opacity-7 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -233,43 +469,59 @@ if (isset($_SESSION['email'])) {
                     $status = $row['status'];
                     $reservation_id = $row['reservation_id'];
                     $full_name = $row['full_name'];
+                    
+                    // Format dates for better display
+                    $formatted_start_date = date("M d, Y", strtotime($start_date));
+                    $formatted_end_date = date("M d, Y", strtotime($end_date));
          
                     ?>
                     <tr>
                     <td>
-                        <div class="d-flex px-2 py-1">
-                            <div>
-                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3" alt="<?php echo htmlspecialchars($name); ?>">
+                        <div class="gown-item">
+                            <div class="gown-image">
+                                <img src="<?php echo $main_image; ?>" alt="<?php echo htmlspecialchars($name); ?>">
                             </div>
-                            <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
+                            <div class="gown-details">
+                                <div class="gown-name"><?php echo htmlspecialchars($name); ?></div>
+                                <div class="gown-id">ID: <?php echo $gown_id; ?></div>
                             </div>
                         </div>
                     </td>
-                    <td class="text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"><?php echo htmlspecialchars($full_name); ?></span>
+                    <td>
+                        <span class="customer-name"><?php echo htmlspecialchars($full_name); ?></span>
                     </td>
                     <td>
-                        <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
-                        <p class="text-xs text-secondary mb-0"></p> 
+                        <div class="date-cell">
+                            <div class="date-label">Pick-up On</div>
+                            <div class="date-value"><?php echo $formatted_start_date; ?></div>
+                        </div>
                     </td>
-                    <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-label">Return On</div>
+                            <div class="date-value"><?php echo $formatted_end_date; ?></div>
+                        </div>
                     </td>
                     <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($status); ?></span>
+                        <span class="status-badge confirmed"><?php echo htmlspecialchars($status); ?></span>
                     </td>
-                    <td class="align-middle">
-                        <a class="btn btn-warning btn-md" href="view_contract.php?reservation_id=<?php echo $row['reservation_id']; ?>"><i class="fas fa-eye"></i></a>
-                         
+                    <td class="align-middle text-center">
+                        <a class="action-btn" href="view_contract.php?reservation_id=<?php echo $row['reservation_id']; ?>" title="View Contract">
+                            <i class="fas fa-eye"></i>
                         </a>
                     </td>
                     </tr>
                     <?php
                         }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/folder.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>No Contracts Found</p></td></tr>";
+                      ?>
+                      <tr>
+                        <td colspan="6" class="empty-state">
+                            <img src="images/folder.png" class="img-fluid" alt="No Contracts">
+                            <p>No Contracts Found</p>
+                        </td>
+                      </tr>
+                      <?php
                     }
 
 
@@ -287,7 +539,7 @@ if (isset($_SESSION['email'])) {
             
           </div>
           <br>
-            <a class = "btn btn-primary" href = "edit_contract.php"><i class = "fa fa-edit"></i> Edit Contract</a>
+            <a class="edit-btn" href="edit_contract.php"><i class="fa fa-edit"></i> Edit Contract</a>
          
         </div>
 

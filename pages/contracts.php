@@ -55,6 +55,214 @@ $result = $stmt->get_result();
   <title>
  Ging's Boutique | Contract
   </title>
+  <style>
+    /* Enhanced Contract Table Styles */
+    .contract-container {
+      background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .contract-header {
+      background: linear-gradient(45deg, #17a2b8, #5bc0de);
+      color: white;
+      padding: 20px;
+      border-radius: 15px 15px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .contract-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .contract-header h6 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .contract-header h6 i {
+      margin-right: 10px;
+      font-size: 1.4rem;
+    }
+    
+    .contract-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .contract-table thead th {
+      background-color: #f8f9fa;
+      color: #344767;
+      font-weight: 600;
+      padding: 15px;
+      border-bottom: 2px solid #e9ecef;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .contract-table tbody tr {
+      transition: all 0.3s ease;
+    }
+    
+    .contract-table tbody tr:hover {
+      background-color: rgba(23, 162, 184, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .contract-table tbody td {
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .gown-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .gown-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .gown-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .gown-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .gown-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .gown-name {
+      font-weight: 600;
+      color: #344767;
+      margin-bottom: 5px;
+    }
+    
+    .gown-id {
+      font-size: 0.75rem;
+      color: #67748e;
+    }
+    
+    .date-cell {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .date-label {
+      font-size: 0.7rem;
+      color: #67748e;
+      margin-bottom: 3px;
+    }
+    
+    .date-value {
+      font-weight: 600;
+      color: #344767;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-badge.confirmed {
+      background: linear-gradient(45deg, #28a745, #75b798);
+      color: #0f5132;
+    }
+    
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border: none;
+      background: linear-gradient(45deg, #17a2b8, #5bc0de);
+      color: white;
+      box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(23, 162, 184, 0.4);
+    }
+    
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .empty-state img {
+      max-width: 150px;
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    
+    .empty-state p {
+      font-size: 1rem;
+      color: #67748e;
+      margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+      .contract-table thead th {
+        font-size: 0.7rem;
+        padding: 10px;
+      }
+      
+      .contract-table tbody td {
+        padding: 10px;
+      }
+      
+      .gown-image {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .gown-name {
+        font-size: 0.9rem;
+      }
+      
+      .date-value {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -248,19 +456,19 @@ $result = $stmt->get_result();
     
     <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>My Contracts</h6>
+          <div class="card contract-container mb-4">
+            <div class="card-header contract-header">
+              <h6><i class="fas fa-file-contract me-2"></i> My Contracts</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table class="table contract-table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Details</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Signed</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-secondary opacity-7 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -281,39 +489,49 @@ $result = $stmt->get_result();
                     $status = $row['status'];
                     $reservation_id = $row['reservation_id'];
                     $date_signed = $row['date_signed'];
+                    
+                    // Format date for better display
+                    $formatted_date_signed = date("M d, Y", strtotime($date_signed));
          
                     ?>
                     <tr>
                     <td>
-                        <div class="d-flex px-2 py-1">
-                            <div>
-                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3" alt="<?php echo htmlspecialchars($name); ?>">
+                        <div class="gown-item">
+                            <div class="gown-image">
+                                <img src="<?php echo $main_image; ?>" alt="<?php echo htmlspecialchars($name); ?>">
                             </div>
-                            <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
+                            <div class="gown-details">
+                                <div class="gown-name"><?php echo htmlspecialchars($name); ?></div>
+                                <div class="gown-id">ID: <?php echo $gown_id; ?></div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($date_signed); ?></p>
-                        <p class="text-xs text-secondary mb-0"></p> 
+                        <div class="date-cell">
+                            <div class="date-label">Signed On</div>
+                            <div class="date-value"><?php echo $formatted_date_signed; ?></div>
+                        </div>
                     </td>
-                 
                     <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($status); ?></span>
+                        <span class="status-badge confirmed"><?php echo htmlspecialchars($status); ?></span>
                     </td>
-                    <td class="align-middle">
-                        <a class="btn btn-warning btn-md" href="my_contracts.php?reservation_id=<?php echo $row['reservation_id']; ?>"><i class="fas fa-eye"></i></a>
-                         
+                    <td class="align-middle text-center">
+                        <a class="action-btn" href="my_contracts.php?reservation_id=<?php echo $row['reservation_id']; ?>" title="View Contract">
+                            <i class="fas fa-eye"></i>
                         </a>
                     </td>
                     </tr>
                     <?php
                         }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/empty-mailbox.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>Contract Empty</p></td></tr>";
-
+                      ?>
+                      <tr>
+                        <td colspan="4" class="empty-state">
+                            <img src="images/empty-mailbox.png" class="img-fluid" alt="No Contracts">
+                            <p>No contracts found</p>
+                        </td>
+                      </tr>
+                      <?php
                     }
 
 
@@ -330,7 +548,7 @@ $result = $stmt->get_result();
             </div>
             
           </div>
-         
+          
         </div>
       
       

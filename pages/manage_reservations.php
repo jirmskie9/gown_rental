@@ -198,9 +198,18 @@ if (isset($_SESSION['email'])) {
     <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Manage Reservations</h6>
+          <div class="card mb-4 shadow-sm">
+            <div class="card-header text-white pb-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-0"><i class="fa fa-calendar-alt me-2"></i>Manage Reservations</h5>
+                </div>
+                <div>
+                  <span class="badge bg-white text-primary">
+                    <i class="fa fa-filter me-1"></i> Filter
+                  </span>
+                </div>
+              </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -239,37 +248,54 @@ if (isset($_SESSION['email'])) {
                     <td>
                         <div class="d-flex px-2 py-1">
                             <div>
-                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3" alt="<?php echo htmlspecialchars($name); ?>">
+                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3 rounded" alt="<?php echo htmlspecialchars($name); ?>">
                             </div>
                             <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
+                                <h6 class="mb-0 text-sm font-weight-bold"><?php echo htmlspecialchars($name); ?></h6>
+                                <p class="text-xs text-secondary mb-0">ID: <?php echo $reservation_id; ?></p>
                             </div>
                         </div>
                     </td>
                     <td class="text-sm">
-                        <span class="badge badge-sm bg-gradient-warning"><?php echo htmlspecialchars($full_name); ?></span>
+                        <span class="badge badge-sm bg-gradient-warning text-white"><?php echo htmlspecialchars($full_name); ?></span>
                     </td>
                     <td>
-                        <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
-                        <p class="text-xs text-secondary mb-0"></p> 
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-calendar-plus text-primary me-2"></i>
+                            <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
+                        </div>
                     </td>
                     <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fa fa-calendar-minus text-success me-2"></i>
+                            <span class="badge badge-sm bg-gradient-success text-white"><?php echo htmlspecialchars($end_date); ?></span>
+                        </div>
                     </td>
                     <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($status); ?></span>
+                        <?php 
+                        $statusClass = '';
+                        if ($status == 'pending') {
+                            $statusClass = 'bg-gradient-warning';
+                        } elseif ($status == 'approved') {
+                            $statusClass = 'bg-gradient-success';
+                        } elseif ($status == 'rejected') {
+                            $statusClass = 'bg-gradient-danger';
+                        } elseif ($status == 'completed') {
+                            $statusClass = 'bg-gradient-info';
+                        }
+                        ?>
+                        <span class="badge badge-sm <?php echo $statusClass; ?> text-white"><?php echo htmlspecialchars($status); ?></span>
                     </td>
                     <td class="align-middle">
-                        <a class="btn btn-warning btn-md" href="view_reservation.php?reservation_id=<?php echo $row['reservation_id']; ?>"><i class="fas fa-eye"></i></a>
-                         
+                        <a class="btn btn-primary btn-sm" href="view_reservation.php?reservation_id=<?php echo $row['reservation_id']; ?>">
+                            <i class="fas fa-eye me-1"></i> View
                         </a>
                     </td>
                     </tr>
                     <?php
                         }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/folder.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>No Reservations Found</p></td></tr>";
+                      echo "<tr><td colspan='6' class='text-center align-middle py-4'><div class='d-flex flex-column align-items-center'><img src='images/folder.png' class='img-fluid mb-3' style='max-width: 100px;' alt='Empty Image'><p class='text-danger mb-0'>No Reservations Found</p></div></td></tr>";
                     }
 
 
@@ -280,10 +306,16 @@ if (isset($_SESSION['email'])) {
                   
                 </table>
                 
-               
+                
               </div>
               
             </div>
+            
+          </div>
+          
+          <!-- Reservation Statistics Card -->
+          <div class="row mt-4">
+            
             
           </div>
          

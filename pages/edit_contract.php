@@ -200,68 +200,231 @@ if (isset($_SESSION['email'])) {
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Edit Contract</h6>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-0">Edit Contract</h5>
+                  <p class="text-sm text-secondary mb-0">Create or modify a gown rental contract</p>
+                </div>
+                <div>
+                  <span class="badge badge-sm bg-gradient-info">Contract Form</span>
+                </div>
+              </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-            <div class="contract-container" style="padding: 20px; border-radius: 10px; font-family: Arial, sans-serif; background-color: #f9f9f9; ">
-    <h4 style="text-align: center; color: #886CC0; font-weight: bold;">Gown Rental Contract</h4>
-    <form action="process/submit_contract.php" method="POST">
-        <p style="text-align: justify; color: #333;">
-            This agreement is made between 
-            <input type="text" name="renter_name" placeholder="Renter's Name" style="border: none; border-bottom: 1px solid #333; width: 150px;" required>, 
-            hereinafter referred to as "The Renter," and 
-            <input type="text" name="business_name" placeholder="Your Business Name" style="border: none; border-bottom: 1px solid #333; width: 150px;" required>, 
-            referred to as "The Rental Service Provider," on 
-            <input type="date" name="contract_date" style="border: none; border-bottom: 1px solid #333;" required>.
-        </p>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                  <div class="card mb-4">
+                    <div class="card-header pb-0">
+                      <h6 class="mb-0">Contract Details</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="contract-container p-4" style="border-radius: 10px; font-family: 'Poppins', sans-serif; background-color: #f8f9fa; box-shadow: 0px 0px 15px rgba(0,0,0,0.05);">
+                        <div class="text-center mb-4">
+                          <h4 class="text-primary font-weight-bold">Gown Rental Contract</h4>
+                          <div class="divider bg-gradient-primary my-3"></div>
+                        </div>
+                        
+                        <form action="process/submit_contract.php" method="POST">
+                          <div class="mb-4">
+                            <p class="text-sm">
+                              This agreement is made between 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="text" name="renter_name" class="form-control" placeholder="Renter's Name" required>
+                              </div>
+                              hereinafter referred to as "The Renter," and 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="text" name="business_name" class="form-control" placeholder="Your Business Name" required>
+                              </div>
+                              referred to as "The Rental Service Provider," on 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="date" name="contract_date" class="form-control" required>
+                              </div>
+                            </p>
+                          </div>
 
-        <h5 style="color: #886CC0; margin-top: 20px;">Rental Details</h5>
-        <p style="text-align: justify; color: #333;">
-            The Renter agrees to rent the gown described below for the period starting from 
-            <input type="date" name="pickup_date" style="border: none; border-bottom: 1px solid #333;" required> 
-            to 
-            <input type="date" name="return_date" style="border: none; border-bottom: 1px solid #333;" required>.
-        </p>
-        <ul style="color: #333;">
-            <li><strong>Gown Name:</strong> <input type="text" name="gown_name" placeholder="Gown Name" style="border: none; border-bottom: 1px solid #333;" required></li>
-            <li><strong>Size:</strong> <input type="text" name="gown_size" placeholder="Size" style="border: none; border-bottom: 1px solid #333;" required></li>
-            <li><strong>Color:</strong> <input type="text" name="gown_color" placeholder="Color" style="border: none; border-bottom: 1px solid #333;" required></li>
-            <li><strong>Rental Price:</strong> <input type="text" name="gown_price" placeholder="Price" style="border: none; border-bottom: 1px solid #333;" required></li>
-        </ul>
+                          <div class="mb-4">
+                            <h5 class="text-primary font-weight-bold">Rental Details</h5>
+                            <p class="text-sm">
+                              The Renter agrees to rent the gown described below for the period starting from 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="date" name="pickup_date" class="form-control" required>
+                              </div>
+                              to 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="date" name="return_date" class="form-control" required>
+                              </div>
+                            </p>
+                            
+                            <div class="row mt-3">
+                              <div class="col-md-6">
+                                <div class="input-group input-group-outline mb-3">
+                                  <label class="form-label">Gown Name</label>
+                                  <input type="text" name="gown_name" class="form-control" placeholder="Gown Name" required>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="input-group input-group-outline mb-3">
+                                  <label class="form-label">Size</label>
+                                  <input type="text" name="gown_size" class="form-control" placeholder="Size" required>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="input-group input-group-outline mb-3">
+                                  <label class="form-label">Color</label>
+                                  <input type="text" name="gown_color" class="form-control" placeholder="Color" required>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="input-group input-group-outline mb-3">
+                                  <label class="form-label">Rental Price</label>
+                                  <input type="text" name="gown_price" class="form-control" placeholder="Price" required>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-        <h5 style="color: #886CC0; margin-top: 20px;">Terms & Conditions</h5>
-        <ol style="color: #333;">
-            <li>The gown must be returned in the same condition it was received.</li>
-            <li>A late return fee of <input type="text" name="late_fee" placeholder="Fee Amount" style="border: none; border-bottom: 1px solid #333;" required> per day will be applied for late returns.</li>
-            <li>The Renter is responsible for any damage or loss to the gown.</li>
-            <li>No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
-        </ol>
+                          <div class="mb-4">
+                            <h5 class="text-primary font-weight-bold">Terms & Conditions</h5>
+                            <ol class="text-sm">
+                              <li class="mb-2">The gown must be returned in the same condition it was received.</li>
+                              <li class="mb-2">A late return fee of 
+                                <div class="input-group input-group-outline my-2">
+                                  <input type="text" name="late_fee" class="form-control" placeholder="Fee Amount" required>
+                                </div>
+                                per day will be applied for late returns.
+                              </li>
+                              <li class="mb-2">The Renter is responsible for any damage or loss to the gown.</li>
+                              <li class="mb-2">No alterations can be made to the gown without prior permission from the Rental Service Provider.</li>
+                            </ol>
+                          </div>
 
-        <h5 style="color: #886CC0; margin-top: 20px;">Payment & Deposit</h5>
-        <p style="text-align: justify; color: #333;">
-            The total rental fee is 
-            <input type="text" name="total_fee" placeholder="Total Rental Fee" style="border: none; border-bottom: 1px solid #333;" required>, 
-            including a 3% transaction fee. A refundable security deposit of 
-            <input type="text" name="deposit_amount" placeholder="Deposit Amount" style="border: none; border-bottom: 1px solid #333;" required> 
-            will be collected and returned upon inspection of the gown.
-        </p>
-
-       
-        
-        <div style="text-align: center; margin-top: 20px;">
-        <a class = "btn btn-primary" href = "edit_contract.php"><i class = "fa fa-save"></i> Save Contract</a>
-        </div>
-    </form>
-</div>
-
-            
+                          <div class="mb-4">
+                            <h5 class="text-primary font-weight-bold">Payment & Deposit</h5>
+                            <p class="text-sm">
+                              The total rental fee is 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="text" name="total_fee" class="form-control" placeholder="Total Rental Fee" required>
+                              </div>
+                              including a 3% transaction fee. A refundable security deposit of 
+                              <div class="input-group input-group-outline my-2">
+                                <input type="text" name="deposit_amount" class="form-control" placeholder="Deposit Amount" required>
+                              </div>
+                              will be collected and returned upon inspection of the gown.
+                            </p>
+                          </div>
+                          
+                          <div class="d-flex justify-content-center mt-4">
+                            <button type="submit" class="btn btn-primary">
+                              <i class="fa fa-save me-2"></i> Save Contract
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                  <div class="card mb-4">
+                    <div class="card-header pb-0">
+                      <h6 class="mb-0">Contract Preview</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-center mb-3">
+                        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md me-3 mx-auto">
+                          <i class="fa fa-file-contract text-lg opacity-10" aria-hidden="true"></i>
+                        </div>
+                        <h5 class="mt-3">Contract Preview</h5>
+                        <p class="text-sm text-secondary">This is how your contract will appear to customers</p>
+                      </div>
+                      
+                      <div class="preview-container p-3" style="border-radius: 10px; background-color: #f8f9fa; border: 1px dashed #dee2e6;">
+                        <div class="text-center mb-3">
+                          <h6 class="text-primary font-weight-bold">Gown Rental Contract</h6>
+                          <div class="divider bg-gradient-primary my-2"></div>
+                        </div>
+                        
+                        <div class="mb-2">
+                          <p class="text-xs">
+                            This agreement is made between <span class="text-primary">[Renter's Name]</span>, 
+                            hereinafter referred to as "The Renter," and 
+                            <span class="text-primary">[Business Name]</span>, 
+                            referred to as "The Rental Service Provider," on 
+                            <span class="text-primary">[Contract Date]</span>.
+                          </p>
+                        </div>
+                        
+                        <div class="mb-2">
+                          <h6 class="text-primary font-weight-bold">Rental Details</h6>
+                          <p class="text-xs">
+                            The Renter agrees to rent the gown described below for the period starting from 
+                            <span class="text-primary">[Pickup Date]</span> 
+                            to 
+                            <span class="text-primary">[Return Date]</span>.
+                          </p>
+                          
+                          <div class="table-responsive">
+                            <table class="table align-items-center mb-0">
+                              <thead>
+                                <tr>
+                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Item</th>
+                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Color</th>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Size</th>
+                                  <th class="text-end text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    <div class="d-flex px-2 py-1">
+                                      <div>
+                                        <img src="images/dress.png" class="avatar avatar-sm me-3" alt="gown">
+                                      </div>
+                                      <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-xs">[Gown Name]</h6>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <p class="text-xs font-weight-bold mb-0">[Color]</p>
+                                  </td>
+                                  <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">[Size]</span>
+                                  </td>
+                                  <td class="align-middle text-end">
+                                    <span class="text-secondary text-xs font-weight-bold">₱[Price]</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card">
+                    <div class="card-header pb-0">
+                      <h6 class="mb-0">Contract Actions</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex flex-column gap-3">
+                        <a href="manage_contract.php" class="btn btn-secondary w-100">
+                          <i class="fa fa-arrow-left me-2"></i> Back to Contracts
+                        </a>
+                        <button type="button" class="btn btn-info w-100" onclick="window.print()">
+                          <i class="fa fa-print me-2"></i> Print Preview
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-
-    
           </div>
-          <br>
-      
-         
         </div>
 
       <?php include ('footer.php'); ?>

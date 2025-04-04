@@ -234,99 +234,260 @@ $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
             $gown_name = $row['name'];
+            $gown_image = $row['main_image'];
+            $gown_description = $row['description'];
+            $gown_category = $row['category'];
             }
         }
 ?>
     
     <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <div class="card-header pb-0">
-              <div class="d-flex align-items-center">
-                <p class="mb-0">Set up your Reservation</p>
-              
+          <div class="card shadow-lg border-0">
+            <div class="card-header bg-gradient-primary text-white py-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i> Set up your Reservation</h5>
+                <span class="badge bg-white text-primary"><?php echo $gown_name; ?></span>
               </div>
             </div>
-            <div class="card-body">
-
+            <div class="card-body p-4">
               <div class="row">
-              <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">View Calendar</label><br>
-                    <button class = "btn btn-primary" data-bs-toggle="modal" data-bs-target="#calendarModal">Check</button>
+                <div class="col-md-4 mb-4">
+                  <div class="gown-preview-card p-3 border rounded h-100">
+                    <h6 class="text-primary mb-3"><i class="fas fa-dress me-2"></i>Gown Details</h6>
+                    <div class="gown-image-container mb-3">
+                      <img src="uploads/<?php echo $gown_image; ?>" class="img-fluid rounded" alt="<?php echo $gown_name; ?>">
+                    </div>
+                    <div class="gown-info">
+                      <p class="mb-1"><strong>Name:</strong> <?php echo $gown_name; ?></p>
+                      <p class="mb-1"><strong>Category:</strong> <?php echo $gown_category; ?></p>
+                      <p class="mb-0"><strong>Description:</strong> <?php echo $gown_description; ?></p>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <form action="process/reserve_gown.php" method = "POST"> 
-                      <input type="hidden" name = "full_name" value = "<?php echo $full_name?>">
-                      <input type="hidden" name = "gown_name" value = "<?php echo $gown_name?>">
-                      <input type="hidden" value = "<?php echo $user_id?>" name = "user">
-                      <input type="hidden" value = "<?php echo $gown_id?>" name = "gown_id">
-                    <label for="example-text-input" class="form-control-label">Date to Pick up</label>
-                   <input type="date" class = "form-control" name = "date_to_pick" value="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Date to Return</label>
-                    <input type="date" class = "form-control" name = "date_to_return" value="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                </div>
-               
-           
-              
-              
-              <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Initial Cost</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                  <?php $price = $row['price'];
-                  $priceWithTax = $price + ($price * 0.03); ?> 
-                    <input class="form-control" type="text" value="<?php echo $row['price']; ?> PHP" readOnly>
+                
+                <div class="col-md-8">
+                  <div class="reservation-form-card p-3 border rounded h-100">
+                    <h6 class="text-primary mb-3"><i class="fas fa-calendar-alt me-2"></i>Reservation Details</h6>
+                    
+                    <div class="row mb-4">
+                      <div class="col-md-12">
+                        <div class="calendar-section p-3 bg-light rounded">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                              <h6 class="mb-1">Check Availability</h6>
+                              <p class="text-muted small mb-0">View the calendar to see when this gown is available</p>
+                            </div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#calendarModal">
+                              <i class="fas fa-calendar-week me-2"></i>View Calendar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <form action="process/reserve_gown.php" method="POST" class="needs-validation" novalidate> 
+                      <input type="hidden" name="full_name" value="<?php echo $full_name?>">
+                      <input type="hidden" name="gown_name" value="<?php echo $gown_name?>">
+                      <input type="hidden" value="<?php echo $user_id?>" name="user">
+                      <input type="hidden" value="<?php echo $gown_id?>" name="gown_id">
+                      
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="date_to_pick" class="form-label">Date to Pick Up</label>
+                            <div class="input-group">
+                              <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                              <input type="date" class="form-control" id="date_to_pick" name="date_to_pick" value="<?php echo date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="invalid-feedback">Please select a pick-up date</div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="date_to_return" class="form-label">Date to Return</label>
+                            <div class="input-group">
+                              <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                              <input type="date" class="form-control" id="date_to_return" name="date_to_return" value="<?php echo date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="invalid-feedback">Please select a return date</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="cost-breakdown p-3 bg-light rounded mb-4">
+                        <h6 class="text-primary mb-3"><i class="fas fa-receipt me-2"></i>Cost Breakdown</h6>
+                        
+                        <?php 
+                        $price = $row['price'];
+                        $priceWithTax = $price + ($price * 0.03);
+                        $securityDeposit = 400;
+                        $totalAmount = $priceWithTax + $securityDeposit;
+                        ?>
+                        
+                        <div class="cost-item d-flex justify-content-between mb-2 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0">Gown Rental</h6>
+                            <small class="text-muted">Base price</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0"><?php echo $price; ?> PHP</h6>
+                            <input type="hidden" name="price" value="<?php echo $price; ?>">
+                          </div>
+                        </div>
+                        
+                        <div class="cost-item d-flex justify-content-between mb-2 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0">Transaction Fee</h6>
+                            <small class="text-muted">3% of rental price</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0"><?php echo $price * 0.03; ?> PHP</h6>
+                          </div>
+                        </div>
+                        
+                        <div class="cost-item d-flex justify-content-between mb-2 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0">Security Deposit</h6>
+                            <small class="text-muted">Refundable upon return</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0"><?php echo $securityDeposit; ?> PHP</h6>
+                          </div>
+                        </div>
+                        
+                        <div class="total-cost d-flex justify-content-between mt-3 pt-2 border-top">
+                          <div>
+                            <h5 class="mb-0 text-primary">Total Amount</h5>
+                            <small class="text-muted">Inclusive of all fees</small>
+                          </div>
+                          <div class="text-end">
+                            <h4 class="mb-0 text-primary"><?php echo $totalAmount; ?> PHP</h4>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="terms-section mb-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="terms" required>
+                          <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and confirm that all information provided is accurate
+                          </label>
+                          <div class="invalid-feedback">
+                            You must agree to the terms before proceeding
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="find_gown.php" class="btn btn-outline-secondary me-md-2">
+                          <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                        <button class="btn btn-primary" type="submit" name="reserve">
+                          <i class="fas fa-check-circle me-2"></i> Reserve Now
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
-              <p class="text-uppercase text-sm">Total Cost + Transaction Fee</p>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                  <?php $price = $row['price'];
-                  $priceWithTax = $price + ($price * 0.03); ?> 
-                  <input type="hidden" name = "price" value = "<?php echo $row['price']; ?>">
-                    <input class="form-control" type="text" value="<?php echo $priceWithTax?> PHP" readOnly>
-                  </div>
-                </div>
-              </div>
-              
             </div>
-           
           </div>
-          <div class="card-footer">
-                <button class = "btn btn-primary" type = "submit" name = "reserve"><i class="fas fa-check-circle" ></i> 
-                Reserve Now</button>
-                <a href="find_gown.php" class="btn btn-block">
-                            <i class="fas fa-arrow-left"></i> Return
-                    </a>
-               </form>
-            </div>
         </div>
-        
       </div>
                          <div class="modal fade" id="calendarModal" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="calendarModalLabel">Calendar</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title" id="calendarModalLabel"><i class="fas fa-calendar-alt me-2"></i>Availability Calendar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div id="calendar"></div>
+            <div class="modal-body p-4">
+                <div class="alert alert-info mb-3">
+                    <i class="fas fa-info-circle me-2"></i> This calendar shows when the gown is already reserved. Please select dates when the gown is available.
+                </div>
+                <div id="calendar" class="border rounded p-2"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+  .gown-preview-card, .reservation-form-card {
+    transition: all 0.3s ease;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .gown-preview-card:hover, .reservation-form-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  .gown-image-container {
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .gown-image-container img {
+    transition: transform 0.5s ease;
+  }
+  
+  .gown-image-container:hover img {
+    transform: scale(1.05);
+  }
+  
+  .cost-breakdown {
+    border-left: 4px solid #886CC0;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(45deg, #886CC0, #5E3F8E);
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(45deg, #5E3F8E, #886CC0);
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(45deg, #886CC0, #5E3F8E);
+  }
+  
+  .text-primary {
+    color: #886CC0 !important;
+  }
+  
+  .form-control:focus {
+    border-color: #886CC0;
+    box-shadow: 0 0 0 0.25rem rgba(136, 108, 192, 0.25);
+  }
+  
+  .input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
+  }
+  
+  .form-control {
+    border-left: none;
+  }
+  
+  .form-control:focus + .input-group-text {
+    border-color: #886CC0;
+  }
+  
+  .form-control:focus ~ .input-group-text {
+    border-color: #886CC0;
+  }
+  
+  @media (max-width: 768px) {
+    .gown-preview-card, .reservation-form-card {
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>
 
       
       <?php include ('footer.php'); ?>
@@ -428,11 +589,14 @@ $result = $stmt->get_result();
                     });
                 },
                 eventContent: function(arg) {
-                    let badge = `<span>${arg.event.title}</span>`;
+                    let badge = `<span class="badge bg-danger">${arg.event.title}</span>`;
                     return { html: badge }; 
                 },
                 height: '100%',
-                contentHeight: 'auto'
+                contentHeight: 'auto',
+                eventColor: '#886CC0',
+                eventTextColor: '#fff',
+                eventBorderColor: '#5E3F8E'
             });
 
             calendar.render();
@@ -441,6 +605,45 @@ $result = $stmt->get_result();
         $('#calendarModal').on('hidden.bs.modal', function () {
             if (calendar) {
                 calendar.destroy();
+            }
+        });
+        
+        // Form validation
+        (function() {
+            'use strict';
+            
+            var forms = document.querySelectorAll('.needs-validation');
+            
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        
+        // Date validation
+        document.getElementById('date_to_pick').addEventListener('change', function() {
+            var pickDate = new Date(this.value);
+            var returnDate = new Date(document.getElementById('date_to_return').value);
+            
+            if (pickDate > returnDate) {
+                document.getElementById('date_to_return').value = this.value;
+            }
+            
+            document.getElementById('date_to_return').min = this.value;
+        });
+        
+        document.getElementById('date_to_return').addEventListener('change', function() {
+            var pickDate = new Date(document.getElementById('date_to_pick').value);
+            var returnDate = new Date(this.value);
+            
+            if (returnDate < pickDate) {
+                this.value = document.getElementById('date_to_pick').value;
             }
         });
     });

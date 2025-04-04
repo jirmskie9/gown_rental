@@ -331,143 +331,199 @@ if ($reservation_id) {
 
       <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
-
+          <div class="card mb-4 shadow-lg border-0">
+            <div class="card-header text-white py-3">
+              <h5 class="mb-0 text-center">Complete Your Payment</h5>
+            </div>
             <div class="card-body px-4 pt-4 pb-4">
               <div class="row">
                 <div class="col-lg-4 order-lg-2 mb-4">
-                  <h5 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Your cart</span>
-                    <span class="badge badge-primary badge-pill">3</span>
-                  </h5>
-                  <ul class="list-group mb-3">
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                      <div>
-                        <h6 class="my-0">Gown name</h6>
-                        <small class="text-muted"><?php echo $gown_name2 ?></small>
-                      </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                      <div>
-                        <h6 class="my-0">Rental Price</h6>
-                        <small class="text-muted"><?php echo $price2 ?> PHP</small>
-                      </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                      <div>
-                        <h6 class="my-0">Security Deposit</h6>
-                        <small class="text-muted">400 PHP</small>
-                      </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                      <div>
-                        <h6 class="my-0">Date to Pick</h6>
-                        <small class="text-muted"><?php echo $date_to_pick2 ?></small>
-                      </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                      <div>
-                        <h6 class="my-0">Date to Return</h6>
-                        <small class="text-muted"><?php echo $date_to_return2 ?></small>
-                      </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between active">
-                      <div class="text-white">
-                        <h6 class="my-0 text-white">Promo code</h6>
-                        <small>Enter Code</small>
-                      </div>
-                      <span class="text-white">100 PHP off</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-
-                      <span>Total (PHP)</span>
-                      <strong><?php echo $total ?></strong>
-                    </li>
-                  </ul>
-
-                  <form>
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Promo code">
-                      <button type="submit" class="input-group-text">Redeem</button>
+                  <div class="card bg-gradient-light shadow-sm border-0">
+                    <div class="card-header bg-gradient-primary text-white py-3">
+                      <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                        <span>Order Summary</span>
+                        <span class="badge bg-white text-primary"><?php echo $gown_name2 ?></span>
+                      </h5>
                     </div>
-                  </form>
+                    <div class="card-body">
+                      <div class="order-details">
+                        <div class="detail-item d-flex justify-content-between mb-3 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0 text-dark">Gown Rental</h6>
+                            <small class="text-muted"><?php echo $gown_name2 ?></small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0 text-dark"><?php echo $price2 ?> PHP</h6>
+                            <small class="text-muted">Base price</small>
+                          </div>
+                        </div>
+                        
+                        <div class="detail-item d-flex justify-content-between mb-3 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0 text-dark">Security Deposit</h6>
+                            <small class="text-muted">Refundable upon return</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0 text-dark">400 PHP</h6>
+                            <small class="text-muted">Required</small>
+                          </div>
+                        </div>
+                        
+                        <div class="detail-item d-flex justify-content-between mb-3 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0 text-dark">Service Fee</h6>
+                            <small class="text-muted">Processing fee</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0 text-dark"><?php echo $interest ?> PHP</h6>
+                            <small class="text-muted">3% of rental price</small>
+                          </div>
+                        </div>
+                        
+                        <div class="detail-item d-flex justify-content-between mb-3 pb-2 border-bottom">
+                          <div>
+                            <h6 class="mb-0 text-dark">Rental Period</h6>
+                            <small class="text-muted">Pickup & Return dates</small>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-0 text-dark"><?php echo $date_to_pick2 ?></h6>
+                            <small class="text-muted">to <?php echo $date_to_return2 ?></small>
+                          </div>
+                        </div>
+                  
+                        <div class="total-section bg-light p-3 rounded mt-3">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-dark">Total Amount</h5>
+                            <h4 class="mb-0 text-primary"><?php echo $total ?> PHP</h4>
+                          </div>
+                          <small class="text-muted">Inclusive of all fees</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-8 order-lg-1">
-                  <form class="needs-validation" novalidate="" method="POST" action="process/add_payment.php"
-                    enctype="multipart/form-data">
-                    <h5 class="mb-3">Payment</h5>
-                    <small class="text-muted">Please leave empty the Gcash Fields if you choose Cash on Pick Up payment
-                      method</small>
-                    <input type="hidden" name="reservation_id" value="<?php echo $reservation_id ?>">
-                    <input type="hidden" name="amount" value="<?php echo $price2 ?>">
-                    <div class="d-block my-3">
-                      <div class="form-check custom-radio mb-2">
-                        <input id="credit" name="paymentMethod" type="radio" class="form-check-input"
-                          value="Cash on Pick Up" required="">
-                        <label class="form-check-label" for="credit">Cash on Pick Up</label>
-                      </div>
-                      <div class="form-check custom-radio mb-2">
-                        <input id="debit" name="paymentMethod" type="radio" class="form-check-input" value="Gcash"
-                          required="">
-                        <label class="form-check-label" for="debit">Gcash</label>
-                      </div>
+                  <div class="card shadow-sm border-0">
+                    <div class="card-header bg-gradient-primary text-white py-3">
+                      <h5 class="mb-0">Payment Method</h5>
                     </div>
-                    <div class="row">
-                      <div class="col-md-6 mb-3">
-                        <label for="cc-name" class="form-label">Gcash Name</label>
-                        <input type="text" class="form-control" id="gcash_name" name="gcash_name" placeholder=""
-                          required="">
-                        <small class="text-muted">Full name as your Gcash Name</small>
-                        <div class="invalid-feedback">
-                          Name on card is required
+                    <div class="card-body">
+                      <form class="needs-validation" novalidate="" method="POST" action="process/add_payment.php"
+                        enctype="multipart/form-data">
+                        <input type="hidden" name="reservation_id" value="<?php echo $reservation_id ?>">
+                        <input type="hidden" name="amount" value="<?php echo $price2 ?>">
+                        
+                        <div class="payment-methods mb-4">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <div class="payment-option p-3 border rounded h-100">
+                                <div class="form-check">
+                                  <input id="cash" name="paymentMethod" type="radio" class="form-check-input"
+                                    value="Cash on Pick Up" required="">
+                                  <label class="form-check-label h5 mb-0" for="cash">
+                                    <i class="fa fa-money-bill-wave text-success me-2"></i> Cash on Pick Up
+                                  </label>
+                                </div>
+                                <p class="text-muted small mt-2 mb-0">Pay when you pick up your gown</p>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <div class="payment-option p-3 border rounded h-100">
+                                <div class="form-check">
+                                  <input id="gcash" name="paymentMethod" type="radio" class="form-check-input" value="Gcash"
+                                    required="">
+                                  <label class="form-check-label h5 mb-0" for="gcash">
+                                    <i class="fa fa-mobile-alt text-primary me-2"></i> GCash
+                                  </label>
+                                </div>
+                                <p class="text-muted small mt-2 mb-0">Pay securely with GCash</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label for="cc-number" class="form-label">Gcash Number</label>
-                        <input type="text" class="form-control" id="gcash_number" name="gcash_number" placeholder=""
-                          required="">
-                        <div class="invalid-feedback">
-                          Gcash number is required
+                        
+                        <div class="alert alert-info mb-4">
+                          <i class="fa fa-info-circle me-2"></i> Please leave the GCash fields empty if you choose Cash on Pick Up payment method
                         </div>
-                      </div>
+                        
+                        <div id="gcash-fields" class="gcash-details mb-4" style="display: none;">
+                          <h6 class="mb-3 text-dark">GCash Payment Details</h6>
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="gcash_name" class="form-label">GCash Name</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                <input type="text" class="form-control" id="gcash_name" name="gcash_name" placeholder="Full name as registered in GCash">
+                              </div>
+                              <small class="text-muted">Full name as registered in your GCash account</small>
+                              <div class="invalid-feedback">
+                                GCash name is required
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="gcash_number" class="form-label">GCash Number</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                                <input type="text" class="form-control" id="gcash_number" name="gcash_number" placeholder="09XX XXX XXXX">
+                              </div>
+                              <div class="invalid-feedback">
+                                GCash number is required
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="transaction_id" class="form-label">Transaction ID</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-receipt"></i></span>
+                                <input type="text" name="transaction_id" class="form-control" id="transaction_id" placeholder="Reference number">
+                              </div>
+                              <div class="invalid-feedback">
+                                Transaction ID is required
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="proof" class="form-label">Proof of Payment</label>
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="fa fa-image"></i></span>
+                                <input type="file" class="form-control" name="proof" id="proof">
+                              </div>
+                              <small class="text-muted">Upload screenshot of your payment confirmation</small>
+                              <div class="invalid-feedback">
+                                Proof of Payment is required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="terms-section mb-4">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                              I agree to the <a href="#" class="text-primary">Terms and Conditions</a> and confirm that all information provided is accurate
+                            </label>
+                            <div class="invalid-feedback">
+                              You must agree to the terms before proceeding
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                          <button class="btn btn-primary btn-lg py-3" type="submit" name="pay">
+                            <i class="fa fa-credit-card me-2"></i> Complete Payment
+                          </button>
+                          <a href="my_payment.php" class="btn btn-outline-secondary">
+                            <i class="fa fa-arrow-left me-2"></i> Back to Payments
+                          </a>
+                        </div>
+                      </form>
                     </div>
-                    <div class="row">
-                      <div class="col-md-6 mb-3">
-                        <label for="cc-expiration" class="form-label">Transaction ID</label>
-                        <input type="text" name="transaction_id" class="form-control" id="cc-expiration" placeholder=""
-                          required="">
-                        <div class="invalid-feedback">
-                          Transaction ID is required
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label for="cc-expiration" class="form-label">Proof of Payment</label>
-                        <input type="file" class="form-control" name="proof">
-                        <div class="invalid-feedback">
-                          Proof of Payment is required
-                        </div>
-                      </div>
-                    </div>
-                    <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit" name="pay">
-                      <i class="fa fa-credit-card"></i> Continue to checkout
-                    </button>
-                  </form>
+                  </div>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
-
 
         <?php include('footer.php'); ?>
       </div>
@@ -539,6 +595,55 @@ if ($reservation_id) {
   <!--   Core JS Files   -->
   <?php include('script.php'); ?>
   <script src="sweetalert.min.js"></script>
+  <script>
+    // Show/hide GCash fields based on payment method selection
+    document.addEventListener('DOMContentLoaded', function() {
+      const cashRadio = document.getElementById('cash');
+      const gcashRadio = document.getElementById('gcash');
+      const gcashFields = document.getElementById('gcash-fields');
+      
+      function toggleGCashFields() {
+        if (gcashRadio.checked) {
+          gcashFields.style.display = 'block';
+        } else {
+          gcashFields.style.display = 'none';
+        }
+      }
+      
+      cashRadio.addEventListener('change', toggleGCashFields);
+      gcashRadio.addEventListener('change', toggleGCashFields);
+      
+      // Initialize payment option styling
+      const paymentOptions = document.querySelectorAll('.payment-option');
+      paymentOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const radio = this.querySelector('input[type="radio"]');
+          radio.checked = true;
+          
+          // Remove active class from all options
+          paymentOptions.forEach(opt => {
+            opt.classList.remove('border-primary', 'bg-light');
+          });
+          
+          // Add active class to selected option
+          this.classList.add('border-primary', 'bg-light');
+          
+          // Toggle GCash fields
+          toggleGCashFields();
+        });
+      });
+      
+      // Form validation
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      });
+    });
+  </script>
   <?php
   if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     ?>

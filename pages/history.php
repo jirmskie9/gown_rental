@@ -55,6 +55,214 @@ if (isset($_GET['gown_id']) && is_numeric($_GET['gown_id'])) {
 <title>
 Ging's Boutique | History
 </title>
+<style>
+  /* Enhanced History Table Styles */
+  .history-container {
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .history-header {
+    background: linear-gradient(45deg,rgb(116, 106, 136), #9b6dff);
+    color: white;
+    padding: 20px;
+    border-radius: 15px 15px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .history-header:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .history-header h6 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .history-header h6 i {
+    margin-right: 10px;
+    font-size: 1.4rem;
+  }
+  
+  .history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .history-table thead th {
+    background-color: #f8f9fa;
+    color: #344767;
+    font-weight: 600;
+    padding: 15px;
+    border-bottom: 2px solid #e9ecef;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .history-table tbody tr {
+    transition: all 0.3s ease;
+  }
+  
+  .history-table tbody tr:hover {
+    background-color: rgba(111, 66, 193, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .history-table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .gown-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .gown-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .gown-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .gown-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .gown-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .gown-name {
+    font-weight: 600;
+    color: #344767;
+    margin-bottom: 5px;
+  }
+  
+  .gown-id {
+    font-size: 0.75rem;
+    color: #67748e;
+  }
+  
+  .date-cell {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .date-label {
+    font-size: 0.7rem;
+    color: #67748e;
+    margin-bottom: 3px;
+  }
+  
+  .date-value {
+    font-weight: 600;
+    color: #344767;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .status-badge.completed {
+    background: linear-gradient(45deg, #6f42c1, #9b6dff);
+    color: #ffffff;
+  }
+  
+  .action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;
+    background: linear-gradient(45deg, #6f42c1, #9b6dff);
+    color: white;
+    box-shadow: 0 4px 10px rgba(111, 66, 193, 0.3);
+  }
+  
+  .action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(111, 66, 193, 0.4);
+  }
+  
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .empty-state img {
+    max-width: 150px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+    color: #67748e;
+    margin: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .history-table thead th {
+      font-size: 0.7rem;
+      padding: 10px;
+    }
+    
+    .history-table tbody td {
+      padding: 10px;
+    }
+    
+    .gown-image {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .gown-name {
+      font-size: 0.9rem;
+    }
+    
+    .date-value {
+      font-size: 0.8rem;
+    }
+  }
+</style>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -260,89 +468,106 @@ Ging's Boutique | History
 
       <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>My Reservation History</h6>
+          <div class="card history-container mb-4">
+            <div class="card-header history-header">
+              <h6><i class="fas fa-history me-2"></i> Rental History</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
+                <table class="table history-table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Picked
-                      </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date
-                        to Return</th>
-
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Details</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pick-up Date</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Return Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                      <th class="text-secondary opacity-7 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <?php
-                    $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
-FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' AND (r.status = 'confirmed' OR r.status = 'completed') ORDER BY r.status DESC";
-                    $result = $conn->query($sql);
+                  <?php
 
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                        $gown_id = $row['gown_id'];
-                        $main_image = 'uploads/' . basename($row['main_image']);
-                        $name = $row['name'];
-                        $start_date = $row['start_date'];
-                        $end_date = $row['end_date'];
-                        $status = $row['status'];
-                        $reservation_id = $row['reservation_id'];
-                        ?>
-                        <tr>
-                          <td>
-                            <div class="d-flex px-2 py-1">
-                              <div>
-                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3"
-                                  alt="<?php echo htmlspecialchars($name); ?>">
-                              </div>
-                              <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo htmlspecialchars($name); ?></h6>
-                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($name); ?></p>
-                              </div>
+            $sql = "SELECT r.reservation_id, r.customer_id, r.gown_id, r.start_date, r.end_date, r.total_price, r.status, g.name, g.main_image 
+            FROM reservations r JOIN gowns g ON r.gown_id = g.gown_id WHERE r.customer_id = '$user_id' AND r.status = 'completed'";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+
+                while ($row = $result->fetch_assoc()) {
+                    $gown_id = $row['gown_id'];
+                    $main_image = 'uploads/' . basename($row['main_image']);
+                    $name = $row['name'];
+                    $start_date = $row['start_date'];
+                    $end_date = $row['end_date'];
+                    $status = $row['status'];
+                    $reservation_id = $row['reservation_id'];
+                    
+                    // Format dates for better display
+                    $formatted_start_date = date("M d, Y", strtotime($start_date));
+                    $formatted_end_date = date("M d, Y", strtotime($end_date));
+         
+                    ?>
+                    <tr>
+                    <td>
+                        <div class="gown-item">
+                            <div class="gown-image">
+                                <img src="<?php echo $main_image; ?>" alt="<?php echo htmlspecialchars($name); ?>">
                             </div>
-                          </td>
-                          <td>
-                            <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($start_date); ?></p>
-                            <p class="text-xs text-secondary mb-0"></p>
-                          </td>
-                          <td class="align-middle text-center text-sm">
-                            <span
-                              class="badge badge-sm bg-gradient-success"><?php echo htmlspecialchars($end_date); ?></span>
-                          </td>
-                          <td class="align-middle text-center">
-                            <?php if ($status !== 'completed') { ?>
-                              <a href="view_history.php?reservation_id=<?php echo $reservation_id ?>"
-                                class="btn btn-warning"><i class="fa fa-eye"></i></a>
-                            <?php } ?>
-                          </td>
-                        </tr>
-                        <?php
-                      }
+                            <div class="gown-details">
+                                <div class="gown-name"><?php echo htmlspecialchars($name); ?></div>
+                                <div class="gown-id">ID: <?php echo $gown_id; ?></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-label">Pick-up On</div>
+                            <div class="date-value"><?php echo $formatted_start_date; ?></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-label">Return On</div>
+                            <div class="date-value"><?php echo $formatted_end_date; ?></div>
+                        </div>
+                    </td>
+                    <td class="align-middle text-center">
+                        <span class="status-badge completed"><?php echo htmlspecialchars($status); ?></span>
+                    </td>
+                    <td class="align-middle text-center">
+                        <a class="action-btn" href="view_history.php?reservation_id=<?php echo $row['reservation_id']; ?>" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                    </tr>
+                    <?php
+                        }
                     } else {
-                      echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/empty.png' class='img-fluid' alt='Empty Image'><p class='text-danger'>Reservation Empty</p></td></tr>";
+                      ?>
+                      <tr>
+                        <td colspan="5" class="empty-state">
+                            <img src="images/empty-mailbox.png" class="img-fluid" alt="No History">
+                            <p>No rental history found</p>
+                        </td>
+                      </tr>
+                      <?php
                     }
+
 
                     $conn->close();
                     ?>
-
-
+                    
                   </tbody>
-
+                  
                 </table>
-
-
+                
+               
               </div>
-
+              
             </div>
-
+            
           </div>
-
+          
         </div>
 
 

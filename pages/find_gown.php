@@ -41,13 +41,471 @@ if (isset($_SESSION['email'])) {
   </title>
   <style>
     .image-zoom {
-    transition: transform 0.3s ease; 
-}
+      transition: transform 0.3s ease; 
+    }
 
-.image-zoom:hover {
-    transform: scale(0.95); 
-}
-
+    .image-zoom:hover {
+      transform: scale(1.05); 
+    }
+    
+    .gown-card {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .gown-card:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+    
+    .gown-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px 15px 0 0;
+      height: 350px;
+    }
+    
+    .gown-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+    
+    .gown-details {
+      padding: 1.5rem;
+    }
+    
+    .gown-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #344767;
+      font-size: 1.2rem;
+    }
+    
+    .gown-title a {
+      color: #344767;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .gown-title a:hover {
+      color: #5e72e4;
+    }
+    
+    .gown-info {
+      margin-bottom: 1rem;
+    }
+    
+    .gown-info p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .gown-description {
+      color: #67748e;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+    
+    .gown-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .gown-actions .btn {
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .gown-actions .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .pagination {
+      margin-top: 2rem;
+    }
+    
+    .pagination .page-link {
+      border-radius: 8px;
+      margin: 0 3px;
+      color: #5e72e4;
+      border: none;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .pagination .page-item.active .page-link {
+      background-color: #5e72e4;
+      color: white;
+    }
+    
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    
+    .search-container .form-control {
+      border-radius: 10px;
+      padding-left: 1rem;
+      padding-right: 3rem;
+      height: 3rem;
+      border: 1px solid #e9ecef;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .search-container .form-control:focus {
+      box-shadow: 0 4px 15px rgba(94, 114, 228, 0.15);
+      border-color: #5e72e4;
+    }
+    
+    .search-container .input-group-text {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      border: none;
+      background: transparent;
+      z-index: 10;
+    }
+    
+    .search-container .input-group-text i {
+      color: #5e72e4;
+      font-size: 1.2rem;
+    }
+    
+    .section-title {
+      margin-bottom: 1.5rem;
+      color: #344767;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, #5e72e4, #825ee4);
+      border-radius: 3px;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      background: #f8f9fa;
+      border-radius: 15px;
+      color: #67748e;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .no-results i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #5e72e4;
+    }
+    
+    /* Enhanced hero section */
+    .hero-section {
+      background: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      border-radius: 15px;
+      padding: 3rem;
+      margin-bottom: 2.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(94, 114, 228, 0.2);
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40%;
+      height: 100%;
+      background: url('images/dress-pattern.png') no-repeat center center;
+      background-size: contain;
+      opacity: 0.1;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+      max-width: 70%;
+      line-height: 1.6;
+    }
+    
+    .hero-search {
+      max-width: 500px;
+      position: relative;
+    }
+    
+    .hero-search .form-control {
+      height: 3.5rem;
+      border-radius: 10px;
+      padding-left: 1.5rem;
+      padding-right: 3.5rem;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+    }
+    
+    .hero-search .btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 0 10px 10px 0;
+      padding: 0 1.5rem;
+      background: #5e72e4;
+      border: none;
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .hero-search .btn:hover {
+      background: #4a5bd0;
+    }
+    
+    /* Enhanced filter section */
+    .filter-section {
+      background: white;
+      border-radius: 15px;
+      padding: 1.8rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .filter-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: #344767;
+      display: flex;
+      align-items: center;
+    }
+    
+    .filter-title i {
+      margin-right: 0.5rem;
+      color: #5e72e4;
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    
+    .filter-option {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      background: #f8f9fa;
+      color: #67748e;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .filter-option:hover, .filter-option.active {
+      background: #5e72e4;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(94, 114, 228, 0.2);
+      text-decoration: none;
+    }
+    
+    .results-count {
+      font-size: 0.95rem;
+      color: #67748e;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .results-count i {
+      margin-right: 0.5rem;
+      color: #5e72e4;
+    }
+    
+    .gown-price {
+      font-weight: 600;
+      color: #5e72e4;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: baseline;
+    }
+    
+    .gown-price small {
+      font-size: 0.8rem;
+      color: #67748e;
+      margin-left: 0.5rem;
+    }
+    
+    .gown-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.95);
+      color: #5e72e4;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+    }
+    
+    .gown-badge i {
+      margin-right: 0.3rem;
+      color: #5e72e4;
+    }
+    
+    .gown-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .gown-feature {
+      background: #f8f9fa;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: #67748e;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .gown-feature i {
+      margin-right: 0.4rem;
+      color: #5e72e4;
+    }
+    
+    .view-more {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 2rem;
+      background: #f8f9fa;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .view-more p {
+      font-size: 1.1rem;
+      color: #67748e;
+      margin-bottom: 1.5rem;
+    }
+    
+    .view-more-btn {
+      background: transparent;
+      border: 1px solid #5e72e4;
+      color: #5e72e4;
+      padding: 0.6rem 2.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .view-more-btn:hover {
+      background: #5e72e4;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(94, 114, 228, 0.2);
+    }
+    
+    /* Available gowns section enhancement */
+    .available-gowns-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .available-gowns-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .available-gowns-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #344767;
+      margin: 0;
+    }
+    
+    .available-gowns-count {
+      background: #f8f9fa;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #67748e;
+      display: flex;
+      align-items: center;
+    }
+    
+    .available-gowns-count i {
+      margin-right: 0.5rem;
+      color: #5e72e4;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        max-width: 100%;
+      }
+      
+      .gown-image-container {
+        height: 300px;
+      }
+    }
   </style>
 </head>
 
@@ -239,7 +697,33 @@ if (isset($_SESSION['email'])) {
     <!-- End Navbar -->
     <div class="container-fluid py-4">
     
+    <!-- Hero Section -->
+    
+   
     <div class="row">
+      <div class="col-12">
+        <div class="filter-section">
+          <h5 class="filter-title"><i class="fas fa-filter"></i> Filter by Category</h5>
+          <div class="filter-options">
+            <a href="find_gown.php" class="filter-option <?php echo (!isset($_GET['category']) || $_GET['category'] == 'all') ? 'active' : ''; ?>">All Gowns</a>
+            <a href="find_gown.php?category=wedding" class="filter-option <?php echo (isset($_GET['category']) && $_GET['category'] == 'wedding') ? 'active' : ''; ?>">Wedding Gowns</a>
+            <a href="find_gown.php?category=evening" class="filter-option <?php echo (isset($_GET['category']) && $_GET['category'] == 'evening') ? 'active' : ''; ?>">Evening Gowns</a>
+            <a href="find_gown.php?category=prom" class="filter-option <?php echo (isset($_GET['category']) && $_GET['category'] == 'prom') ? 'active' : ''; ?>">Prom Dresses</a>
+            <a href="find_gown.php?category=cocktail" class="filter-option <?php echo (isset($_GET['category']) && $_GET['category'] == 'cocktail') ? 'active' : ''; ?>">Cocktail Dresses</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="available-gowns-section">
+      <div class="available-gowns-header">
+        <h4 class="available-gowns-title">Available Gowns</h4>
+        <div class="available-gowns-count">
+          <i class="fas fa-dress"></i> Showing gowns that match your search criteria
+        </div>
+      </div>
+      
+      <div class="row">
     <?php
     // Get the current page from the URL, default to 1 if not set
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -247,49 +731,53 @@ if (isset($_SESSION['email'])) {
     $offset = ($currentPage - 1) * $itemsPerPage; // Calculate the offset
 
     $searchQuery = isset($_POST['search']) ? $_POST['search'] : '';
+    $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 
     // Prepare the SQL statement with LIMIT and OFFSET
-    $sql = "SELECT * FROM gowns WHERE availability_status = 'available' AND name LIKE ? LIMIT ? OFFSET ?";
-    $stmt = $conn->prepare($sql);
-    $searchParam = "%" . $searchQuery . "%";
-    $stmt->bind_param("sii", $searchParam, $itemsPerPage, $offset);
+    if ($category == 'all') {
+        $sql = "SELECT * FROM gowns WHERE availability_status = 'available' AND name LIKE ? LIMIT ? OFFSET ?";
+        $stmt = $conn->prepare($sql);
+        $searchParam = "%" . $searchQuery . "%";
+        $stmt->bind_param("sii", $searchParam, $itemsPerPage, $offset);
+    } else {
+        $sql = "SELECT * FROM gowns WHERE availability_status = 'available' AND category = ? AND name LIKE ? LIMIT ? OFFSET ?";
+        $stmt = $conn->prepare($sql);
+        $searchParam = "%" . $searchQuery . "%";
+        $stmt->bind_param("ssii", $category, $searchParam, $itemsPerPage, $offset);
+    }
+    
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             ?>
-            <div class="col-lg-12 col-xl-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row m-b-30">
-                            <div class="col-md-5 col-xxl-12">
-                                <div class="new-arrival-product mb-4 mb-xxl-4 mb-md-0">
-                                    <div class="new-arrivals-img-contnent">
-                                    <img class="img-fluid image-zoom" style="max-height: 350px; width: 100%; object-fit: cover;" src="<?php echo str_replace('../', '', $row['main_image']); ?>" alt="<?php echo $row['name']; ?>">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7 col-xxl-12">
-                                <div class="new-arrival-content position-relative">
-                                    <h4><a href="view_gown.php?id=<?php echo $row['gown_id']; ?>"><?php echo $row['name']; ?></a></h4>
-                                    <p>Availability: <span class="item"><?php echo $row['availability_status']; ?> <i class="fa fa-check-circle text-success"></i></span></p>
-                                    <p class = "text-warning">Size: <span class="item"><?php echo $row['size']; ?></span></p>
-                                    <p class="text-content text-primary"><?php echo $row['description']; ?></p>
-
-                                    <a href="reserve_gown.php?gown_id=<?php echo $row['gown_id']; ?>" class="btn btn-success">
-                                        <i class="fas fa-check-circle"></i> Reserve Now
-                                    </a>
-                                    <a class="btn btn-warning" href="process/add_bookmark.php?gown_id=<?php echo $row['gown_id'];?>&user_id=<?php echo $user_id?>"
-                                    >
-                                        <i class="fas fa-bookmark"></i> Add to Bookmark
-                                    </a>
-                                    <a class="btn btn-primary" href="view_gown.php?gown_id=<?php echo $row['gown_id']; ?>">
-                                        <i class="fas fa-eye"></i> View Gown
-                                    </a>
-                                </div>
-                            </div>
+            <div class="col-lg-6 col-xl-3 mb-4">
+                <div class="gown-card">
+                    <div class="gown-image-container">
+                        <img class="gown-image image-zoom" src="<?php echo str_replace('../', '', $row['main_image']); ?>" alt="<?php echo $row['name']; ?>">
+                        <div class="gown-badge"><i class="fas fa-check-circle"></i> Available</div>
+                    </div>
+                    <div class="gown-details">
+                        <h4 class="gown-title"><a href="view_gown.php?id=<?php echo $row['gown_id']; ?>"><?php echo $row['name']; ?></a></h4>
+                        <div class="gown-price">
+                          ₱<?php echo number_format($row['price'], 2); ?> <small>per rental</small>
+                        </div>
+                        <div class="gown-features">
+                          <div class="gown-feature"><i class="fas fa-ruler"></i> <?php echo $row['size']; ?></div>
+                          <div class="gown-feature"><i class="fas fa-palette"></i> <?php echo $row['color']; ?></div>
+                        </div>
+                        <p class="gown-description"><?php echo substr($row['description'], 0, 100) . (strlen($row['description']) > 100 ? '...' : ''); ?></p>
+                        <div class="gown-actions">
+                            <a href="reserve_gown.php?gown_id=<?php echo $row['gown_id']; ?>" class="btn btn-success">
+                                <i class="fas fa-check-circle me-1"></i> Reserve
+                            </a>
+                            <a class="btn btn-warning" href="process/add_bookmark.php?gown_id=<?php echo $row['gown_id'];?>&user_id=<?php echo $user_id?>">
+                                <i class="fas fa-bookmark me-1"></i> Bookmark
+                            </a>
+                            <a class="btn btn-primary" href="view_gown.php?gown_id=<?php echo $row['gown_id']; ?>">
+                                <i class="fas fa-eye me-1"></i> View
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -297,32 +785,79 @@ if (isset($_SESSION['email'])) {
             <?php
         }
     } else {
-        echo "No gowns found.";
+        ?>
+        <div class="col-12">
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h4>No gowns found</h4>
+                <p>Try adjusting your search criteria or browse all available gowns.</p>
+                <a href="find_gown.php" class="btn btn-primary mt-3">View All Gowns</a>
+            </div>
+        </div>
+        <?php
     }
 
     // Get the total number of gowns for pagination
-    $countSql = "SELECT COUNT(*) as total FROM gowns WHERE name LIKE ?";
-    $countStmt = $conn->prepare($countSql);
-    $countStmt->bind_param("s", $searchParam);
+    if ($category == 'all') {
+        $countSql = "SELECT COUNT(*) as total FROM gowns WHERE name LIKE ?";
+        $countStmt = $conn->prepare($countSql);
+        $countStmt->bind_param("s", $searchParam);
+    } else {
+        $countSql = "SELECT COUNT(*) as total FROM gowns WHERE category = ? AND name LIKE ?";
+        $countStmt = $conn->prepare($countSql);
+        $countStmt->bind_param("ss", $category, $searchParam);
+    }
+    
     $countStmt->execute();
     $countResult = $countStmt->get_result();
     $totalRows = $countResult->fetch_assoc()['total'];
     $totalPages = ceil($totalRows / $itemsPerPage); // Calculate total pages
 
     // Display pagination
-    echo '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
-    for ($i = 1; $i <= $totalPages; $i++) {
-        echo '<li class="page-item' . ($i == $currentPage ? ' active' : '') . '">
-                <a class="page-link" href="?page=' . $i . '&search=' . urlencode($searchQuery) . '">' . $i . '</a>
-              </li>';
+    if ($totalPages > 1) {
+        echo '<div class="col-12"><nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
+        
+        // Previous button
+        if ($currentPage > 1) {
+            echo '<li class="page-item">
+                    <a class="page-link" href="?page=' . ($currentPage - 1) . '&search=' . urlencode($searchQuery) . '&category=' . $category . '">
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                  </li>';
+        }
+        
+        // Page numbers
+        for ($i = 1; $i <= $totalPages; $i++) {
+            echo '<li class="page-item' . ($i == $currentPage ? ' active' : '') . '">
+                    <a class="page-link" href="?page=' . $i . '&search=' . urlencode($searchQuery) . '&category=' . $category . '">' . $i . '</a>
+                  </li>';
+        }
+        
+        // Next button
+        if ($currentPage < $totalPages) {
+            echo '<li class="page-item">
+                    <a class="page-link" href="?page=' . ($currentPage + 1) . '&search=' . urlencode($searchQuery) . '&category=' . $category . '">
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  </li>';
+        }
+        
+        echo '</ul></nav></div>';
     }
-    echo '</ul></nav>';
 
     $stmt->close();
     $countStmt->close();
     ?>
 </div>
 
+<div class="row">
+  <div class="col-12">
+    <div class="view-more">
+      <p>Can't find what you're looking for? Contact us for custom gown options.</p>
+   
+    </div>
+  </div>
+</div>
       
       <?php include ('footer.php'); ?>
     </div>
@@ -391,6 +926,58 @@ if (isset($_SESSION['email'])) {
   <!--   Core JS Files   -->
   <?php include('script.php'); ?>
   <script src="sweetalert.min.js"></script>
+  
+  <script>
+    // Make filter options interactive
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterOptions = document.querySelectorAll('.filter-option');
+      
+      // Add hover effect to filter options
+      filterOptions.forEach(option => {
+        option.addEventListener('mouseenter', function() {
+          if (!this.classList.contains('active')) {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 4px 10px rgba(94, 114, 228, 0.2)';
+          }
+        });
+        
+        option.addEventListener('mouseleave', function() {
+          if (!this.classList.contains('active')) {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+          }
+        });
+      });
+      
+      // Enhance search functionality
+      const searchForm = document.querySelector('.hero-search form');
+      const searchInput = searchForm.querySelector('input[name="search"]');
+      
+      searchInput.addEventListener('focus', function() {
+        this.parentElement.style.boxShadow = '0 4px 15px rgba(94, 114, 228, 0.2)';
+      });
+      
+      searchInput.addEventListener('blur', function() {
+        this.parentElement.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+      });
+      
+      // Add animation to gown cards
+      const gownCards = document.querySelectorAll('.gown-card');
+      
+      gownCards.forEach((card, index) => {
+        // Add a staggered animation effect
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+    });
+  </script>
+  
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
 ?>
