@@ -40,7 +40,7 @@ if (isset($_POST['reserve'])) {
     }
 
     // Check if the gown has already been reserved by the same customer
-    $duplicateCheckSql = "SELECT * FROM reservations WHERE gown_id = ? AND customer_id = ?";
+    $duplicateCheckSql = "SELECT * FROM reservations WHERE gown_id = ? AND customer_id = ? AND status != 'completed'";
     
     if ($duplicateCheckStmt = $conn->prepare($duplicateCheckSql)) {
         $duplicateCheckStmt->bind_param("ii", $gown_id, $user_id);

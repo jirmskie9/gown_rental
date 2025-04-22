@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('process/config.php');
+include ('process/config.php');
 
 if (!isset($_SESSION['email'])) {
   header('location: ../index.php');
@@ -14,22 +14,20 @@ if (isset($_SESSION['email'])) {
 
   if ($result_session->num_rows > 0) {
     $row_session = $result_session->fetch_assoc();
-	  $user_id = $row_session['user_id'];
+    $user_id = $row_session['user_id'];
     $full_name = $row_session['full_name'];
     $email = $row_session['email'];
-	  $profile = $row_session['profile'];
-	  $type = $row_session['user_type'];
+    $profile = $row_session['profile'];
+    $type = $row_session['user_type'];
 
-	  if ($type != 'admin') {
-    header('location: ../index.php');
-    exit();
-	}
-      
+    if ($type != 'admin') {
+      header('location: ../index.php');
+      exit();
+    }
   } else {
     header('location: ../index.php');
     exit();
   }
-
 }
 
 $reservation_id = intval($_GET['reservation_id']);
@@ -37,10 +35,198 @@ $reservation_id = intval($_GET['reservation_id']);
 <!DOCTYPE html>
 <html lang="en">
 
-  <?php include('header.php');?>
+  <?php include ('header.php'); ?>
   <title>
   Ging's Boutique | Reservations
   </title>
+  <style>
+    .timeline {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      height: 100%;
+      width: 2px;
+      background: #e9ecef;
+    }
+    .timeline-block {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .timeline-step {
+      position: absolute;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      z-index: 1;
+    }
+    .timeline-content {
+      margin-left: 50px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    .badge-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 0.25rem;
+    }
+    .bg-gradient-success {
+      background: linear-gradient(310deg, #17a37f 0%, #17a37f 100%);
+    }
+    .bg-gradient-warning {
+      background: linear-gradient(310deg, #fbcf33 0%, #fbcf33 100%);
+    }
+    .bg-gradient-danger {
+      background: linear-gradient(310deg, #ea0606 0%, #ea0606 100%);
+    }
+    .countdown-text {
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+  <script>
+    let idleTime = 0;
+    const idleInterval = 6000; // Check every second
+    const idleTimeout = 10; // Logout after 10 seconds of inactivity
+    const warningTime = 5; // Show warning 5 seconds before logout
+    let warningShown = false;
+    let countdownInterval;
+
+    // Reset timer on user activity
+    function resetIdleTime() {
+      idleTime = 0;
+      warningShown = false;
+      // If there's an existing warning, close it
+      const existingAlert = document.querySelector('.swal-overlay');
+      if (existingAlert) {
+        clearInterval(countdownInterval);
+        swal.close();
+      }
+    }
+
+    // Show warning with live countdown
+    function showWarningWithCountdown() {
+      warningShown = true;
+      let secondsLeft = warningTime;
+
+      // Create warning dialog
+      const warningDialog = document.createElement('div');
+      warningDialog.innerHTML = `
+        <div class="idle-warning text-center">
+          <div class="warning-icon mb-3">
+            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-3">Idle Detection Warning!</h4>
+          <div class="countdown-container">
+            <div class="countdown-number" id="countdown">${secondsLeft}</div>
+            <div class="countdown-text mt-2">seconds until logout</div>
+          </div>
+          <div class="mt-3 text-muted">Move mouse or press any key to cancel</div>
+        </div>
+      `;
+
+      // Add styles for the countdown
+      const style = document.createElement('style');
+      style.textContent = `
+        .idle-warning {
+          padding: 20px;
+        }
+        .countdown-container {
+          margin: 20px 0;
+        }
+        .countdown-number {
+          font-size: 72px;
+          font-weight: bold;
+          color: #dc3545;
+          animation: pulse 1s infinite;
+          line-height: 1;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .countdown-text {
+          font-size: 1.2rem;
+          color: #666;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .warning-icon {
+          animation: shake 1s infinite;
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      swal({
+        content: warningDialog,
+        buttons: false,
+        closeOnEsc: false,
+        closeOnClickOutside: false,
+      });
+
+      // Update countdown
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement && secondsLeft >= 0) {
+          countdownElement.textContent = secondsLeft;
+          // Add extra visual feedback as time runs out
+          if (secondsLeft <= 2) {
+            countdownElement.style.color = '#dc3545';
+            countdownElement.style.animation = 'pulse 0.5s infinite';
+          }
+        }
+        if (secondsLeft < 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    // Increment idle time counter
+    function timerIncrement() {
+      idleTime += 1;
+      
+      // Show warning 5 seconds before logout
+      if (idleTime === (idleTimeout - warningTime) && !warningShown) {
+        showWarningWithCountdown();
+      }
+      
+      if (idleTime >= idleTimeout) {
+        clearInterval(countdownInterval);
+        window.location.href = 'logout.php';
+      }
+    }
+
+    // Initialize idle detection when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up the timer that checks for inactivity
+      setInterval(timerIncrement, idleInterval);
+
+      // Reset timer on any user activity
+      const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+      events.forEach(function(event) {
+        document.addEventListener(event, resetIdleTime, true);
+      });
+    });
+  </script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -154,9 +340,9 @@ $reservation_id = intval($_GET['reservation_id']);
                 $res = $conn->query($sql);
 
                 if ($res->num_rows > 0) {
-                    while ($row = $res->fetch_assoc()) {
-                        $formatted_date_time = date("F j, Y, g:i a", strtotime($row['date_time']));
-                        ?>
+                  while ($row = $res->fetch_assoc()) {
+                    $formatted_date_time = date('F j, Y, g:i a', strtotime($row['date_time']));
+                    ?>
                         <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">
                                 <div class="d-flex py-1">
@@ -176,9 +362,9 @@ $reservation_id = intval($_GET['reservation_id']);
                             </a>
                         </li>
                         <?php
-                    }
+                  }
                 } else {
-                    echo '<li class="mb-2">No notifications available.</li>';
+                  echo '<li class="mb-2">No notifications available.</li>';
                 }
                 ?>
             </ul>
@@ -191,25 +377,25 @@ $reservation_id = intval($_GET['reservation_id']);
     <!-- End Navbar -->
 
     <?php
-                    // Ensure that the gown_id is set in the URL and is an integer
-                    if (isset($_GET['reservation_id'])) {
-                        $reservation_id = (int)$_GET['reservation_id'];
+    // Ensure that the gown_id is set in the URL and is an integer
+    if (isset($_GET['reservation_id'])) {
+      $reservation_id = (int) $_GET['reservation_id'];
 
-                        // Prepare the SQL statement to fetch gown details
-                        $sql = "SELECT r.gown_id, r.status, r.start_date, r.end_date, r.status, r.payment_status,
+      // Prepare the SQL statement to fetch gown details
+      $sql = 'SELECT r.gown_id, r.status, r.start_date, r.end_date, r.status, r.payment_status,
                         r.customer_id, u.full_name, u.address, u.email, u.phone_number, g.name, g.color,
                         g.main_image, g.price FROM reservations r JOIN users u ON r.customer_id =
-                        u.user_id JOIN gowns g ON r.gown_id = g.gown_id WHERE reservation_id = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("i", $reservation_id);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
+                        u.user_id JOIN gowns g ON r.gown_id = g.gown_id WHERE reservation_id = ?';
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param('i', $reservation_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
 
-                        if ($result->num_rows > 0) {
-                            $row = $result->fetch_assoc();
-                        }
-                    }
-                            ?>
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+      }
+    }
+    ?>
     <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
@@ -217,11 +403,11 @@ $reservation_id = intval($_GET['reservation_id']);
                             <div class="card-header bg-gradient-primary text-white">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h5 class="mb-0">Reservation ID: <strong>00000<?php echo $reservation_id?></strong></h5>
+                                        <h5 class="mb-0">Reservation ID: <strong>00000<?php echo $reservation_id ?></strong></h5>
                                     </div>
                                     <div>
                                         <span class="badge bg-white text-primary">
-                                            <strong>Status:</strong> <?php echo htmlspecialchars($row['status'])?>
+                                            <strong>Status:</strong> <?php echo htmlspecialchars($row['status']) ?>
                                         </span>
                                     </div>
                                 </div>
@@ -234,11 +420,11 @@ $reservation_id = intval($_GET['reservation_id']);
                                                 <h6 class="mb-0"><i class="fa fa-calendar-plus me-2"></i>Pick up Date:</h6>
                                             </div>
                                             <div class="card-body">
-                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
-                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-primary"></i><?php echo htmlspecialchars($row['start_date'])?></div>
-                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-primary"></i><?php echo htmlspecialchars($row['address'])?></div>
-                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-primary"></i><?php echo htmlspecialchars($row['email'])?></div>
-                                                <div><i class="fa fa-phone me-2 text-primary"></i><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name']) ?></strong> </div>
+                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-primary"></i><?php echo htmlspecialchars($row['start_date']) ?></div>
+                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-primary"></i><?php echo htmlspecialchars($row['address']) ?></div>
+                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-primary"></i><?php echo htmlspecialchars($row['email']) ?></div>
+                                                <div><i class="fa fa-phone me-2 text-primary"></i><?php echo htmlspecialchars($row['phone_number']) ?></div>
                                             </div>
                                         </div>
                                     </div>
@@ -248,11 +434,11 @@ $reservation_id = intval($_GET['reservation_id']);
                                                 <h6 class="mb-0"><i class="fa fa-calendar-minus me-2"></i>Date to Return:</h6>
                                             </div>
                                             <div class="card-body">
-                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name'])?></strong> </div>
-                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-success"></i><?php echo htmlspecialchars($row['end_date'])?></div>
-                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-success"></i><?php echo htmlspecialchars($row['address'])?></div>
-                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-success"></i><?php echo htmlspecialchars($row['email'])?></div>
-                                                <div><i class="fa fa-phone me-2 text-success"></i><?php echo htmlspecialchars($row['phone_number'])?></div>
+                                                <div class="mb-2"> <strong><?php echo htmlspecialchars($row['full_name']) ?></strong> </div>
+                                                <div class="mb-2"><i class="fa fa-calendar me-2 text-success"></i><?php echo htmlspecialchars($row['end_date']) ?></div>
+                                                <div class="mb-2"><i class="fa fa-map-marker-alt me-2 text-success"></i><?php echo htmlspecialchars($row['address']) ?></div>
+                                                <div class="mb-2"><i class="fa fa-envelope me-2 text-success"></i><?php echo htmlspecialchars($row['email']) ?></div>
+                                                <div><i class="fa fa-phone me-2 text-success"></i><?php echo htmlspecialchars($row['phone_number']) ?></div>
                                             </div>
                                         </div>
                                     </div>
@@ -272,7 +458,7 @@ $reservation_id = intval($_GET['reservation_id']);
                                             <div class="card shadow-sm">
                                                 <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['main_image'])); ?>" alt="" class="img-fluid rounded mb-2" style="max-height: 150px; object-fit: cover;">
                                                 <div class="card-body p-2 text-center">
-                                                    <strong class="text-primary"><?php echo htmlspecialchars($row['name'])?></strong>
+                                                    <strong class="text-primary"><?php echo htmlspecialchars($row['name']) ?></strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -301,9 +487,9 @@ $reservation_id = intval($_GET['reservation_id']);
                                                 <tbody>
                                                     <tr>
                                                         <td class="text-center">1</td>
-                                                        <td class="font-weight-bold"><?php echo htmlspecialchars($row['name'])?></td>
-                                                        <td>₱<?php echo number_format(htmlspecialchars($row['price']), 2)?></td>
-                                                        <td class="text-end"><?php echo htmlspecialchars($row['color'])?></td>
+                                                        <td class="font-weight-bold"><?php echo htmlspecialchars($row['name']) ?></td>
+                                                        <td>₱<?php echo number_format(htmlspecialchars($row['price']), 2) ?></td>
+                                                        <td class="text-end"><?php echo htmlspecialchars($row['color']) ?></td>
                                                         <td class="text-center">1</td>
                                                       
                                                     </tr>
@@ -324,17 +510,17 @@ $reservation_id = intval($_GET['reservation_id']);
                                                     <tbody>
                                                         <tr>
                                                             <td class="left"><strong>Subtotal</strong></td>
-                                                            <td class="right">₱<?php echo number_format(htmlspecialchars($row['price']), 2)?></td>
+                                                            <td class="right">₱<?php echo number_format(htmlspecialchars($row['price']), 2) ?></td>
                                                         </tr>
                                                         <?php
                                                         $price = htmlspecialchars($row['price']);
-                                                        $transactionFee = $price * 0.03; 
+                                                        $transactionFee = $price * 0.03;
                                                         $totalPrice = $price + $transactionFee;
                                                         $added = $totalPrice - $price;
                                                         ?>
                                                         <tr>
                                                             <td class="left"><strong>Transaction Fee (3%)</strong></td>
-                                                            <td class="right">₱<?php echo number_format($added, 2)?></td>
+                                                            <td class="right">₱<?php echo number_format($added, 2) ?></td>
                                                         </tr>
                                                        
                                                         <tr>
@@ -355,19 +541,19 @@ $reservation_id = intval($_GET['reservation_id']);
                                 <div class="text-center">
                                 <div class="d-flex justify-content-center gap-3">
                                     <form action="process/update_gown_status.php" method="POST">
-                                        <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
+                                        <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id']) ?>" name="gown_id">
                                         <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
-                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
-                                        <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
+                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id']) ?>" name="user_id">
+                                        <input type="hidden" value = "<?php echo htmlspecialchars($row['name']) ?>" name = "name">
                                         <button class="btn btn-success" type="submit" name="reserve">
                                             <i class="fas fa-check me-2"></i> Confirm
                                         </button>
                                     </form>
                                     <form action="process/return_gown.php" method = "POST">
-                                    <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id'])?>" name="gown_id">
+                                    <input type="hidden" value="<?php echo htmlspecialchars($row['gown_id']) ?>" name="gown_id">
                                         <input type="hidden" value="<?php echo $reservation_id ?>" name="reservation_id">
-                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id'])?>" name="user_id">
-                                        <input type="hidden" value = "<?php echo htmlspecialchars($row['name'])?>" name = "name">
+                                        <input type="hidden" value="<?php echo htmlspecialchars($row['customer_id']) ?>" name="user_id">
+                                        <input type="hidden" value = "<?php echo htmlspecialchars($row['name']) ?>" name = "name">
                                         <?php if ($row['payment_status'] == 'paid') { ?>
                                           <button class="btn btn-primary" type="submit" name="returned">
                                               <i class="fas fa-undo me-2"></i> Returned
@@ -473,11 +659,11 @@ $reservation_id = intval($_GET['reservation_id']);
     </div>
   </div>
   <!--   Core JS Files   -->
-  <?php include('script.php'); ?>
+  <?php include ('script.php'); ?>
   <script src="sweetalert.min.js"></script>
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-?>
+  ?>
     <script>
     swal({
         title: "<?php echo $_SESSION['status']; ?>",
@@ -486,9 +672,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     });
     </script>
 <?php
-    unset($_SESSION['status']);
-    unset($_SESSION['status_code']);
-    unset($_SESSION['status_button']);
+  unset($_SESSION['status']);
+  unset($_SESSION['status_code']);
+  unset($_SESSION['status_button']);
 }
 ?>
 

@@ -89,7 +89,145 @@ if (isset($_SESSION['email'])) {
     .bg-gradient-danger {
       background: linear-gradient(310deg, #ea0606 0%, #ea0606 100%);
     }
+    .countdown-text {
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
   </style>
+  <script>
+    let idleTime = 0;
+    const idleInterval = 6000; // Check every second
+    const idleTimeout = 10; // Logout after 10 seconds of inactivity
+    const warningTime = 5; // Show warning 5 seconds before logout
+    let warningShown = false;
+    let countdownInterval;
+
+    // Reset timer on user activity
+    function resetIdleTime() {
+      idleTime = 0;
+      warningShown = false;
+      // If there's an existing warning, close it
+      const existingAlert = document.querySelector('.swal-overlay');
+      if (existingAlert) {
+        clearInterval(countdownInterval);
+        swal.close();
+      }
+    }
+
+    // Show warning with live countdown
+    function showWarningWithCountdown() {
+      warningShown = true;
+      let secondsLeft = warningTime;
+
+      // Create warning dialog
+      const warningDialog = document.createElement('div');
+      warningDialog.innerHTML = `
+        <div class="idle-warning text-center">
+          <div class="warning-icon mb-3">
+            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-3">Idle Detection Warning!</h4>
+          <div class="countdown-container">
+            <div class="countdown-number" id="countdown">${secondsLeft}</div>
+            <div class="countdown-text mt-2">seconds until logout</div>
+          </div>
+          <div class="mt-3 text-muted">Move mouse or press any key to cancel</div>
+        </div>
+      `;
+
+      // Add styles for the countdown
+      const style = document.createElement('style');
+      style.textContent = `
+        .idle-warning {
+          padding: 20px;
+        }
+        .countdown-container {
+          margin: 20px 0;
+        }
+        .countdown-number {
+          font-size: 72px;
+          font-weight: bold;
+          color: #dc3545;
+          animation: pulse 1s infinite;
+          line-height: 1;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .countdown-text {
+          font-size: 1.2rem;
+          color: #666;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .warning-icon {
+          animation: shake 1s infinite;
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      swal({
+        content: warningDialog,
+        buttons: false,
+        closeOnEsc: false,
+        closeOnClickOutside: false,
+      });
+
+      // Update countdown
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement && secondsLeft >= 0) {
+          countdownElement.textContent = secondsLeft;
+          // Add extra visual feedback as time runs out
+          if (secondsLeft <= 2) {
+            countdownElement.style.color = '#dc3545';
+            countdownElement.style.animation = 'pulse 0.5s infinite';
+          }
+        }
+        if (secondsLeft < 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    // Increment idle time counter
+    function timerIncrement() {
+      idleTime += 1;
+      
+      // Show warning 5 seconds before logout
+      if (idleTime === (idleTimeout - warningTime) && !warningShown) {
+        showWarningWithCountdown();
+      }
+      
+      if (idleTime >= idleTimeout) {
+        clearInterval(countdownInterval);
+        window.location.href = 'logout.php';
+      }
+    }
+
+    // Initialize idle detection when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up the timer that checks for inactivity
+      setInterval(timerIncrement, idleInterval);
+
+      // Reset timer on any user activity
+      const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+      events.forEach(function(event) {
+        document.addEventListener(event, resetIdleTime, true);
+      });
+    });
+  </script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -222,7 +360,7 @@ if (isset($_SESSION['email'])) {
                                         <img src="images/email.png" class="avatar avatar-sm me-3">
                                     </div>
                                     <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
+                                        <h6 class="text-sm font-weight-normal mb-0">
                                             <span class=""><?php echo $row['content']; ?></span>
                                         </h6>
                                         <p class="text-xs text-secondary mb-0">
@@ -359,45 +497,67 @@ if (isset($_SESSION['email'])) {
         </div>
       </div>
       
-      <!-- Quick Actions Section -->
+      <!-- Rental Trends and Popular Gowns Section -->
       <div class="row mt-4">
-        <div class="col-lg-4 mb-lg-0 mb-4">
-          <div class="card">
+        <div class="col-lg-6 mb-lg-0 mb-4">
+          <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Quick Actions</h6>
+              <h6 class="text-capitalize">Rental Trends</h6>
+              <p class="text-sm mb-0">
+                <i class="fa fa-arrow-up text-success"></i>
+                <span class="font-weight-bold">Monthly rental activity</span>
+              </p>
             </div>
             <div class="card-body p-3">
-              <div class="row">
-                <div class="col-6 mb-3">
-                  <a href="manage_gowns.php" class="btn btn-primary btn-sm w-100">
-                    <i class="fa fa-plus-circle me-2"></i> Add Gown
-                  </a>
-                </div>
-                <div class="col-6 mb-3">
-                  <a href="manage_reservations.php" class="btn btn-info btn-sm w-100">
-                    <i class="fa fa-calendar-plus me-2"></i> Reservations
-                  </a>
-                </div>
-                <div class="col-6 mb-3">
-                  <a href="manage_customers.php" class="btn btn-success btn-sm w-100">
-                    <i class="fa fa-user-plus me-2"></i> View Customer
-                  </a>
-                </div>
-                <div class="col-6 mb-3">
-                  <a href="payments.php" class="btn btn-warning btn-sm w-100">
-                    <i class="fa fa-money-bill-alt me-2"></i> Payments
-                  </a>
-                </div>
+              <div class="chart">
+                <canvas id="rental-trends-chart" class="chart-canvas" height="300"></canvas>
               </div>
             </div>
           </div>
         </div>
-        
-        <!-- Recent Activities Section -->
-        <div class="col-lg-8 mb-lg-0 mb-4">
-          <div class="card">
+        <div class="col-lg-6 mb-lg-0 mb-4">
+          <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Recent Activities</h6>
+              <h6 class="text-capitalize">Most Popular Gowns</h6>
+              <p class="text-sm mb-0">
+                <i class="fa fa-trophy text-warning"></i>
+                <span class="font-weight-bold">Top rented gowns</span>
+              </p>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="popular-gowns-chart" class="chart-canvas" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods Section -->
+      <div class="row mt-4">
+        <div class="col-lg-12 mb-lg-0 mb-4">
+          <div class="card z-index-2 h-100">
+            <div class="card-header pb-0 pt-3 bg-transparent">
+              <h6 class="text-capitalize">Payment Methods</h6>
+              <p class="text-sm mb-0">
+                Distribution of payment methods
+              </p>
+            </div>
+            <div class="card-body p-3">
+              <div class="chart">
+                <canvas id="chart-pie" class="chart-canvas" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activities Section -->
+      <div class="row mt-4">
+        <div class="col-lg-7 mb-lg-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h6>Recent Activities</h6>
             </div>
             <div class="card-body p-3">
               <div class="timeline timeline-one-side">
@@ -440,43 +600,11 @@ if (isset($_SESSION['email'])) {
             </div>
           </div>
         </div>
-      </div>
-      
-      <!-- Charts Section -->
-      <div class="row mt-4">
-        <div class="col-lg-8 mb-lg-0 mb-4">
-          <div class="card z-index-2 h-100">
-            <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Reservations Overview</h6>
-              <p class="text-sm mb-0">
-                Monthly reservation trends in 2024
-              </p>
-            </div>
-            <div class="card-body p-3">
-              <div class="chart">
-                <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 mb-lg-0 mb-4">
-          <div class="card z-index-2 h-100">
-            <div class="card-header pb-0 pt-3 bg-transparent">
-              <h6 class="text-capitalize">Payment Methods</h6>
-              <p class="text-sm mb-0">
-                Distribution of payment methods
-              </p>
-            </div>
-            <div class="card-body p-3">
-              <div class="chart">
-                <canvas id="chart-pie" class="chart-canvas" height="300"></canvas>
-              </div>
-            </div>
-          </div>
+        <div class="col-lg-5 mb-lg-0 mb-4">
+          <!-- Empty column for spacing -->
         </div>
       </div>
-      
+
       <!-- Upcoming Reservations Section -->
       <div class="row mt-4">
         <div class="col-12">
@@ -536,7 +664,7 @@ if (isset($_SESSION['email'])) {
                           <span class="badge badge-sm bg-gradient-<?php echo $status_class; ?>"><?php echo ucfirst($row_upcoming['status']); ?></span>
                         </td>
                         <td class="align-middle">
-                          <a href="manage_reservations.php?id=<?php echo $row_upcoming['reservation_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View details">
+                          <a href="view_reservation.php?reservation_id=<?php echo $row_upcoming['reservation_id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="View details">
                             View
                           </a>
                         </td>
@@ -621,7 +749,179 @@ if (isset($_SESSION['email'])) {
   </div>
   <!--   Core JS Files   -->
   <?php include('script.php'); ?>
-  <?php include('graph.php'); ?>
+  <?php
+  // Get rental trends data
+  $rental_trends_sql = "SELECT DATE_FORMAT(start_date, '%Y-%m') as month, COUNT(*) as count 
+                       FROM reservations 
+                       WHERE status = 'completed' 
+                       GROUP BY DATE_FORMAT(start_date, '%Y-%m') 
+                       ORDER BY month ASC 
+                       LIMIT 12";
+  $rental_trends_result = $conn->query($rental_trends_sql);
+  $rental_months = [];
+  $rental_counts = [];
+  while($row = $rental_trends_result->fetch_assoc()) {
+    $rental_months[] = date('M Y', strtotime($row['month'] . '-01'));
+    $rental_counts[] = $row['count'];
+  }
+
+  // Get popular gowns data
+  $popular_gowns_sql = "SELECT g.name, COUNT(r.gown_id) as rent_count 
+                        FROM gowns g 
+                        LEFT JOIN reservations r ON g.gown_id = r.gown_id 
+                        WHERE r.status = 'completed' 
+                        GROUP BY g.gown_id, g.name 
+                        ORDER BY rent_count DESC 
+                        LIMIT 5";
+  $popular_gowns_result = $conn->query($popular_gowns_sql);
+  $gown_names = [];
+  $rent_counts = [];
+  while($row = $popular_gowns_result->fetch_assoc()) {
+    $gown_names[] = $row['name'];
+    $rent_counts[] = $row['rent_count'];
+  }
+  ?>
+  <script>
+    // Rental Trends Chart
+    var ctx1 = document.getElementById("rental-trends-chart").getContext("2d");
+    new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: <?php echo json_encode($rental_months); ?>,
+        datasets: [{
+          label: "Rentals",
+          tension: 0.4,
+          borderWidth: 2,
+          borderColor: "#5e72e4",
+          backgroundColor: "rgba(94, 114, 228, 0.2)",
+          fill: true,
+          data: <?php echo json_encode($rental_counts); ?>,
+          maxBarThickness: 6
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              color: "#fbfbfb",
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: "#ccc",
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+        },
+      },
+    });
+
+    // Popular Gowns Chart
+    var ctx2 = document.getElementById("popular-gowns-chart").getContext("2d");
+    new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: <?php echo json_encode($gown_names); ?>,
+        datasets: [{
+          label: "Rentals",
+          tension: 0.4,
+          borderWidth: 0,
+          borderRadius: 4,
+          borderSkipped: false,
+          backgroundColor: "#fb6340",
+          data: <?php echo json_encode($rent_counts); ?>,
+          maxBarThickness: 40
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              color: "#fbfbfb",
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: "#ccc",
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+        },
+      },
+    });
+  </script>
   <?php include('payment_chart.php'); ?>
   <script src="sweetalert.min.js"></script>
 <?php

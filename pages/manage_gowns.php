@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('process/config.php');
+include ('process/config.php');
 
 if (!isset($_SESSION['email'])) {
   header('location: ../index.php');
@@ -14,28 +14,26 @@ if (isset($_SESSION['email'])) {
 
   if ($result_session->num_rows > 0) {
     $row_session = $result_session->fetch_assoc();
-	  $user_id = $row_session['user_id'];
+    $user_id = $row_session['user_id'];
     $full_name = $row_session['full_name'];
     $email = $row_session['email'];
-	  $profile = $row_session['profile'];
-	  $type = $row_session['user_type'];
+    $profile = $row_session['profile'];
+    $type = $row_session['user_type'];
 
-	  if ($type != 'admin') {
-    header('location: ../index.php');
-    exit();
-	}
-      
+    if ($type != 'admin') {
+      header('location: ../index.php');
+      exit();
+    }
   } else {
     header('location: ../index.php');
     exit();
   }
-
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-  <?php include('header.php');?>
+  <?php include ('header.php'); ?>
   <title>
   Ging's Boutique | Gowns
   </title>
@@ -352,6 +350,194 @@ if (isset($_SESSION['email'])) {
       }
     }
   </style>
+   <style>
+    .timeline {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      height: 100%;
+      width: 2px;
+      background: #e9ecef;
+    }
+    .timeline-block {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .timeline-step {
+      position: absolute;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      z-index: 1;
+    }
+    .timeline-content {
+      margin-left: 50px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    .badge-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 0.25rem;
+    }
+    .bg-gradient-success {
+      background: linear-gradient(310deg, #17a37f 0%, #17a37f 100%);
+    }
+    .bg-gradient-warning {
+      background: linear-gradient(310deg, #fbcf33 0%, #fbcf33 100%);
+    }
+    .bg-gradient-danger {
+      background: linear-gradient(310deg, #ea0606 0%, #ea0606 100%);
+    }
+    .countdown-text {
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+  <script>
+    let idleTime = 0;
+    const idleInterval = 1000; // Check every second
+    const idleTimeout = 60; // Logout after 10 seconds of inactivity
+    const warningTime = 5; // Show warning 5 seconds before logout
+    let warningShown = false;
+    let countdownInterval;
+
+    // Reset timer on user activity
+    function resetIdleTime() {
+      idleTime = 0;
+      warningShown = false;
+      // If there's an existing warning, close it
+      const existingAlert = document.querySelector('.swal-overlay');
+      if (existingAlert) {
+        clearInterval(countdownInterval);
+        swal.close();
+      }
+    }
+
+    // Show warning with live countdown
+    function showWarningWithCountdown() {
+      warningShown = true;
+      let secondsLeft = warningTime;
+
+      // Create warning dialog
+      const warningDialog = document.createElement('div');
+      warningDialog.innerHTML = `
+        <div class="idle-warning text-center">
+          <div class="warning-icon mb-3">
+            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-3">Idle Detection Warning!</h4>
+          <div class="countdown-container">
+            <div class="countdown-number" id="countdown">${secondsLeft}</div>
+            <div class="countdown-text mt-2">seconds until logout</div>
+          </div>
+          <div class="mt-3 text-muted">Move mouse or press any key to cancel</div>
+        </div>
+      `;
+
+      // Add styles for the countdown
+      const style = document.createElement('style');
+      style.textContent = `
+        .idle-warning {
+          padding: 20px;
+        }
+        .countdown-container {
+          margin: 20px 0;
+        }
+        .countdown-number {
+          font-size: 72px;
+          font-weight: bold;
+          color: #dc3545;
+          animation: pulse 1s infinite;
+          line-height: 1;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .countdown-text {
+          font-size: 1.2rem;
+          color: #666;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .warning-icon {
+          animation: shake 1s infinite;
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      swal({
+        content: warningDialog,
+        buttons: false,
+        closeOnEsc: false,
+        closeOnClickOutside: false,
+      });
+
+      // Update countdown
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement && secondsLeft >= 0) {
+          countdownElement.textContent = secondsLeft;
+          // Add extra visual feedback as time runs out
+          if (secondsLeft <= 2) {
+            countdownElement.style.color = '#dc3545';
+            countdownElement.style.animation = 'pulse 0.5s infinite';
+          }
+        }
+        if (secondsLeft < 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    // Increment idle time counter
+    function timerIncrement() {
+      idleTime += 1;
+      
+      // Show warning 5 seconds before logout
+      if (idleTime === (idleTimeout - warningTime) && !warningShown) {
+        showWarningWithCountdown();
+      }
+      
+      if (idleTime >= idleTimeout) {
+        clearInterval(countdownInterval);
+        window.location.href = 'logout.php';
+      }
+    }
+
+    // Initialize idle detection when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up the timer that checks for inactivity
+      setInterval(timerIncrement, idleInterval);
+
+      // Reset timer on any user activity
+      const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+      events.forEach(function(event) {
+        document.addEventListener(event, resetIdleTime, true);
+      });
+    });
+  </script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -473,9 +659,9 @@ if (isset($_SESSION['email'])) {
                 $res = $conn->query($sql);
 
                 if ($res->num_rows > 0) {
-                    while ($row = $res->fetch_assoc()) {
-                        $formatted_date_time = date("F j, Y, g:i a", strtotime($row['date_time']));
-                        ?>
+                  while ($row = $res->fetch_assoc()) {
+                    $formatted_date_time = date('F j, Y, g:i a', strtotime($row['date_time']));
+                    ?>
                         <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">
                                 <div class="d-flex py-1">
@@ -495,9 +681,9 @@ if (isset($_SESSION['email'])) {
                             </a>
                         </li>
                         <?php
-                    }
+                  }
                 } else {
-                    echo '<li class="mb-2">No notifications available.</li>';
+                  echo '<li class="mb-2">No notifications available.</li>';
                 }
                 ?>
             </ul>
@@ -530,23 +716,22 @@ if (isset($_SESSION['email'])) {
                   <tbody>
                   <?php
 
-            $sql = "SELECT * FROM gowns";
-            $result = $conn->query($sql);
+                  $sql = 'SELECT * FROM gowns';
+                  $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      $gown_id = $row['gown_id'];
+                      $main_image = 'uploads/' . basename($row['main_image']);
+                      $name = $row['name'];
+                      $color = $row['color'];
+                      $price = $row['price'];
+                      $availability_status = $row['availability_status'];
+                      $created_at = $row['created_at'];
 
-                while ($row = $result->fetch_assoc()) {
-                    $gown_id = $row['gown_id'];
-                    $main_image = 'uploads/' . basename($row['main_image']);
-                    $name = $row['name'];
-                    $color = $row['color'];
-                    $price = $row['price'];
-                    $availability_status = $row['availability_status'];
-                    $created_at = $row['created_at'];
-                    
-                    // Format date for better display
-                    $formatted_date = date("M d, Y", strtotime($created_at));
-                    ?>
+                      // Format date for better display
+                      $formatted_date = date('M d, Y', strtotime($created_at));
+                      ?>
                     <tr>
                     <td>
                         <div class="gown-item">
@@ -587,9 +772,9 @@ if (isset($_SESSION['email'])) {
                     </td>
                     </tr>
                     <?php
-                        }
-                    } else {
-                      ?>
+                    }
+                  } else {
+                    ?>
                       <tr>
                         <td colspan="5" class="empty-state">
                             <img src="images/empty.png" class="img-fluid" alt="No Gowns">
@@ -597,11 +782,10 @@ if (isset($_SESSION['email'])) {
                         </td>
                       </tr>
                       <?php
-                    }
+                  }
 
-
-                    $conn->close();
-                    ?>
+                  $conn->close();
+                  ?>
                     
                   </tbody>
                   
@@ -719,11 +903,11 @@ if (isset($_SESSION['email'])) {
     </div>
   </div>
   <!--   Core JS Files   -->
-  <?php include('script.php'); ?>
+  <?php include ('script.php'); ?>
   <script src="sweetalert.min.js"></script>
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-?>
+  ?>
     <script>
     swal({
         title: "<?php echo $_SESSION['status']; ?>",
@@ -732,9 +916,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     });
     </script>
 <?php
-    unset($_SESSION['status']);
-    unset($_SESSION['status_code']);
-    unset($_SESSION['status_button']);
+  unset($_SESSION['status']);
+  unset($_SESSION['status_code']);
+  unset($_SESSION['status_button']);
 }
 ?>
 </body>

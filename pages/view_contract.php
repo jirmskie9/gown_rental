@@ -46,13 +46,201 @@ if (isset($_SESSION['email'])) {
 
   <?php include('header.php');?>
   <title>
-  Ging's Boutique | View
+  Ging's Boutique | View Contract
   </title>
   <style>
     @media print {
-
-        button {
-            display: none; 
+        /* Hide unnecessary elements */
+        .navbar,
+        .sidenav,
+        .fixed-plugin,
+        .card-header,
+        .btn,
+        .footer {
+            display: none !important;
+        }
+        
+        /* Reset background colors and shadows for better printing */
+        body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: 'Poppins', Arial, sans-serif !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        .card-body {
+            padding: 0 !important;
+        }
+        
+        /* Ensure text is black for better printing */
+        .text-primary,
+        .text-secondary,
+        .text-info,
+        .text-success,
+        .text-warning,
+        .text-danger {
+            color: black !important;
+        }
+        
+        /* Fix image sizing for print */
+        img {
+            max-width: 80px !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+        
+        .avatar {
+            width: 40px !important;
+            height: 40px !important;
+        }
+        
+        .avatar-sm {
+            width: 30px !important;
+            height: 30px !important;
+        }
+        
+        /* Ensure tables print properly */
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 10px 0 !important;
+        }
+        
+        th, td {
+            border: 1px solid #ddd !important;
+            padding: 6px !important;
+            font-size: 12px !important;
+        }
+        
+        /* Ensure signature image prints clearly */
+        .signature-image {
+            max-height: 60px !important;
+            border: 1px solid #ddd !important;
+        }
+        
+        /* Improve table layout */
+        .table > :not(caption) > * > * {
+            padding: 0.3rem !important;
+        }
+        
+        .d-flex {
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        .me-3 {
+            margin-right: 0.5rem !important;
+        }
+        
+        /* Adjust text sizes for print */
+        .text-sm {
+            font-size: 11px !important;
+        }
+        
+        .text-xs {
+            font-size: 10px !important;
+        }
+        
+        /* Ensure proper spacing */
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+        
+        .mb-3 {
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* Enhanced contract styling */
+        .contract-container {
+            border: 1px solid #ddd !important;
+            padding: 15px !important;
+            margin: 0 auto !important;
+            max-width: 100% !important;
+        }
+        
+        .contract-header {
+            text-align: center !important;
+            margin-bottom: 15px !important;
+            border-bottom: 2px solid #344767 !important;
+            padding-bottom: 10px !important;
+        }
+        
+        .contract-header h4 {
+            font-size: 20px !important;
+            font-weight: bold !important;
+            margin-bottom: 5px !important;
+        }
+        
+        .contract-section {
+            margin-bottom: 15px !important;
+        }
+        
+        .contract-section h5 {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            margin-bottom: 10px !important;
+            border-bottom: 1px solid #eee !important;
+            padding-bottom: 5px !important;
+        }
+        
+        .contract-table {
+            margin: 10px 0 !important;
+            border: 1px solid #ddd !important;
+        }
+        
+        .contract-table th {
+            background-color: #f8f9fa !important;
+            font-weight: bold !important;
+        }
+        
+        .contract-signature {
+            margin-top: 20px !important;
+            border-top: 1px solid #eee !important;
+            padding-top: 10px !important;
+        }
+        
+        .contract-footer {
+            margin-top: 20px !important;
+            text-align: center !important;
+            font-size: 10px !important;
+            color: #666 !important;
+        }
+        
+        /* Adjust spacing for one page */
+        .row {
+            margin-bottom: 10px !important;
+        }
+        
+        .col-lg-4, .col-lg-8, .col-md-6, .col-md-12, .col-sm-12 {
+            padding: 0 5px !important;
+        }
+        
+        .card {
+            margin-bottom: 10px !important;
+        }
+        
+        .card-header {
+            padding: 10px !important;
+        }
+        
+        .card-body {
+            padding: 10px !important;
+        }
+        
+        /* Ensure content fits on one page */
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
+        }
+        
+        /* Hide scrollbars */
+        * {
+            overflow: visible !important;
         }
     }
 </style>
@@ -578,6 +766,166 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     unset($_SESSION['status_button']);
 }
 ?>
+
+<script>
+function printContract() {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    
+    // Get the contract content
+    const contractContent = document.getElementById('contractContent').innerHTML;
+    
+    // Create the print-friendly HTML
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Gown Rental Contract - #${<?php echo $reservation_id; ?>}</title>
+            <style>
+                body {
+                    font-family: 'Poppins', Arial, sans-serif;
+                    line-height: 1.4;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                }
+                .contract-container {
+                    border: 1px solid #ddd;
+                    padding: 15px;
+                    margin: 0 auto;
+                    max-width: 100%;
+                }
+                .contract-header {
+                    text-align: center;
+                    margin-bottom: 15px;
+                    border-bottom: 2px solid #344767;
+                    padding-bottom: 10px;
+                }
+                .contract-header h4 {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+                .contract-section {
+                    margin-bottom: 15px;
+                }
+                .contract-section h5 {
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 5px;
+                }
+                .contract-table {
+                    margin: 10px 0;
+                    border: 1px solid #ddd;
+                }
+                .contract-table th {
+                    background-color: #f8f9fa;
+                    font-weight: bold;
+                }
+                .contract-signature {
+                    margin-top: 20px;
+                    border-top: 1px solid #eee;
+                    padding-top: 10px;
+                }
+                .contract-footer {
+                    margin-top: 20px;
+                    text-align: center;
+                    font-size: 10px;
+                    color: #666;
+                }
+                .divider {
+                    border-top: 2px solid #344767;
+                    margin: 15px 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 10px 0;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 6px;
+                    text-align: left;
+                    font-size: 12px;
+                }
+                th {
+                    background-color: #f8f9fa;
+                }
+                .signature-section {
+                    margin-top: 20px;
+                }
+                .signature-image {
+                    max-height: 60px;
+                    margin: 5px 0;
+                }
+                /* Fix image sizing */
+                img {
+                    max-width: 80px !important;
+                    height: auto !important;
+                    object-fit: contain !important;
+                }
+                .avatar {
+                    width: 40px !important;
+                    height: 40px !important;
+                }
+                .avatar-sm {
+                    width: 30px !important;
+                    height: 30px !important;
+                }
+                /* Adjust spacing for one page */
+                .row {
+                    margin-bottom: 10px;
+                }
+                .col-lg-4, .col-lg-8, .col-md-6, .col-md-12, .col-sm-12 {
+                    padding: 0 5px;
+                }
+                .card {
+                    margin-bottom: 10px;
+                }
+                .card-header {
+                    padding: 10px;
+                }
+                .card-body {
+                    padding: 10px;
+                }
+                @media print {
+                    @page {
+                        size: A4 portrait;
+                        margin: 10mm;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="contract-container">
+                <div class="contract-header">
+                    <h4>Gown Rental Contract</h4>
+                    <p>Contract #${<?php echo $reservation_id; ?>}</p>
+                    <p>Date: ${new Date().toLocaleDateString()}</p>
+                </div>
+                ${contractContent}
+                <div class="contract-footer">
+                    <p>This document is a legally binding contract between the renter and Ging's Boutique.</p>
+                    <p>Generated on ${new Date().toLocaleString()}</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    // Write the content to the new window
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for images to load before printing
+    printWindow.onload = function() {
+        printWindow.print();
+        printWindow.close();
+    };
+}
+</script>
 
 </body>
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('process/config.php');
+include ('process/config.php');
 
 if (!isset($_SESSION['email'])) {
   header('location: ../index.php');
@@ -14,22 +14,20 @@ if (isset($_SESSION['email'])) {
 
   if ($result_session->num_rows > 0) {
     $row_session = $result_session->fetch_assoc();
-	  $user_id = $row_session['user_id'];
+    $user_id = $row_session['user_id'];
     $full_name = $row_session['full_name'];
     $email = $row_session['email'];
-	  $profile = $row_session['profile'];
-	  $type = $row_session['user_type'];
+    $profile = $row_session['profile'];
+    $type = $row_session['user_type'];
 
-	  if ($type != 'admin') {
-    header('location: ../index.php');
-    exit();
-	}
-      
-  }else{
+    if ($type != 'admin') {
+      header('location: ../index.php');
+      exit();
+    }
+  } else {
     header('location: ../index.php');
     exit();
   }
-
 }
 $gown_id = intval($_GET['gown_id']);
 ?>
@@ -37,7 +35,7 @@ $gown_id = intval($_GET['gown_id']);
 <!DOCTYPE html>
 <html lang="en">
 
-  <?php include('header.php');?>
+  <?php include ('header.php'); ?>
   <title>
   Ging's Boutique | Edit Gown
   </title>
@@ -177,6 +175,194 @@ $gown_id = intval($_GET['gown_id']);
       opacity: 0.9;
     }
   </style>
+  <style>
+    .timeline {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 30px;
+      height: 100%;
+      width: 2px;
+      background: #e9ecef;
+    }
+    .timeline-block {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .timeline-step {
+      position: absolute;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      z-index: 1;
+    }
+    .timeline-content {
+      margin-left: 50px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    .badge-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 0.25rem;
+    }
+    .bg-gradient-success {
+      background: linear-gradient(310deg, #17a37f 0%, #17a37f 100%);
+    }
+    .bg-gradient-warning {
+      background: linear-gradient(310deg, #fbcf33 0%, #fbcf33 100%);
+    }
+    .bg-gradient-danger {
+      background: linear-gradient(310deg, #ea0606 0%, #ea0606 100%);
+    }
+    .countdown-text {
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+  <script>
+    let idleTime = 0;
+    const idleInterval = 6000; // Check every second
+    const idleTimeout = 10; // Logout after 10 seconds of inactivity
+    const warningTime = 5; // Show warning 5 seconds before logout
+    let warningShown = false;
+    let countdownInterval;
+
+    // Reset timer on user activity
+    function resetIdleTime() {
+      idleTime = 0;
+      warningShown = false;
+      // If there's an existing warning, close it
+      const existingAlert = document.querySelector('.swal-overlay');
+      if (existingAlert) {
+        clearInterval(countdownInterval);
+        swal.close();
+      }
+    }
+
+    // Show warning with live countdown
+    function showWarningWithCountdown() {
+      warningShown = true;
+      let secondsLeft = warningTime;
+
+      // Create warning dialog
+      const warningDialog = document.createElement('div');
+      warningDialog.innerHTML = `
+        <div class="idle-warning text-center">
+          <div class="warning-icon mb-3">
+            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-3">Idle Detection Warning!</h4>
+          <div class="countdown-container">
+            <div class="countdown-number" id="countdown">${secondsLeft}</div>
+            <div class="countdown-text mt-2">seconds until logout</div>
+          </div>
+          <div class="mt-3 text-muted">Move mouse or press any key to cancel</div>
+        </div>
+      `;
+
+      // Add styles for the countdown
+      const style = document.createElement('style');
+      style.textContent = `
+        .idle-warning {
+          padding: 20px;
+        }
+        .countdown-container {
+          margin: 20px 0;
+        }
+        .countdown-number {
+          font-size: 72px;
+          font-weight: bold;
+          color: #dc3545;
+          animation: pulse 1s infinite;
+          line-height: 1;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .countdown-text {
+          font-size: 1.2rem;
+          color: #666;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .warning-icon {
+          animation: shake 1s infinite;
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      swal({
+        content: warningDialog,
+        buttons: false,
+        closeOnEsc: false,
+        closeOnClickOutside: false,
+      });
+
+      // Update countdown
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement && secondsLeft >= 0) {
+          countdownElement.textContent = secondsLeft;
+          // Add extra visual feedback as time runs out
+          if (secondsLeft <= 2) {
+            countdownElement.style.color = '#dc3545';
+            countdownElement.style.animation = 'pulse 0.5s infinite';
+          }
+        }
+        if (secondsLeft < 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    // Increment idle time counter
+    function timerIncrement() {
+      idleTime += 1;
+      
+      // Show warning 5 seconds before logout
+      if (idleTime === (idleTimeout - warningTime) && !warningShown) {
+        showWarningWithCountdown();
+      }
+      
+      if (idleTime >= idleTimeout) {
+        clearInterval(countdownInterval);
+        window.location.href = 'logout.php';
+      }
+    }
+
+    // Initialize idle detection when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up the timer that checks for inactivity
+      setInterval(timerIncrement, idleInterval);
+
+      // Reset timer on any user activity
+      const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+      events.forEach(function(event) {
+        document.addEventListener(event, resetIdleTime, true);
+      });
+    });
+  </script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -299,9 +485,9 @@ $gown_id = intval($_GET['gown_id']);
                 $res = $conn->query($sql);
 
                 if ($res->num_rows > 0) {
-                    while ($row = $res->fetch_assoc()) {
-                        $formatted_date_time = date("F j, Y, g:i a", strtotime($row['date_time']));
-                        ?>
+                  while ($row = $res->fetch_assoc()) {
+                    $formatted_date_time = date('F j, Y, g:i a', strtotime($row['date_time']));
+                    ?>
                         <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">
                                 <div class="d-flex py-1">
@@ -321,9 +507,9 @@ $gown_id = intval($_GET['gown_id']);
                             </a>
                         </li>
                         <?php
-                    }
+                  }
                 } else {
-                    echo '<li class="mb-2">No notifications available.</li>';
+                  echo '<li class="mb-2">No notifications available.</li>';
                 }
                 ?>
             </ul>
@@ -346,21 +532,20 @@ $gown_id = intval($_GET['gown_id']);
                 </a>
               </div>
             </div>
-            <?php 
+            <?php
             $sql2 = "SELECT * FROM gowns WHERE gown_id = '$gown_id'";
             $res = $conn->query($sql2);
 
             if ($res->num_rows > 0) {
-                while ($row = $res->fetch_assoc()) {
-                
-                    $gown_name = htmlspecialchars($row['name']);
-                    $size = htmlspecialchars($row['size']);
-                    $color = htmlspecialchars($row['color']);
-                    $price = htmlspecialchars($row['price']);
-                    $description = htmlspecialchars($row['description']);
-                    $main_image = htmlspecialchars($row['main_image']);
-                    $status = htmlspecialchars($row['availability_status']);
-                }
+              while ($row = $res->fetch_assoc()) {
+                $gown_name = htmlspecialchars($row['name']);
+                $size = htmlspecialchars($row['size']);
+                $color = htmlspecialchars($row['color']);
+                $price = htmlspecialchars($row['price']);
+                $description = htmlspecialchars($row['description']);
+                $main_image = htmlspecialchars($row['main_image']);
+                $status = htmlspecialchars($row['availability_status']);
+              }
             }
             ?>
             <div class="card-body">
@@ -368,9 +553,9 @@ $gown_id = intval($_GET['gown_id']);
                 <h5><?php echo $gown_name; ?></h5>
                 <p><span class="info-label">ID:</span> #<?php echo $gown_id; ?></p>
                 <p><span class="info-label">Status:</span> 
-                  <?php if($status == 'available'): ?>
+                  <?php if ($status == 'available'): ?>
                     <span class="gown-status status-available">Available</span>
-                  <?php elseif($status == 'maintenance'): ?>
+                  <?php elseif ($status == 'maintenance'): ?>
                     <span class="gown-status status-maintenance">Under Maintenance</span>
                   <?php else: ?>
                     <span class="gown-status status-rented">Rented</span>
@@ -386,7 +571,7 @@ $gown_id = intval($_GET['gown_id']);
                     <input type="hidden" name="gown_id" value="<?php echo htmlspecialchars($gown_id); ?>">
 
                     <label for="example-text-input" class="form-control-label">Gown Name</label>
-                    <input class="form-control" type="text" name = "gown_name" value = "<?php echo $gown_name?>">
+                    <input class="form-control" type="text" name = "gown_name" value = "<?php echo $gown_name ?>">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -403,7 +588,7 @@ $gown_id = intval($_GET['gown_id']);
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Color</label>
-                    <input class="form-control" type="text" name = "gown_color" value = "<?php echo $color?>">
+                    <input class="form-control" type="text" name = "gown_color" value = "<?php echo $color ?>">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -411,7 +596,7 @@ $gown_id = intval($_GET['gown_id']);
                     <label for="example-text-input" class="form-control-label">Price</label>
                     <div class="input-group">
                       <span class="input-group-text">₱</span>
-                      <input class="form-control" type="number" name = "gown_price" value = "<?php echo $price?>">
+                      <input class="form-control" type="number" name = "gown_price" value = "<?php echo $price ?>">
                     </div>
                   </div>
                 </div>
@@ -458,7 +643,7 @@ $gown_id = intval($_GET['gown_id']);
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">About me</label>
-                    <textarea name="description" id="" class = "form-control" style = "height: 100px;"><?php echo $description?></textarea>
+                    <textarea name="description" id="" class = "form-control" style = "height: 100px;"><?php echo $description ?></textarea>
                   </div>
                 </div>
               </div>
@@ -496,7 +681,7 @@ $gown_id = intval($_GET['gown_id']);
             </div>
             <div class="card-body">
               <div class="text-center">
-                <?php if(!empty($main_image) && file_exists("../uploads/gowns/".$main_image)): ?>
+                <?php if (!empty($main_image) && file_exists('../uploads/gowns/' . $main_image)): ?>
                   <img src="../uploads/gowns/<?php echo $main_image; ?>" alt="Gown Preview" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
                 <?php else: ?>
                   <div class="text-center p-5">
@@ -511,9 +696,9 @@ $gown_id = intval($_GET['gown_id']);
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>Status</span>
-                    <?php if($status == 'available'): ?>
+                    <?php if ($status == 'available'): ?>
                       <span class="gown-status status-available">Available</span>
-                    <?php elseif($status == 'maintenance'): ?>
+                    <?php elseif ($status == 'maintenance'): ?>
                       <span class="gown-status status-maintenance">Under Maintenance</span>
                     <?php else: ?>
                       <span class="gown-status status-rented">Rented</span>
@@ -604,11 +789,11 @@ $gown_id = intval($_GET['gown_id']);
     </div>
   </div>
   <!--   Core JS Files   -->
-  <?php include('script.php'); ?>
+  <?php include ('script.php'); ?>
   <script src="sweetalert.min.js"></script>
 <?php
 if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-?>
+  ?>
     <script>
     swal({
         title: "<?php echo $_SESSION['status']; ?>",
@@ -617,9 +802,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
     });
     </script>
 <?php
-    unset($_SESSION['status']);
-    unset($_SESSION['status_code']);
-    unset($_SESSION['status_button']);
+  unset($_SESSION['status']);
+  unset($_SESSION['status_code']);
+  unset($_SESSION['status_button']);
 }
 ?>
 
