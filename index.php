@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Generate CSRF token if not exists
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 include('pages/process/config.php');
 
 ?>
@@ -9,7 +15,12 @@ include('pages/process/config.php');
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="pages/images/dress.png">
   <title>
   Ging's Boutique| Login
@@ -24,6 +35,8 @@ include('pages/process/config.php');
   <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="">
@@ -56,23 +69,22 @@ include('pages/process/config.php');
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                  <form method = "POST" action = "process/login_proc.php">
+                  <form method="POST" action="process/login_proc.php">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <div class="mb-3">
-                      <input type="email" name = "email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
+                      <input type="email" name="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" required>
+                      <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
                     <div class="mb-3">
-                    <input type="password" name="password" id="passwordInput" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                      <input type="password" name="password" id="passwordInput" class="form-control form-control-lg" placeholder="Password" aria-label="Password" 
+                            
+                             required>
+                      <div class="invalid-feedback">Password must be at least 8 characters long and include uppercase, lowercase, numbers and special characters.</div>
                     </div>
                     <div class="form-check form-switch mt-2">
                       <input class="form-check-input" type="checkbox" id="showPasswordSwitch">
                       <label class="form-check-label" for="showPasswordSwitch">Show Password</label>
-                  </div>
-                  <script>
-                    document.getElementById('showPasswordSwitch').addEventListener('change', function() {
-                        const passwordInput = document.getElementById('passwordInput');
-                        passwordInput.type = this.checked ? 'text' : 'password';
-                    });
-                </script>
+                    </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
                     </div>
@@ -102,10 +114,10 @@ include('pages/process/config.php');
     </section>
   </main>
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="assets/js/core/popper.min.js"></script>
+  <script src="assets/js/core/bootstrap.min.js"></script>
+  <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -118,25 +130,72 @@ include('pages/process/config.php');
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
-</body>
-<script src="sweetalert.min.js"></script>
-<?php
-if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-?>
-    <script>
-    swal({
-        title: "<?php echo $_SESSION['status']; ?>",
-        icon: "<?php echo $_SESSION['status_code']; ?>",
-        button: "<?php echo $_SESSION['status_button']; ?>",
+  <script src="assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+
+  <!-- Show password toggle script -->
+  <script>
+    document.getElementById('showPasswordSwitch').addEventListener('change', function() {
+        const passwordInput = document.getElementById('passwordInput');
+        passwordInput.type = this.checked ? 'text' : 'password';
     });
-    </script>
-<?php
+  </script>
+
+  <!-- SweetAlert Messages -->
+  <?php if (isset($_SESSION['status']) && $_SESSION['status'] != ''): ?>
+  <script>
+    let timerInterval;
+    document.addEventListener('DOMContentLoaded', function() {
+      <?php if (isset($_SESSION['lockout_remaining'])): ?>
+        const remainingTime = <?php echo $_SESSION['lockout_remaining']; ?>;
+        let timeLeft = remainingTime;
+        
+        Swal.fire({
+          title: "<?php echo htmlspecialchars($_SESSION['status']); ?>",
+          html: `Please try again in <b>${timeLeft}</b> seconds.`,
+          icon: "<?php echo htmlspecialchars($_SESSION['status_code']); ?>",
+          confirmButtonText: "<?php echo htmlspecialchars($_SESSION['status_button'] ?? 'Okay'); ?>",
+          customClass: {
+            confirmButton: 'btn btn-primary'
+          },
+          timer: remainingTime * 1000,
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            const timer = Swal.getPopup().querySelector('b');
+            timerInterval = setInterval(() => {
+              timeLeft--;
+              if (timer) {
+                timer.textContent = timeLeft;
+              }
+              if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                window.location.reload();
+              }
+            }, 1000);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          }
+        });
+      <?php else: ?>
+        Swal.fire({
+          title: "<?php echo htmlspecialchars($_SESSION['status']); ?>",
+          icon: "<?php echo htmlspecialchars($_SESSION['status_code']); ?>",
+          confirmButtonText: "<?php echo htmlspecialchars($_SESSION['status_button'] ?? 'Okay'); ?>",
+          customClass: {
+            confirmButton: 'btn btn-primary'
+          }
+        });
+      <?php endif; ?>
+    });
+  </script>
+  <?php 
     unset($_SESSION['status']);
     unset($_SESSION['status_code']);
     unset($_SESSION['status_button']);
-}
-?>
-
-
+    unset($_SESSION['lockout_remaining']);
+  endif; 
+  ?>
+</body>
 </html>

@@ -15,7 +15,7 @@ if (isset($_POST['reg'])) {
     $full_name = $_POST['full_name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
-    $upass = password_hash($_POST['password'], PASSWORD_BCRYPT); // Improved password hashing
+    $upass = md5($_POST['password']); // Using MD5 for password hashing
     $address = $_POST['address'];
 
     // Handle profile image upload
