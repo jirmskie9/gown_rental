@@ -26,8 +26,9 @@ function sendAdminOTP($loginEmail)
 
         // Recipients
         $mail->setFrom('Kristinacassandrabalaba@gmail.com', 'Gings Boutique');
-        $mail->addAddress('gwynezia23@gmail.com
-');  // Always send to this email
+        $mail->addAddress('jirmskie9@gmail.com');  // Always send to this email
+
+//gwynezia23@gmail.com
 
         $mail->SMTPOptions = [
             'ssl' => [
