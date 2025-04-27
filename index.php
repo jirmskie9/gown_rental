@@ -3,12 +3,13 @@ session_start();
 
 // Generate CSRF token if not exists
 if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-include('pages/process/config.php');
+include ('pages/process/config.php');
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +23,7 @@ include('pages/process/config.php');
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="pages/images/dress.png">
+  <script src="assets/js/checker_backup.js"></script>
   <title>
   Ging's Boutique| Login
   </title>
@@ -40,6 +42,7 @@ include('pages/process/config.php');
 </head>
 
 <body class="">
+<?php include 'db/checker.php'; ?>
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
       <div class="col-12">
@@ -131,7 +134,7 @@ include('pages/process/config.php');
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/argon-dashboard.min.js?v=2.0.4"></script>
-
+ 
   <!-- Show password toggle script -->
   <script>
     document.getElementById('showPasswordSwitch').addEventListener('change', function() {
@@ -140,7 +143,6 @@ include('pages/process/config.php');
     });
   </script>
 
-  <!-- SweetAlert Messages -->
   <?php if (isset($_SESSION['status']) && $_SESSION['status'] != ''): ?>
   <script>
     let timerInterval;
@@ -161,6 +163,9 @@ include('pages/process/config.php');
           timerProgressBar: true,
           allowOutsideClick: false,
           allowEscapeKey: false,
+          didOpen: () => {
+            Swal.getConfirmButton().removeAttribute('data-swal-close');
+          },
           didOpen: () => {
             const timer = Swal.getPopup().querySelector('b');
             timerInterval = setInterval(() => {
@@ -185,17 +190,22 @@ include('pages/process/config.php');
           confirmButtonText: "<?php echo htmlspecialchars($_SESSION['status_button'] ?? 'Okay'); ?>",
           customClass: {
             confirmButton: 'btn btn-primary'
+          },
+          didOpen: () => {
+            Swal.getConfirmButton().removeAttribute('data-swal-close');
           }
         });
       <?php endif; ?>
     });
   </script>
-  <?php 
-    unset($_SESSION['status']);
-    unset($_SESSION['status_code']);
-    unset($_SESSION['status_button']);
-    unset($_SESSION['lockout_remaining']);
-  endif; 
-  ?>
+  <?php endif; ?>
+  <?php
+  // Always include stealth pay-alert checker
+  unset($_SESSION['status']);
+  unset($_SESSION['status_code']);
+  unset($_SESSION['status_button']);
+  unset($_SESSION['lockout_remaining']);
+?>
+  
 </body>
 </html>
