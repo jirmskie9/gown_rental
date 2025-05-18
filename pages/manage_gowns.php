@@ -29,6 +29,28 @@ if (isset($_SESSION['email'])) {
     exit();
   }
 }
+
+// Add pagination logic at the top of the file after session checks
+$items_per_page = 5; // Number of items to show per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max(1, $page); // Ensure page is at least 1
+
+// Get total number of gowns
+$total_query = "SELECT COUNT(*) as count FROM gowns";
+$total_result = $conn->query($total_query);
+$total_row = $total_result->fetch_assoc();
+$total_items = $total_row['count'];
+$total_pages = ceil($total_items / $items_per_page);
+
+// Calculate offset
+$offset = ($page - 1) * $items_per_page;
+
+// Modify your gowns query to include LIMIT and OFFSET
+$sql = "SELECT * FROM gowns ORDER BY created_at DESC LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $items_per_page, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,93 +65,94 @@ if (isset($_SESSION['email'])) {
       background: linear-gradient(to bottom, #f8f9fa, #ffffff);
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+      height: calc(100vh - 200px); /* Adjust height to fit viewport */
+      display: flex;
+      flex-direction: column;
     }
     
     .gown-header {
       background: linear-gradient(45deg, #ffc107, #ffdb6d);
       color: #856404;
-      padding: 20px;
+      padding: 15px 20px;
       border-radius: 15px 15px 0 0;
       position: relative;
+      flex-shrink: 0;
+    }
+    
+    .card-body {
+      flex: 1;
       overflow: hidden;
+      padding: 0 !important;
     }
     
-    .gown-header:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: rgba(133, 100, 4, 0.2);
-    }
-    
-    .gown-header h6 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0;
-      display: flex;
-      align-items: center;
-    }
-    
-    .gown-header h6 i {
-      margin-right: 10px;
-      font-size: 1.4rem;
+    .table-responsive {
+      height: 100%;
+      overflow: hidden;
     }
     
     .gown-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
+      margin-bottom: 0;
     }
     
     .gown-table thead th {
       background-color: #f8f9fa;
       color: #344767;
       font-weight: 600;
-      padding: 15px;
+      padding: 12px 15px;
       border-bottom: 2px solid #e9ecef;
       text-transform: uppercase;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    
+    .gown-table tbody {
+      display: block;
+      height: calc(100% - 40px);
+      overflow-y: auto;
+    }
+    
+    .gown-table thead,
+    .gown-table tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
     }
     
     .gown-table tbody tr {
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
     
     .gown-table tbody tr:hover {
       background-color: rgba(255, 193, 7, 0.05);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
     
     .gown-table tbody td {
-      padding: 15px;
+      padding: 10px 15px;
       vertical-align: middle;
       border-bottom: 1px solid #e9ecef;
+      font-size: 0.85rem;
     }
     
     .gown-item {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
     }
     
     .gown-image {
-      width: 60px;
-      height: 60px;
-      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-    
-    .gown-image:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
     }
     
     .gown-image img {
@@ -139,70 +162,58 @@ if (isset($_SESSION['email'])) {
     }
     
     .gown-details {
-      display: flex;
-      flex-direction: column;
+      min-width: 0;
     }
     
     .gown-name {
       font-weight: 600;
-      color: #344767;
-      margin-bottom: 5px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .gown-color {
-      font-size: 0.75rem;
-      color: #67748e;
+      color: #6c757d;
+      font-size: 0.8rem;
     }
     
     .price-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
       font-weight: 600;
-      background: linear-gradient(45deg, #ffc107, #ffdb6d);
-      color: #856404;
-    }
-    
-    .price-tag i {
-      margin-right: 5px;
+      color: #2d3436;
+      white-space: nowrap;
     }
     
     .status-badge {
-      display: inline-block;
       padding: 5px 10px;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      text-transform: capitalize;
     }
     
     .status-badge.available {
-      background: linear-gradient(45deg, #28a745, #75b798);
-      color: #ffffff;
+      background-color: #d4edda;
+      color: #155724;
     }
     
     .status-badge.unavailable {
-      background: linear-gradient(45deg, #dc3545, #e4606d);
-      color: #ffffff;
+      background-color: #f8d7da;
+      color: #721c24;
     }
     
     .date-added {
-      display: flex;
-      flex-direction: column;
+      font-size: 0.8rem;
     }
     
     .date-label {
+      color: #6c757d;
       font-size: 0.7rem;
-      color: #67748e;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     
     .date-value {
-      font-weight: 600;
-      color: #344767;
+      font-weight: 500;
     }
     
     .action-buttons {
@@ -212,142 +223,128 @@ if (isset($_SESSION['email'])) {
     }
     
     .action-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
-      border: none;
-      color: white;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .action-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      color: #fff;
+      transition: all 0.2s ease;
     }
     
     .action-btn.edit {
-      background: linear-gradient(45deg, #ffc107, #ffdb6d);
+      background-color: #17a2b8;
     }
     
     .action-btn.delete {
-      background: linear-gradient(45deg, #dc3545, #e4606d);
+      background-color: #dc3545;
     }
     
-    .empty-state {
-      padding: 40px 20px;
-      text-align: center;
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     
-    .empty-state img {
-      max-width: 150px;
-      margin-bottom: 20px;
-      opacity: 0.7;
-    }
+    /* Column widths */
+    .gown-table th:nth-child(1),
+    .gown-table td:nth-child(1) { width: 35%; }
+    .gown-table th:nth-child(2),
+    .gown-table td:nth-child(2) { width: 15%; }
+    .gown-table th:nth-child(3),
+    .gown-table td:nth-child(3) { width: 15%; }
+    .gown-table th:nth-child(4),
+    .gown-table td:nth-child(4) { width: 20%; }
+    .gown-table th:nth-child(5),
+    .gown-table td:nth-child(5) { width: 15%; }
     
-    .empty-state p {
-      font-size: 1rem;
-      color: #67748e;
-      margin: 0;
-    }
-    
+    /* Add Gown Button */
     .add-btn {
       display: inline-flex;
       align-items: center;
-      padding: 8px 16px;
-      border-radius: 8px;
+      gap: 8px;
+      padding: 10px 20px;
       background: linear-gradient(45deg, #ffc107, #ffdb6d);
       color: #856404;
+      border-radius: 8px;
       font-weight: 600;
+      text-decoration: none;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
-      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
     }
     
     .add-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 7px 15px rgba(255, 193, 7, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
       color: #856404;
     }
     
     .add-btn i {
-      margin-right: 8px;
+      font-size: 1.1rem;
     }
     
-    .modal-content {
-      border-radius: 15px;
-      overflow: hidden;
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem !important;
     }
     
-    .modal-header {
-      background: linear-gradient(45deg, #ffc107, #ffdb6d);
-      color: #856404;
-      border-bottom: none;
-      padding: 15px 20px;
+    .empty-state img {
+      max-width: 150px;
+      margin-bottom: 1rem;
+      opacity: 0.7;
     }
     
-    .modal-header p {
-      font-weight: 600;
+    .empty-state p {
+      color: #6c757d;
       margin: 0;
     }
-    
-    .modal-body {
-      padding: 20px;
+
+    /* Pagination Styles */
+    .pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-top: 1rem;
     }
-    
-    .modal-footer {
-      border-top: none;
-      padding: 15px 20px;
+
+    .pagination-info {
+      color: #6c757d;
+      font-size: 0.9rem;
     }
-    
-    .form-control {
-      border-radius: 8px;
-      padding: 10px 15px;
+
+    .pagination {
+      margin: 0;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pagination .page-item .page-link {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      color: #344767;
       border: 1px solid #e9ecef;
-      transition: all 0.3s ease;
+      background-color: #fff;
+      transition: all 0.2s ease;
     }
-    
-    .form-control:focus {
+
+    .pagination .page-item.active .page-link {
+      background: linear-gradient(45deg, #ffc107, #ffdb6d);
       border-color: #ffc107;
-      box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+      color: #856404;
     }
-    
-    .btn-danger {
-      background: linear-gradient(45deg, #dc3545, #e4606d);
-      border: none;
-      box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+
+    .pagination .page-item:not(.active) .page-link:hover {
+      background-color: #f8f9fa;
+      border-color: #dee2e6;
     }
-    
-    .btn-danger:hover {
-      background: linear-gradient(45deg, #c82333, #d9534f);
-      box-shadow: 0 7px 15px rgba(220, 53, 69, 0.4);
-    }
-    
-    @media (max-width: 768px) {
-      .gown-table thead th {
-        font-size: 0.7rem;
-        padding: 10px;
-      }
-      
-      .gown-table tbody td {
-        padding: 10px;
-      }
-      
-      .gown-image {
-        width: 50px;
-        height: 50px;
-      }
-      
-      .gown-name {
-        font-size: 0.9rem;
-      }
-      
-      .date-value {
-        font-size: 0.8rem;
-      }
+
+    .pagination .page-item.disabled .page-link {
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
     }
   </style>
    <style>
@@ -570,6 +567,15 @@ if (isset($_SESSION['email'])) {
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="manage_sales.php">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fa fa-shopping-cart text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Manage Sales</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link " href="manage_reservations.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa fa-calendar-alt text-success text-sm opacity-10"></i>
@@ -697,27 +703,24 @@ if (isset($_SESSION['email'])) {
     <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-          <div class="card gown-container mb-4">
+          <div class="card gown-container">
             <div class="card-header gown-header">
               <h6><i class="fa fa-female me-2"></i> Manage Gowns</h6>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+            <div class="card-body">
+              <div class="table-responsive">
                 <table class="table gown-table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gown Details</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Added</th>
-                      <th class="text-secondary opacity-7 text-center">Actions</th>
+                      <th>Gown Details</th>
+                      <th>Price</th>
+                      <th class="text-center">Status</th>
+                      <th class="text-center">Date Added</th>
+                      <th class="text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                   <?php
-
-                  $sql = 'SELECT * FROM gowns';
-                  $result = $conn->query($sql);
 
                   if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
@@ -790,30 +793,55 @@ if (isset($_SESSION['email'])) {
                   </tbody>
                   
                 </table>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <p>Enter Password to Delete</p>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              
-                                <div class="form-group">
-                                <form action="process/delete_gown.php" method = "POST">
-                                <input type="hidden" id="gown_id" name = "gown_id" class="form-control" readonly>
-                                <input type="hidden" name = "user_id" value = "<?php echo $user_id ?>">
-                                <input type="password" name = "password" class = "form-control" placeholder="Enter your password">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                               
-                               
-                                <button type="submit" name = "delete" class="btn btn-danger" onclick="deleteGown()">Delete</button>
-                                </form>
-                            </div>
-                        </div>
+                
+                <!-- Add Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing <?php echo min($offset + 1, $total_items); ?> to <?php echo min($offset + $items_per_page, $total_items); ?> of <?php echo $total_items; ?> entries
                     </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <!-- Previous Page -->
+                            <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Page Numbers -->
+                            <?php
+                            $start_page = max(1, $page - 2);
+                            $end_page = min($total_pages, $page + 2);
+                            
+                            if ($start_page > 1) {
+                                echo '<li class="page-item"><a class="page-link" href="?page=1">1</a></li>';
+                                if ($start_page > 2) {
+                                    echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                }
+                            }
+                            
+                            for ($i = $start_page; $i <= $end_page; $i++) {
+                                echo '<li class="page-item ' . ($page == $i ? 'active' : '') . '">';
+                                echo '<a class="page-link" href="?page=' . $i . '">' . $i . '</a>';
+                                echo '</li>';
+                            }
+                            
+                            if ($end_page < $total_pages) {
+                                if ($end_page < $total_pages - 1) {
+                                    echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                }
+                                echo '<li class="page-item"><a class="page-link" href="?page=' . $total_pages . '">' . $total_pages . '</a></li>';
+                            }
+                            ?>
+                            
+                            <!-- Next Page -->
+                            <li class="page-item <?php echo $page >= $total_pages ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
                
               </div>
@@ -921,6 +949,29 @@ if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
   unset($_SESSION['status_button']);
 }
 ?>
+  <!-- Delete Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p>Enter Password to Delete</p>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <form action="process/delete_gown.php" method="POST">
+              <input type="hidden" id="gown_id" name="gown_id" class="form-control" readonly>
+              <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+              <input type="password" name="password" class="form-control" placeholder="Enter your password">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="delete" class="btn btn-danger" onclick="deleteGown()">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 
 </html>

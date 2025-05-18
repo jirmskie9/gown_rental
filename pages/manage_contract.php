@@ -493,6 +493,16 @@ if (isset($_SESSION['email'])) {
             <span class="nav-link-text ms-1">Manage Gowns</span>
           </a>
         </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="manage_sales.php">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fa fa-shopping-cart text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Manage Sales</span>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="manage_reservations.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -723,9 +733,7 @@ if (isset($_SESSION['email'])) {
             </div>
             
           </div>
-          <br>
-            <a class="edit-btn" href="edit_contract.php"><i class="fa fa-edit"></i> Edit Contract</a>
-         
+    
         </div>
 
       <?php include ('footer.php'); ?>

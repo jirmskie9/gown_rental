@@ -421,13 +421,13 @@ if (isset($_SESSION['email'])) {
               </div>
             </div>
             <div class="card-body">
+              <form method="POST" action="process/add_gown.php" enctype="multipart/form-data">
               <p class="text-uppercase text-sm">Gown Information</p>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <form method = "POST" action="process/add_gown.php" enctype="multipart/form-data">
                     <label for="example-text-input" class="form-control-label">Gown Name</label>
-                    <input class="form-control" type="text" name = "gown_name">
+                    <input class="form-control" type="text" name="gown_name">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -435,10 +435,10 @@ if (isset($_SESSION['email'])) {
                     <label for="example-text-input" class="form-control-label">Gown Size</label>
                   
                     <select name="gown_size" id="" class = "form-control">
-                      <option value="">Small</option>
-                      <option value="">Medium</option>
-                      <option value="">Large</option>
-                      <option value="">Extra Large</option>
+                      <option value="Small">Small</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Large">Large</option>
+                      <option value="Extra Large">Extra Large</option>
                     </select>
                   </div>
                 </div>
@@ -507,9 +507,9 @@ if (isset($_SESSION['email'])) {
               </div>
             </div>
             <div class="card-footer text-center">
-                <button type = "submit" name = "save_gown" class = "btn btn-primary"><i class = "fa fa-file"></i> Save Gown</button>
+                <button type="submit" name="save_gown" class="btn btn-primary"><i class="fa fa-file"></i> Save Gown</button>
             </div>
-        </form>
+            </form>
           </div>
         </div>
         <div class="col-md-4">

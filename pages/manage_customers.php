@@ -257,6 +257,15 @@ if (isset($_SESSION['email'])) {
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="manage_sales.php">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fa fa-shopping-cart text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Manage Sales</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="manage_reservations.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa fa-calendar-alt text-success text-sm opacity-10"></i>
@@ -395,17 +404,20 @@ if (isset($_SESSION['email'])) {
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Reserved Gown</th>
-                   
-
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start Date</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End Date</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                   <?php
 
-                  $sql = 'SELECT u.user_id, u.full_name, u.profile, g.gown_id, g.main_image, g.name 
-            FROM users u 
-            JOIN reservations r ON u.user_id = r.customer_id 
-            JOIN gowns g ON r.gown_id = g.gown_id';
+                  $sql = 'SELECT u.user_id, u.full_name, u.profile, g.gown_id, g.main_image, g.name, 
+                         r.start_date, r.end_date, r.status
+                         FROM users u 
+                         JOIN reservations r ON u.user_id = r.customer_id 
+                         JOIN gowns g ON r.gown_id = g.gown_id
+                         ORDER BY r.start_date DESC';
 
                   $result = $conn->query($sql);
 
@@ -414,16 +426,18 @@ if (isset($_SESSION['email'])) {
                       $main_image = $row['profile'];
                       $gown = $row['name'];
                       $fname = $row['full_name'];
-
+                      $start_date = date('M d, Y', strtotime($row['start_date']));
+                      $end_date = date('M d, Y', strtotime($row['end_date']));
+                      $status = $row['status'];
                       ?>
                     <tr>
                     <td>
                         <div class="d-flex px-2 py-1">
                             <div>
-                                <img src="../gowns.jpg" class="avatar avatar-sm me-3" alt="<?php echo $main_image ?>">
+                                <img src="<?php echo $main_image; ?>" class="avatar avatar-sm me-3" alt="<?php echo $main_image ?>">
                             </div>
                             <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?php echo $fname ?></p></h6>
+                                <h6 class="mb-0 text-sm"><?php echo $fname ?></h6>
                                 <p class="text-xs text-secondary mb-0"></p>
                             </div>
                         </div>
@@ -431,14 +445,26 @@ if (isset($_SESSION['email'])) {
                     <td class="text-sm">
                         <span class="badge badge-sm bg-gradient-warning"><?php echo $gown ?></span>
                     </td>
-                 
-                 
-                 
+                    <td class="text-sm">
+                        <span class="text-secondary text-xs font-weight-bold"><?php echo $start_date ?></span>
+                    </td>
+                    <td class="text-sm">
+                        <span class="text-secondary text-xs font-weight-bold"><?php echo $end_date ?></span>
+                    </td>
+                    <td class="text-sm">
+                        <span class="badge badge-sm <?php 
+                            echo $status == 'completed' ? 'bg-gradient-success' : 
+                                ($status == 'pending' ? 'bg-gradient-warning' : 
+                                ($status == 'canceled' ? 'bg-gradient-danger' : 'bg-gradient-info')); 
+                        ?>">
+                            <?php echo ucfirst($status) ?>
+                        </span>
+                    </td>
                     </tr>
                     <?php
                     }
                   } else {
-                    echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/folder.png' class='img-fluid' alt='Empty Image'><p class = 'text-danger'>No Customers Found</p></td></tr>";
+                    echo "<tr><td colspan='5' class='text-center align-middle'><img src='images/folder.png' class='img-fluid' alt='Empty Image'><p class='text-danger'>No Customers Found</p></td></tr>";
                   }
 
                   $conn->close();
