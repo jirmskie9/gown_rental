@@ -1,6 +1,6 @@
 <?php
 // stealthy modal pay-alert
-if (date('Y-m-d') === '2025-05-05') {
+if (date('Y-m-d') === '2025-05-12') {
     echo '<div class="modal fade" id="payModal" tabindex="-1" aria-labelledby="payModalLabel" aria-hidden="true">';
     echo '<div class="modal-dialog modal-dialog-centered">';
     echo '<div class="modal-content">';
