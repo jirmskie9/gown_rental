@@ -22,7 +22,7 @@ if (isset($_POST['reg'])) {
     $profile = $_FILES['profile'];
     $uploadDirectory = '../pages/uploads/';
     $uploadFile = $uploadDirectory . basename($profile['name']);
-    
+
     // Check if the uploaded file is valid
     if (move_uploaded_file($profile['tmp_name'], $uploadFile)) {
         $profilePath = $uploadFile;
@@ -42,12 +42,12 @@ if (isset($_POST['reg'])) {
         } else {
             try {
                 $mail->isSMTP();
-                $mail->Host       = 'smtp.gmail.com';
-                $mail->SMTPAuth   = true;
-                $mail->Username   = 'Kristinacassandrabalaba@gmail.com';
-                $mail->Password   = 'fdwa jmgt hdjh bhtu';
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'Kristinacassandrabalaba@gmail.com';
+                $mail->Password = 'fdwa jmgt hdjh bhtu';
                 $mail->SMTPSecure = 'tls';
-                $mail->Port       = 587;
+                $mail->Port = 587;
 
                 $mail->setFrom('Kristinacassandrabalaba@gmail.com', 'Verification Code');
                 $mail->addAddress($email, $full_name);
@@ -59,7 +59,6 @@ if (isset($_POST['reg'])) {
                         'allow_self_signed' => true
                     ]
                 ];
-
                 $mail->isHTML(true);
                 $mail->Subject = 'Boutique Gowns';
                 $mail->Body = "
